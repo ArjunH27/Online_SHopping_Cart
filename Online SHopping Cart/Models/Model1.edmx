@@ -1,0 +1,922 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShoppingCartDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BaseCategory_Table">
+          <Key>
+            <PropertyRef Name="BaseCatId" />
+          </Key>
+          <Property Name="BaseCatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BaseCatName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="BaseCatDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="BaseCatCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="BaseCatCreateDate" Type="date" Nullable="false" />
+          <Property Name="BaseCatUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="BaseCatUpdateDate" Type="date" Nullable="false" />
+          <Property Name="BaseCatIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Image_Table">
+          <Key>
+            <PropertyRef Name="ImageId" />
+          </Key>
+          <Property Name="ImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Productid" Type="int" Nullable="false" />
+          <Property Name="BinaryImage" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ImageCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ImageCreatedDate" Type="date" Nullable="false" />
+          <Property Name="ImageUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ImageUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="ImageIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Location_Table">
+          <Key>
+            <PropertyRef Name="LocationId" />
+          </Key>
+          <Property Name="LocationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LocationPIN" Type="int" Nullable="false" />
+          <Property Name="LocationDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LocationCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LocationCreatedDate" Type="date" Nullable="false" />
+          <Property Name="LocationUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LocationUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="LocationIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order_Table">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Userid" Type="int" Nullable="false" />
+          <Property Name="OrderDeliveryAddress" Type="varchar" MaxLength="200" />
+          <Property Name="OrderDeliveryDate" Type="date" />
+          <Property Name="OrderStatus" Type="int" Nullable="false" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="OrderCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="OrderCreatedDate" Type="date" Nullable="false" />
+          <Property Name="OrderUpdatedBy" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrderUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="OrderIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetail_Table">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Name="OrderDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orderid" Type="int" Nullable="false" />
+          <Property Name="Serviceid" Type="int" />
+          <Property Name="Productid" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
+        <EntityType Name="Product_Table">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductCatid" Type="int" Nullable="false" />
+          <Property Name="SellerId" Type="int" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductPrice" Type="money" Nullable="false" />
+          <Property Name="ProductDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductStock" Type="int" Nullable="false" />
+          <Property Name="ProductCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductCreatedDate" Type="date" Nullable="false" />
+          <Property Name="ProductUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="ProductIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductCategory_Table">
+          <Key>
+            <PropertyRef Name="ProductCatId" />
+          </Key>
+          <Property Name="ProductCatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BaseCatid" Type="int" Nullable="false" />
+          <Property Name="ProductCatName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductCatDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductCatCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductCatCreatedDate" Type="date" Nullable="false" />
+          <Property Name="ProductCateUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ProductCatUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="ProductCatIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role_Table">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleCreatedDate" Type="date" Nullable="false" />
+          <Property Name="RoleUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleUpdateDate" Type="date" Nullable="false" />
+          <Property Name="RoleIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Service_Table">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Productid" Type="int" Nullable="false" />
+          <Property Name="Locationid" Type="int" Nullable="false" />
+          <Property Name="ServiceProviderid" Type="int" Nullable="false" />
+          <Property Name="ServiceName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="money" Nullable="false" />
+          <Property Name="ServiceDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ServiceCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ServiceCreatedDate" Type="date" Nullable="false" />
+          <Property Name="ServiceUpdatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ServiceUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="ServiceIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_Table">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Roleid" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserAddress" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserCreatedBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserCreatedDate" Type="date" Nullable="false" />
+          <Property Name="UserUpdateBy" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserUpdatedDate" Type="date" Nullable="false" />
+          <Property Name="UserIsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Image_Table_Product_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="Image_Table" Type="Self.Image_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Image_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Order_Table" Type="Self.Order_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Order_Table">
+              <PropertyRef Name="Userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Order_Table">
+          <End Role="Order_Table" Type="Self.Order_Table" Multiplicity="1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order_Table">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Orderid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Product_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Service_Table">
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="0..1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service_Table">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Serviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Table_ProductCategory_Table">
+          <End Role="ProductCategory_Table" Type="Self.ProductCategory_Table" Multiplicity="1" />
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory_Table">
+              <PropertyRef Name="ProductCatId" />
+            </Principal>
+            <Dependent Role="Product_Table">
+              <PropertyRef Name="ProductCatid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product_Table">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCategory_Table_BaseCategory_Table">
+          <End Role="BaseCategory_Table" Type="Self.BaseCategory_Table" Multiplicity="1" />
+          <End Role="ProductCategory_Table" Type="Self.ProductCategory_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseCategory_Table">
+              <PropertyRef Name="BaseCatId" />
+            </Principal>
+            <Dependent Role="ProductCategory_Table">
+              <PropertyRef Name="BaseCatid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_Location_Table">
+          <End Role="Location_Table" Type="Self.Location_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location_Table">
+              <PropertyRef Name="LocationId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="Locationid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_Service_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="ServiceProviderid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Table_User_Table">
+          <End Role="Role_Table" Type="Self.Role_Table" Multiplicity="1" />
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role_Table">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User_Table">
+              <PropertyRef Name="Roleid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoppingCartDbModelStoreContainer">
+          <EntitySet Name="BaseCategory_Table" EntityType="Self.BaseCategory_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Image_Table" EntityType="Self.Image_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location_Table" EntityType="Self.Location_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Table" EntityType="Self.Order_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetail_Table" EntityType="Self.OrderDetail_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product_Table" EntityType="Self.Product_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCategory_Table" EntityType="Self.ProductCategory_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role_Table" EntityType="Self.Role_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Service_Table" EntityType="Self.Service_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Table" EntityType="Self.User_Table" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Image_Table_Product_Table" Association="Self.FK_Image_Table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Image_Table" EntitySet="Image_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Table_User_Table" Association="Self.FK_Order_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Order_Table" EntitySet="Order_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Order_Table" Association="Self.FK_OrderDetail_Table_Order_Table">
+            <End Role="Order_Table" EntitySet="Order_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Product_Table" Association="Self.FK_OrderDetail_Table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Service_Table" Association="Self.FK_OrderDetail_Table_Service_Table">
+            <End Role="Service_Table" EntitySet="Service_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Table_ProductCategory_Table" Association="Self.FK_Product_Table_ProductCategory_Table">
+            <End Role="ProductCategory_Table" EntitySet="ProductCategory_Table" />
+            <End Role="Product_Table" EntitySet="Product_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Table_User_Table" Association="Self.FK_Product_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Product_Table" EntitySet="Product_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCategory_Table_BaseCategory_Table" Association="Self.FK_ProductCategory_Table_BaseCategory_Table">
+            <End Role="BaseCategory_Table" EntitySet="BaseCategory_Table" />
+            <End Role="ProductCategory_Table" EntitySet="ProductCategory_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_Location_Table" Association="Self.FK_Service_Table_Location_Table">
+            <End Role="Location_Table" EntitySet="Location_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_Service_Table" Association="Self.FK_Service_Table_Service_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_User_Table" Association="Self.FK_Service_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Table_User_Table" Association="Self.FK_User_Table_User_Table">
+            <End Role="Role_Table" EntitySet="Role_Table" />
+            <End Role="User_Table" EntitySet="User_Table" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShoppingCartDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BaseCategory_Table">
+          <Key>
+            <PropertyRef Name="BaseCatId" />
+          </Key>
+          <Property Name="BaseCatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BaseCatName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BaseCatDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BaseCatCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BaseCatCreateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BaseCatUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BaseCatUpdateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BaseCatIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ProductCategory_Table" Relationship="Self.FK_ProductCategory_Table_BaseCategory_Table" FromRole="BaseCategory_Table" ToRole="ProductCategory_Table" />
+        </EntityType>
+        <EntityType Name="Image_Table">
+          <Key>
+            <PropertyRef Name="ImageId" />
+          </Key>
+          <Property Name="ImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Productid" Type="Int32" Nullable="false" />
+          <Property Name="BinaryImage" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ImageCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ImageUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ImageIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Product_Table" Relationship="Self.FK_Image_Table_Product_Table" FromRole="Image_Table" ToRole="Product_Table" />
+        </EntityType>
+        <EntityType Name="Location_Table">
+          <Key>
+            <PropertyRef Name="LocationId" />
+          </Key>
+          <Property Name="LocationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LocationPIN" Type="Int32" Nullable="false" />
+          <Property Name="LocationDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LocationCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LocationCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LocationUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LocationUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LocationIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Service_Table" Relationship="Self.FK_Service_Table_Location_Table" FromRole="Location_Table" ToRole="Service_Table" />
+        </EntityType>
+        <EntityType Name="Order_Table">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Userid" Type="Int32" Nullable="false" />
+          <Property Name="OrderDeliveryAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="OrderDeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="OrderStatus" Type="Int32" Nullable="false" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OrderCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OrderUpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OrderIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User_Table" Relationship="Self.FK_Order_Table_User_Table" FromRole="Order_Table" ToRole="User_Table" />
+          <NavigationProperty Name="OrderDetail_Table" Relationship="Self.FK_OrderDetail_Table_Order_Table" FromRole="Order_Table" ToRole="OrderDetail_Table" />
+        </EntityType>
+        <EntityType Name="OrderDetail_Table">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Name="OrderDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orderid" Type="Int32" Nullable="false" />
+          <Property Name="Serviceid" Type="Int32" />
+          <Property Name="Productid" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Order_Table" Relationship="Self.FK_OrderDetail_Table_Order_Table" FromRole="OrderDetail_Table" ToRole="Order_Table" />
+          <NavigationProperty Name="Product_Table" Relationship="Self.FK_OrderDetail_Table_Product_Table" FromRole="OrderDetail_Table" ToRole="Product_Table" />
+          <NavigationProperty Name="Service_Table" Relationship="Self.FK_OrderDetail_Table_Service_Table" FromRole="OrderDetail_Table" ToRole="Service_Table" />
+        </EntityType>
+        <EntityType Name="Product_Table">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCatid" Type="Int32" Nullable="false" />
+          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ProductDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductStock" Type="Int32" Nullable="false" />
+          <Property Name="ProductCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ProductUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ProductIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Image_Table" Relationship="Self.FK_Image_Table_Product_Table" FromRole="Product_Table" ToRole="Image_Table" />
+          <NavigationProperty Name="OrderDetail_Table" Relationship="Self.FK_OrderDetail_Table_Product_Table" FromRole="Product_Table" ToRole="OrderDetail_Table" />
+          <NavigationProperty Name="ProductCategory_Table" Relationship="Self.FK_Product_Table_ProductCategory_Table" FromRole="Product_Table" ToRole="ProductCategory_Table" />
+          <NavigationProperty Name="User_Table" Relationship="Self.FK_Product_Table_User_Table" FromRole="Product_Table" ToRole="User_Table" />
+          <NavigationProperty Name="Service_Table" Relationship="Self.FK_Service_Table_Service_Table" FromRole="Product_Table" ToRole="Service_Table" />
+        </EntityType>
+        <EntityType Name="ProductCategory_Table">
+          <Key>
+            <PropertyRef Name="ProductCatId" />
+          </Key>
+          <Property Name="ProductCatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BaseCatid" Type="Int32" Nullable="false" />
+          <Property Name="ProductCatName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCatDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCatCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCatCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ProductCateUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCatUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ProductCatIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="BaseCategory_Table" Relationship="Self.FK_ProductCategory_Table_BaseCategory_Table" FromRole="ProductCategory_Table" ToRole="BaseCategory_Table" />
+          <NavigationProperty Name="Product_Table" Relationship="Self.FK_Product_Table_ProductCategory_Table" FromRole="ProductCategory_Table" ToRole="Product_Table" />
+        </EntityType>
+        <EntityType Name="Role_Table">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RoleUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleUpdateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RoleIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User_Table" Relationship="Self.FK_User_Table_User_Table" FromRole="Role_Table" ToRole="User_Table" />
+        </EntityType>
+        <EntityType Name="Service_Table">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Productid" Type="Int32" Nullable="false" />
+          <Property Name="Locationid" Type="Int32" Nullable="false" />
+          <Property Name="ServiceProviderid" Type="Int32" Nullable="false" />
+          <Property Name="ServiceName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ServiceDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ServiceCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ServiceCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ServiceUpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ServiceUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ServiceIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Location_Table" Relationship="Self.FK_Service_Table_Location_Table" FromRole="Service_Table" ToRole="Location_Table" />
+          <NavigationProperty Name="OrderDetail_Table" Relationship="Self.FK_OrderDetail_Table_Service_Table" FromRole="Service_Table" ToRole="OrderDetail_Table" />
+          <NavigationProperty Name="Product_Table" Relationship="Self.FK_Service_Table_Service_Table" FromRole="Service_Table" ToRole="Product_Table" />
+          <NavigationProperty Name="User_Table" Relationship="Self.FK_Service_Table_User_Table" FromRole="Service_Table" ToRole="User_Table" />
+        </EntityType>
+        <EntityType Name="User_Table">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Roleid" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserCreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserCreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="UserUpdateBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserUpdatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="UserIsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Order_Table" Relationship="Self.FK_Order_Table_User_Table" FromRole="User_Table" ToRole="Order_Table" />
+          <NavigationProperty Name="Product_Table" Relationship="Self.FK_Product_Table_User_Table" FromRole="User_Table" ToRole="Product_Table" />
+          <NavigationProperty Name="Role_Table" Relationship="Self.FK_User_Table_User_Table" FromRole="User_Table" ToRole="Role_Table" />
+          <NavigationProperty Name="Service_Table" Relationship="Self.FK_Service_Table_User_Table" FromRole="User_Table" ToRole="Service_Table" />
+        </EntityType>
+        <Association Name="FK_ProductCategory_Table_BaseCategory_Table">
+          <End Role="BaseCategory_Table" Type="Self.BaseCategory_Table" Multiplicity="1" />
+          <End Role="ProductCategory_Table" Type="Self.ProductCategory_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseCategory_Table">
+              <PropertyRef Name="BaseCatId" />
+            </Principal>
+            <Dependent Role="ProductCategory_Table">
+              <PropertyRef Name="BaseCatid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Image_Table_Product_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="Image_Table" Type="Self.Image_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Image_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_Location_Table">
+          <End Role="Location_Table" Type="Self.Location_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location_Table">
+              <PropertyRef Name="LocationId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="Locationid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Order_Table" Type="Self.Order_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Order_Table">
+              <PropertyRef Name="Userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Order_Table">
+          <End Role="Order_Table" Type="Self.Order_Table" Multiplicity="1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order_Table">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Orderid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Product_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Table_Service_Table">
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="0..1" />
+          <End Role="OrderDetail_Table" Type="Self.OrderDetail_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service_Table">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="OrderDetail_Table">
+              <PropertyRef Name="Serviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Table_ProductCategory_Table">
+          <End Role="ProductCategory_Table" Type="Self.ProductCategory_Table" Multiplicity="1" />
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory_Table">
+              <PropertyRef Name="ProductCatId" />
+            </Principal>
+            <Dependent Role="Product_Table">
+              <PropertyRef Name="ProductCatid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Product_Table">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_Service_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Table_User_Table">
+          <End Role="Role_Table" Type="Self.Role_Table" Multiplicity="1" />
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role_Table">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User_Table">
+              <PropertyRef Name="Roleid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_Table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Service_Table" Type="Self.Service_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Service_Table">
+              <PropertyRef Name="ServiceProviderid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoppingCartDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BaseCategory_Table" EntityType="Self.BaseCategory_Table" />
+          <EntitySet Name="Image_Table" EntityType="Self.Image_Table" />
+          <EntitySet Name="Location_Table" EntityType="Self.Location_Table" />
+          <EntitySet Name="Order_Table" EntityType="Self.Order_Table" />
+          <EntitySet Name="OrderDetail_Table" EntityType="Self.OrderDetail_Table" />
+          <EntitySet Name="Product_Table" EntityType="Self.Product_Table" />
+          <EntitySet Name="ProductCategory_Table" EntityType="Self.ProductCategory_Table" />
+          <EntitySet Name="Role_Table" EntityType="Self.Role_Table" />
+          <EntitySet Name="Service_Table" EntityType="Self.Service_Table" />
+          <EntitySet Name="User_Table" EntityType="Self.User_Table" />
+          <AssociationSet Name="FK_ProductCategory_Table_BaseCategory_Table" Association="Self.FK_ProductCategory_Table_BaseCategory_Table">
+            <End Role="BaseCategory_Table" EntitySet="BaseCategory_Table" />
+            <End Role="ProductCategory_Table" EntitySet="ProductCategory_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Image_Table_Product_Table" Association="Self.FK_Image_Table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Image_Table" EntitySet="Image_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_Location_Table" Association="Self.FK_Service_Table_Location_Table">
+            <End Role="Location_Table" EntitySet="Location_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Table_User_Table" Association="Self.FK_Order_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Order_Table" EntitySet="Order_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Order_Table" Association="Self.FK_OrderDetail_Table_Order_Table">
+            <End Role="Order_Table" EntitySet="Order_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Product_Table" Association="Self.FK_OrderDetail_Table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Table_Service_Table" Association="Self.FK_OrderDetail_Table_Service_Table">
+            <End Role="Service_Table" EntitySet="Service_Table" />
+            <End Role="OrderDetail_Table" EntitySet="OrderDetail_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Table_ProductCategory_Table" Association="Self.FK_Product_Table_ProductCategory_Table">
+            <End Role="ProductCategory_Table" EntitySet="ProductCategory_Table" />
+            <End Role="Product_Table" EntitySet="Product_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Table_User_Table" Association="Self.FK_Product_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Product_Table" EntitySet="Product_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_Service_Table" Association="Self.FK_Service_Table_Service_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Table_User_Table" Association="Self.FK_User_Table_User_Table">
+            <End Role="Role_Table" EntitySet="Role_Table" />
+            <End Role="User_Table" EntitySet="User_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_Table_User_Table" Association="Self.FK_Service_Table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Service_Table" EntitySet="Service_Table" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShoppingCartDbModelStoreContainer" CdmEntityContainer="ShoppingCartDbEntities">
+          <EntitySetMapping Name="BaseCategory_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.BaseCategory_Table">
+              <MappingFragment StoreEntitySet="BaseCategory_Table">
+                <ScalarProperty Name="BaseCatId" ColumnName="BaseCatId" />
+                <ScalarProperty Name="BaseCatName" ColumnName="BaseCatName" />
+                <ScalarProperty Name="BaseCatDesc" ColumnName="BaseCatDesc" />
+                <ScalarProperty Name="BaseCatCreatedBy" ColumnName="BaseCatCreatedBy" />
+                <ScalarProperty Name="BaseCatCreateDate" ColumnName="BaseCatCreateDate" />
+                <ScalarProperty Name="BaseCatUpdatedBy" ColumnName="BaseCatUpdatedBy" />
+                <ScalarProperty Name="BaseCatUpdateDate" ColumnName="BaseCatUpdateDate" />
+                <ScalarProperty Name="BaseCatIsDeleted" ColumnName="BaseCatIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Image_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Image_Table">
+              <MappingFragment StoreEntitySet="Image_Table">
+                <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+                <ScalarProperty Name="Productid" ColumnName="Productid" />
+                <ScalarProperty Name="BinaryImage" ColumnName="BinaryImage" />
+                <ScalarProperty Name="ImageCreatedBy" ColumnName="ImageCreatedBy" />
+                <ScalarProperty Name="ImageCreatedDate" ColumnName="ImageCreatedDate" />
+                <ScalarProperty Name="ImageUpdatedBy" ColumnName="ImageUpdatedBy" />
+                <ScalarProperty Name="ImageUpdatedDate" ColumnName="ImageUpdatedDate" />
+                <ScalarProperty Name="ImageIsDeleted" ColumnName="ImageIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Location_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Location_Table">
+              <MappingFragment StoreEntitySet="Location_Table">
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationPIN" ColumnName="LocationPIN" />
+                <ScalarProperty Name="LocationDesc" ColumnName="LocationDesc" />
+                <ScalarProperty Name="LocationCreatedBy" ColumnName="LocationCreatedBy" />
+                <ScalarProperty Name="LocationCreatedDate" ColumnName="LocationCreatedDate" />
+                <ScalarProperty Name="LocationUpdatedBy" ColumnName="LocationUpdatedBy" />
+                <ScalarProperty Name="LocationUpdatedDate" ColumnName="LocationUpdatedDate" />
+                <ScalarProperty Name="LocationIsDeleted" ColumnName="LocationIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Order_Table">
+              <MappingFragment StoreEntitySet="Order_Table">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="OrderDeliveryAddress" ColumnName="OrderDeliveryAddress" />
+                <ScalarProperty Name="OrderDeliveryDate" ColumnName="OrderDeliveryDate" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="OrderCreatedBy" ColumnName="OrderCreatedBy" />
+                <ScalarProperty Name="OrderCreatedDate" ColumnName="OrderCreatedDate" />
+                <ScalarProperty Name="OrderUpdatedBy" ColumnName="OrderUpdatedBy" />
+                <ScalarProperty Name="OrderUpdatedDate" ColumnName="OrderUpdatedDate" />
+                <ScalarProperty Name="OrderIsDeleted" ColumnName="OrderIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetail_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.OrderDetail_Table">
+              <MappingFragment StoreEntitySet="OrderDetail_Table">
+                <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
+                <ScalarProperty Name="Orderid" ColumnName="Orderid" />
+                <ScalarProperty Name="Serviceid" ColumnName="Serviceid" />
+                <ScalarProperty Name="Productid" ColumnName="Productid" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Product_Table">
+              <MappingFragment StoreEntitySet="Product_Table">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductCatid" ColumnName="ProductCatid" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+                <ScalarProperty Name="ProductDesc" ColumnName="ProductDesc" />
+                <ScalarProperty Name="ProductStock" ColumnName="ProductStock" />
+                <ScalarProperty Name="ProductCreatedBy" ColumnName="ProductCreatedBy" />
+                <ScalarProperty Name="ProductCreatedDate" ColumnName="ProductCreatedDate" />
+                <ScalarProperty Name="ProductUpdatedBy" ColumnName="ProductUpdatedBy" />
+                <ScalarProperty Name="ProductUpdatedDate" ColumnName="ProductUpdatedDate" />
+                <ScalarProperty Name="ProductIsDeleted" ColumnName="ProductIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCategory_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.ProductCategory_Table">
+              <MappingFragment StoreEntitySet="ProductCategory_Table">
+                <ScalarProperty Name="ProductCatId" ColumnName="ProductCatId" />
+                <ScalarProperty Name="BaseCatid" ColumnName="BaseCatid" />
+                <ScalarProperty Name="ProductCatName" ColumnName="ProductCatName" />
+                <ScalarProperty Name="ProductCatDesc" ColumnName="ProductCatDesc" />
+                <ScalarProperty Name="ProductCatCreatedBy" ColumnName="ProductCatCreatedBy" />
+                <ScalarProperty Name="ProductCatCreatedDate" ColumnName="ProductCatCreatedDate" />
+                <ScalarProperty Name="ProductCateUpdatedBy" ColumnName="ProductCateUpdatedBy" />
+                <ScalarProperty Name="ProductCatUpdatedDate" ColumnName="ProductCatUpdatedDate" />
+                <ScalarProperty Name="ProductCatIsDeleted" ColumnName="ProductCatIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Role_Table">
+              <MappingFragment StoreEntitySet="Role_Table">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+                <ScalarProperty Name="RoleCreatedBy" ColumnName="RoleCreatedBy" />
+                <ScalarProperty Name="RoleCreatedDate" ColumnName="RoleCreatedDate" />
+                <ScalarProperty Name="RoleUpdatedBy" ColumnName="RoleUpdatedBy" />
+                <ScalarProperty Name="RoleUpdateDate" ColumnName="RoleUpdateDate" />
+                <ScalarProperty Name="RoleIsDeleted" ColumnName="RoleIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Service_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Service_Table">
+              <MappingFragment StoreEntitySet="Service_Table">
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Productid" ColumnName="Productid" />
+                <ScalarProperty Name="Locationid" ColumnName="Locationid" />
+                <ScalarProperty Name="ServiceProviderid" ColumnName="ServiceProviderid" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
+                <ScalarProperty Name="ServiceDesc" ColumnName="ServiceDesc" />
+                <ScalarProperty Name="ServiceCreatedBy" ColumnName="ServiceCreatedBy" />
+                <ScalarProperty Name="ServiceCreatedDate" ColumnName="ServiceCreatedDate" />
+                <ScalarProperty Name="ServiceUpdatedBy" ColumnName="ServiceUpdatedBy" />
+                <ScalarProperty Name="ServiceUpdatedDate" ColumnName="ServiceUpdatedDate" />
+                <ScalarProperty Name="ServiceIsDeleted" ColumnName="ServiceIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.User_Table">
+              <MappingFragment StoreEntitySet="User_Table">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Roleid" ColumnName="Roleid" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserCreatedBy" ColumnName="UserCreatedBy" />
+                <ScalarProperty Name="UserCreatedDate" ColumnName="UserCreatedDate" />
+                <ScalarProperty Name="UserUpdateBy" ColumnName="UserUpdateBy" />
+                <ScalarProperty Name="UserUpdatedDate" ColumnName="UserUpdatedDate" />
+                <ScalarProperty Name="UserIsDeleted" ColumnName="UserIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,98 @@
+﻿@model  IEnumerable<Online_SHopping_Cart.Models.Image_Table>
+@{
+    ViewBag.Title = "imagedisplay";
+  
+}
+<script src="~/scripts/JavaScript.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+@using (Html.BeginForm("upload", "Seller", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="w3-content w3-display-container">
+
+        <div style="margin-left:70px;margin-top:50px;">
+            @foreach (var item in ViewBag.imlist)
+            {
+                var image = Convert.ToBase64String(item.BinaryImage);
+                var src = "data:image/png;base64," + image;
+                <div class="mySlides">
+                    <img src="@src" style="width:200px; height:200px;" />
+                    <br />
+
+
+                    <a href="javascript:void(0)" class="deleteimage" id="@item.ImageId">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+
+
+
+
+
+                    @*<button class="deleteimage btn btn-default btn-sm " id="@item.ImageId" >
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>*@
+                </div>
+            }
+
+        </div>
+        <div class="mySlides" style="margin-left:70px;">
+            <image id="image" src="~/Images/upload.png" style="width:150px; height:150px;cursor:pointer;" />
+
+            <input type="file" name="ImageData" id="ImageData" multiple style="display:none;" />
+            <input type="submit" value="Upload" class="btn btn-default" style="margin-top:30px;margin-right:32px" />
+        </div>
+        <a href="javascript:void(0)">
+            <img src="~/Images/left.png" onclick="plusDivs(-1)" style="width:20px;height:20px;margin-left:60px;" />
+        </a>
+        <a href="javascript:void(0)">
+            <img src="~/Images/right.png"
+                 onclick="plusDivs(1)" style="width:20px;height:20px;margin-left:250px;" />
+        </a>
+
+        @*<input type="button" class="w3-button w3-black w3-display-left" value="<"onclick="plusDivs(-1)"/>
+            <input type="button" class="w3-button w3-black w3-display-right" value=">" onclick="plusDivs(1)"/>*@
+
+    </div>
+}
+
+@*<input type="file" src="~/Images/upload.png" style="width:100px; height:100px;" />
+
+    <input type="file" name="ImageData" id="ImageData" multiple />
+    <input type="submit" value="Upload" class="btn btn-default" />*@
+
+@*<div class="col-md-offset-2 col-md-10 mySlides">
+        <label class="btn-bs-file btn btn-primary ">
+            <span class="glyphicon glyphicon-picture"></span> Browse
+            <input type="file" name="ImageData" id="ImageData" onchange="fileCheck(this);" multiple />
+        </label>
+        <input type="submit" value="Upload" class="btn btn-default" />
+    </div>*@
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+
+$(document).ready(function () {
+    $("#image").click(function () {
+
+       // alert("hai");
+        $("input[id='ImageData']").click();
+
+
+    });
+});
+</script>

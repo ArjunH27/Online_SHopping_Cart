@@ -1,0 +1,48 @@
+﻿@model Online_SHopping_Cart.ViewModel.Book
+@{
+    ViewBag.Title = "purchase_all";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+}
+
+    <form method="post" action="/Buyer/purchase_all">
+
+        <label>Location</label>
+        @Html.DropDownList("place", (IEnumerable<SelectListItem>)ViewBag.location_list, "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlbcat" })
+
+        <label>Service</label>
+        @Html.DropDownListFor(model => model.ServiceId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlpcat" })
+
+        <label>Delivery Adddress</label><br />
+        @Html.TextAreaFor(model => model.OrderDelivryAddress)
+        <br />
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-shopping-cart"></span> BOOK
+        </button>
+
+     </form>
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#ddlbcat').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Buyer/service_name_all",
+                    data: { id: $('#ddlbcat').val() },
+                    datatype: "json",
+
+                    success: function (data) {
+                        var category = "<select id='ddlpcat'>";
+                        category = category + '<option value="">--Select--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            category = category + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                        }
+                        category = category + '</select>';
+                        $('#ddlpcat').html(category);
+                    }
+                });
+            });
+
+        });
+    </script>

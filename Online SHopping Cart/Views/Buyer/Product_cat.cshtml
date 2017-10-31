@@ -1,0 +1,44 @@
+﻿@model  IEnumerable<Online_SHopping_Cart.Models.ProductCategory_Table>
+@{
+    ViewBag.Title = "Product_cat";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+   
+}
+
+<style>
+
+</style>
+<link href="~/Content/materialize.css" rel="stylesheet" />
+
+
+@foreach (var item in Model)
+{
+    <button id=@(item.ProductCatId) class="btn waves-effect waves-light" onclick="cato(this)" >@(item.ProductCatName)</button>
+}
+
+
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/materialize.js"></script>
+
+<script>
+    function cato(element) {
+        var btn = element.id;
+        $.ajax({
+            type: "POST",
+            url: "find_pro_cat_id",
+            data: '{id: "' + btn + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                window.location.href = data.Url;
+            },
+            failure: function (response) {
+                alert("Not found");
+            },
+            error: function (response) {
+                alert("error");
+            }
+        });
+
+    }
+</script>

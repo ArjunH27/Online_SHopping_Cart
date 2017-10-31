@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Online_SHopping_Cart.Models.Image_Table>
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<script src="~/scripts/productsPartialView.js"></script>
+<style>
+    #box {
+        display: inline;
+        margin: 20px;
+        width: 200px;
+        float: left;
+    }
+
+    #selectAll {
+        border: inset;
+        display: inline;
+    }
+</style>
+<input type="checkbox" id="selectAll" />
+<label>Select All</label><br /><br />
+<div id="checkboxes">
+
+    @foreach (var item in Model)
+    {
+        var image = Convert.ToBase64String(item.BinaryImage);
+        var src = "data:image/png;base64," + image;
+        <div id="box">
+            <input id="chk@(item.Productid)"
+                   type="checkbox"
+                   value="@item.Productid"
+                   name="ids" />
+            <img src="@src" style="width:150px; height:150px;" onclick="ZoomImage('data:image/jpg;base64,@(Convert.ToBase64String(item.BinaryImage))')" />
+        </div>
+
+
+    }
+</div>
+<div id="popupdiv" style="display: none">
+    <img id="main" src="images/main.jpg">
+</div>

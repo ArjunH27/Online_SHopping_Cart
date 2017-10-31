@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "login";
+    Layout = null;
+}
+<style>
+
+    .wrapper{
+
+        margin-top:150px;
+        margin-left:550px;
+        width:400px;
+        height:400px;
+        text-align:center;
+        
+    }
+
+</style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="~/Content/materialize.css" rel="stylesheet" />
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/materialize.js"></script>
+<body style="background-image:url('../../Images/back1.jpg')">
+    <div class="wrapper">
+        <h3 style="color:#80cbc4" >LOGIN</h3>
+        <form class="col s12" method="post" action="">
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input type="text" name="user" class="validate">
+                <label>User Name</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">lock_outline</i>
+                <input type="password" name="password" class="validate">
+                <label>Password</label>
+            </div>
+            <div>
+                <button class="btn waves-effect waves-light" type="submit">
+                    Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+
+        <div>
+            <h6>Not a User <a href="create">Register Here</a></h6>
+        </div>
+        <div>
+            <h6>Forget Password ?<a href="forget_pass">Retrive Here</a></h6>
+        </div>
+
+    </div>
+</body>
+

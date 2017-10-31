@@ -1,0 +1,36 @@
+﻿@model IEnumerable< Online_SHopping_Cart.Models.Order_Table>
+
+@{
+    ViewBag.Title = "notification";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+}
+
+<h3>Notifications</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderId)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+                <p>Your Order Will BE Delivered By @Html.DisplayFor(modelItem => item.OrderDeliveryDate)</p>
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Details", "OrderHistoryDetails", new { id = item.OrderId })
+
+            </td>
+        </tr>
+    }
+
+</table>
+

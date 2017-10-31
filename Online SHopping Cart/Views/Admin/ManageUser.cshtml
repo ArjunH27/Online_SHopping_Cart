@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Online_SHopping_Cart.ViewModel.Viewmodel>
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Manage User</h2>
+
+<hr />
+<div id="ajaxgrid">
+    @{
+        var gridview = new WebGrid(Model, ajaxUpdateContainerId: "ajaxgrid", canSort: true, rowsPerPage: 5);
+    }
+    @gridview.GetHtml(
+        //tableStyle: "webgrid-table",
+        //headerStyle: "webgrid-header",
+        //footerStyle: "webgrid-footer",
+        //selectedRowStyle: "webgrid-selected-row",
+        //rowStyle: "webgrid-row-style",
+        tableStyle: "webGrid",
+        headerStyle: "header",
+        alternatingRowStyle: "altColor",
+        selectedRowStyle: "clickable",
+        mode: WebGridPagerModes.All,
+    columns: new[]
+
+{
+
+     gridview.Column(columnName:"FirstName", header: "First Name",format: @<span>
+        <span id="Name" class="read">@item.FirstName</span>
+    </span>),
+
+     gridview.Column(columnName: "LastName", header: " Last Name", format: @<span>
+        <span id="Description" class="read">@item.LastName</span>
+    </span> ),
+
+     gridview.Column(columnName: "UserEmail", header: " User Email", format: @<span>
+        <span id="Description" class="read">@item.UserEmail</span>
+    </span> ),
+
+     gridview.Column(columnName: "RoleName", header: "  Type of user", format: @<span>
+        <span id="Description" class="read">@item.RoleName</span>
+    </span> ),
+
+              gridview.Column(columnName: "UserAddress", header: "User Address", format: @<span>
+        <span id="Description" class="read">@item.UserAddress</span>
+    </span> ),
+
+        gridview.Column("", style: "button",format:(item) => {
+            if (item.UserIsDeleted == false)
+            {
+                return Html.Raw(String.Format("<button class='decline' id="+@item.UserId+">Decline</button>"));
+            }
+            else
+            {
+                return Html.Raw("<button class='accept' id="+@item.UserId+">Accept</button><button class='decline' id="+@item.UserId+">Decline</button>");
+
+            }
+        })
+}
+)
+</div>
+
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+<script src="~/scripts/Confirm.js"></script>
+<style type="text/css">
+        .webGrid {
+            border: 1px solid;
+            margin-top: 30px;
+            width: 1200px;
+        }
+
+            .webGrid tr {
+                border: 1px solid #C0C0C0;
+                height: 50px;
+            }
+
+                .webGrid tr :hover {
+                    background-color: #F5F5F5;
+                }
+
+            .webGrid th, .webGrid td {
+                padding-left: 20px;
+                width: 50px;
+                color: black !important;
+                border: 1px solid #C0C0C0;
+            }
+
+        .header {
+            background-color: #e8eef4;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+            .header th {
+                border: 1px solid #C0C0C0;
+                padding-left: 20px;
+            }
+
+        .altColor {
+            background-color: lightgray;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 1px 0 rgba(0,0,0,0.19);
+        }
+
+
+        .clickable {
+            cursor: pointer;
+            background: #ffff99;
+        }
+
+        .update-case {
+            display: none;
+        }
+
+        .cancel-case {
+            display: none;
+        }
+
+       
+</style>
+

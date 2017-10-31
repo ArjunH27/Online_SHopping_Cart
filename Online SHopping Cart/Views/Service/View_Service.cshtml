@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "View_Service";
+    Layout = "~/Views/Shared/_ServiceLayout.cshtml";
+}
+
+<h2>View_Service</h2><br /><br /><br />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"
+      rel="stylesheet" type="text/css" />
+
+
+
+@{
+    var gridview = new WebGrid(ViewBag.OrderList, ajaxUpdateContainerId: "ajaxgrid", rowsPerPage: 7);
+}
+@gridview.GetHtml(
+    //tableStyle: "webgrid-table",
+    // headerStyle: "webgrid-header",
+    // footerStyle: "webgrid-footer",
+    // selectedRowStyle: "webgrid-selected-row",
+    // rowStyle: "webgrid-row-style",
+    // mode: WebGridPagerModes.All,
+    tableStyle: "webGrid", headerStyle: "header", alternatingRowStyle: "altColor", selectedRowStyle: "clickable",
+    columns: new[]
+    { gridview.Column(columnName:"Orderid", header: "Order Id",format: @<text>
+        <span id="OrderId" class="read">@item.Orderid</span></text>),
+
+
+        gridview.Column(columnName:"OrderDeliveryDate", header: "Deliver Before", format: (item) => string.Format("{0:dd-MMM-yyyy}", item.OrderDeliveryDate)),
+        gridview.Column(columnName:"TotalAmount",header:"Total Amount",format: @<text>@String.Format("{0:0.00}", (decimal)(item.TotalAmount)) </text>),
+        gridview.Column(columnName:"Userid", header: "User Id",format: @<text>
+            <span id="UserId" class="read">@item.Userid</span></text>) ,
+        gridview.Column(format: @<text> <a class="details" href="javascript:void(0);  ">View Details</a></text>
+        )
+        }
+        )
+<style type="text/css">
+    /*.webgrid-table {
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                font-size: 1.2em;
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                border: solid 1px #000000;
+                background-color: white;
+            }
+
+                .webgrid-table td, th {
+                    border: 1px solid #000000;
+                    padding: 3px 7px 2px;
+                }
+
+            .webgrid-header {
+                background-color: #000000;
+                color: #ffffff !important;
+                padding-bottom: 4px;
+                padding-top: 5px;
+                text-align: left;
+            }
+
+            .webgrid-footer {
+            }
+
+            .webgrid-row-style {
+                padding: 3px 7px 2px;
+            }*/
+    .webGrid {
+        border: 1px solid;
+        margin-top: 30px;
+        width: 1200px;
+    }
+
+        .webGrid tr {
+            border: 1px solid #C0C0C0;
+            height: 50px;
+        }
+
+            .webGrid tr :hover {
+                background-color: #F5F5F5;
+            }
+
+        .webGrid th, .webGrid td {
+            padding-left: 20px;
+            width: 50px;
+            border: 1px solid #C0C0C0;
+        }
+
+
+
+    .header {
+        background-color: #e8eef4;
+        height: 40px;
+        color: black !important;
+        margin-left: 10px;
+    }
+
+        .header th {
+            border: 1px solid #C0C0C0;
+            padding-left: 20px;
+        }
+
+    .altColor {
+        background-color: lightgray;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 1px 0 rgba(0,0,0,0.19);
+    }
+
+
+    .clickable {
+        cursor: pointer;
+        background: #ffff99;
+    }
+</style>
+<div id="dialog" style="display: none">
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+            //To hide the third column in webgrid that contains user id
+            hideColumn = function (column) {
+                $('tr').each(function () {
+                    $(this).find('td,th').eq(column).hide();
+                });
+            };
+            hideColumn(3);
+            $(function () {
+                $("#dialog").dialog({
+                    width: 600,
+                    height: 600,
+                    autoOpen: false,
+                    modal: true,
+                    title: "View Details"
+
+                });
+                $(".details").on("click", function () {
+                    var tr = $(this).parents('tr:first');
+                    var OrderId = tr.find('#OrderId').html();
+                    var UserId = tr.find('#UserId').html();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Service/OrderDetails",
+                        data:JSON.stringify({"OrderId":OrderId,"UserId":UserId}),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "html",
+                        success: function (response) {
+                            $('#dialog').html(response);
+
+
+                            $('#dialog').dialog('open');
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            });
+</script>

@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "Homepage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@*<h2>Home</h2>*@
+<html>
+<head>
+    <link href="~/css/style1.css" rel="stylesheet">
+    <script src="~/scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/scripts/home.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            var left = $('.slide').offset().left;  // Get the calculated left position
+
+            $(".slide").css({ left: left })  // Set the left to its calculated position
+                         .animate({ "left": "0px" }, "slow");
+
+        });
+    </script>
+</head>
+<body>
+    <h1><img id="dashboard" src="~/Images/dashboard.png" /> Admin Dashboard</h1>
+    <div class="row one">
+        <h2><em>Today</em> </h2>
+        <div class="col-md-2 widget first">
+            <div class="stats-left ">
+                <h5>Today</h5>
+                <h4>Sales</h4>
+            </div>
+            <div class="stats-right">
+                <label>@ViewBag.sales </label>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <div class="col-md-2 widget states-mdl">
+            <div class="stats-left">
+                <h5>New</h5>
+                <h4>User's</h4>
+            </div>
+            <div class="stats-right">
+                <label>@ViewBag.NewUserCount</label>
+            </div>
+            @*<div class="clearfix"> </div>*@
+        </div>
+        <div class="col-md-2 widget states-last">
+            <div class="stats-left">
+                <h5>Today</h5>
+                <h4>Orders</h4>
+            </div>
+            <div class="stats-right">
+                <label>@ViewBag.orders</label>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+
+        <div class="col-md-3 slide ">
+            <div class="widget widget-hide-header widget-reminder">
+                <div class="widget-header ">
+                    <i class="glyphicon glyphicon-bell"></i>
+                    <h3>Today's Reminder</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="today-reminder">
+
+                        <br />
+                        <p style="padding-left:10px">
+                            @ViewBag.unauthorised
+                            New users to be accepted or declined  for today
+                        </p>
+                        <br />
+                        <a href="/Admin/ManageUser"> <em class="reminder-notes">Accept or Decline?</em></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h2><em>Users & Categories</em> </h2>
+        <div class="col-md-6 four-grids">
+            <table class="table1">
+                <tr>
+                    <td colspan="2">
+                        <div class="four-grid">
+                            <div class="four-grid1">
+                                <div class="icon">
+                                    <i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="four-text">
+                                    <h3>Registered User</h3>
+                                    <h4>@ViewBag.UserCount</h4>
+                                    <p> <span class="inlinebar"><canvas width="29" height="20" style="display: inline-block; width: 29px; height: 20px; vertical-align: top;"></canvas></span> </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:167px;">
+                        <div class="four-grid">
+                            <div class="four-grid2">
+                                <div class="icon">
+                                    <img src="~/Images/admin.png" class="addnew3" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Admin</h3>
+                                    <h4>@ViewBag.AdminCount</h4>
+                                    <p><span class="dynamicbar"><canvas width="29" height="20" style="display: inline-block; width: 29px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:167px;">
+                        <div class="four-grid">
+                            <div class="four-grid3">
+                                <div class="icon">
+                                    <img src="~/Images/seller1.png" class="addnew3" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Sellers</h3>
+                                    <h4>@ViewBag.SellerCount </h4>
+                                    <p><span class="dynamicbar"><canvas width="34" height="20" style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:167px;">
+                        <div class="four-grid">
+                            <div class="four-grid4">
+                                <div class="icon">
+                                    <img src="~/Images/buyer.png" class="addnew2" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Buyers</h3>
+                                    <h4>@ViewBag.BuyerCount</h4>
+                                    <p><span class="dynamicbar"><canvas width="34" height="20" style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:167px;">
+                        <div class="four-grid">
+                            <div class="four-grid5">
+                                <div class="icon">
+                                    <img src="~/Images/courier.png" class="addnew4" />
+                                </div>
+                                <div class="four-text">
+                                    <h3> Services</h3>
+                                    <h4>@ViewBag.Servicecount</h4>
+                                    <p><span class="dynamicbar"><canvas style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-md-5 four-grids">
+            <table class="table2">
+                <tr>
+                    <td @*width="250px"*@>
+                        <div class="four-grid">
+                            <div class="four-grid6">
+                                <div class="icon">
+
+                                    <img src="~/Images/new user.png" class="addnew" aria-hidden="true" />
+                                </div>
+                                <div class="four-text">
+                                    <h3> Newly Registered </h3>
+                                    <h4>@ViewBag.NewRegisteredUserCount</h4>
+                                    <p><span class="dynamicbar"><canvas width="34" height="20" style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td @*width="250px;"*@>
+                        <div class="four-grid">
+                            <div class="four-grid7">
+                                <div class="icon">
+
+                                    <img src="~/Images/base categories.png" class="addnew1" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Base Categories</h3>
+                                    <h4>@ViewBag.BaseCategoriesCount </h4>
+                                    <p> <span class="dynamicbar"><canvas width="29" height="20" style="display: inline-block; width: 29px; height: 20px; vertical-align: top;"></canvas></span> </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td @*width="250px;"*@>
+                        <div class="four-grid">
+                            <div class="four-grid8">
+                                <div class="icon">
+                                    <img src="~/Images/productcategory.png" class="addnew2" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Product Categories</h3>
+                                    <h4>@ViewBag.ProductCategoriesCount</h4>
+                                    <p><span class="dynamicbar"><canvas width="34" height="20" style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td @*width="250px;"*@>
+                        <div class="four-grid">
+                            <div class="four-grid9">
+                                <div class="icon">
+                                    <img src="~/Images/Locations.png" class="addnew2" />
+                                </div>
+                                <div class="four-text">
+                                    <h3>Locations</h3>
+                                    <h4>@ViewBag.LocationsCount</h4>
+                                    <p><span class="dynamicbar"><canvas width="34" height="20" style="display: inline-block; width: 34px; height: 20px; vertical-align: top;"></canvas></span></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+    @*<div class="clearfix"></div>*@
+
+
+
+</body>
+</html>

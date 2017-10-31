@@ -1,0 +1,109 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/Content/materialize.css" rel="stylesheet" />
+</head>
+<body style="padding:0px;margin:0px;">
+    
+    <nav>
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li><h4>shopFactory</h4></li>
+                </ul>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    
+                    <li>@Html.ActionLink("Home", "Index")</li>
+                    <li>@Html.ActionLink("Notification", "notification")</li>
+                    <li>@Html.ActionLink("Order", "OrderHistoryList")</li>
+                </ul>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    @if (Session["count"] != null)
+            {
+                        <li>@Html.ActionLink("Cart(" + @Session["count"].ToString() + ")", "cart")</li>
+                    }
+                    else
+                    {
+                        Response.Redirect("User/login");
+                    }
+
+                    @if (Session["user"] != null)
+                    {
+                        <li>Welcome : @Session["user"].ToString() </li>
+                        
+                        <li data-activates="slide-out" class="button-collapse">Profile</li>
+                    }
+                    else
+                    {
+                        Response.Redirect("~/User/login");
+                    }
+                    
+                </ul>
+</div>
+    </nav>
+    
+        <ul id="slide-out" class="side-nav">
+            <li>
+                <div class="user-view" style="height:300px;">
+                    <div class="background">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png">
+                    </div>
+                </div>
+            </li>
+            <li><a class="waves-effect" href="#!">NAME : @Session["user"].ToString()</a> </li>
+            <li><a class="waves-effect" href="#!">UserName : @Session["user"].ToString()</a> </li>
+            <li><a class="waves-effect" href="#!">Email : @Session["user"].ToString()</a></li>
+            <li><div class="divider"></div></li>
+            <li ><div class="chip">
+                 @Html.ActionLink("EDIT PROFILE", "profile")
+                <i class="material-icons"> account_circle</i>
+                </div>
+            </li>
+            <li>
+                <div class="chip">
+                    @Html.ActionLink("CHANGE PASSWORD", "")
+                    <i class="material-icons"> edit</i>
+                </div>
+            </li>
+            <li>
+                <div class="chip">
+                    @Html.ActionLink("LOGOUT", "logout")
+                    <i class="material-icons"> backspace</i>
+                </div>
+            </li>
+           
+</ul>
+        
+    
+
+  
+    <div >
+        @RenderBody()
+       
+    </div>
+   
+
+</body>
+</html>
+<script src="~/Scripts/modernizr-2.6.2.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/scripts/materialize.js"></script>
+<script>
+     $('.button-collapse').sideNav({
+         menuWidth: 300, // Default is 300
+         edge: 'right', // Choose the horizontal origin
+         closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+         draggable: true, // Choose whether you can drag to open on touch screens,
+
+    }
+  );
+</script>

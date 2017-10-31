@@ -1,0 +1,143 @@
+﻿@model Online_SHopping_Cart.ViewModel.Service_ViewModel
+@{
+    ViewBag.Title = "Add_Service";
+    Layout = "~/Views/Shared/_ServiceLayout.cshtml";
+}
+
+<h2>Add_Service</h2>
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.min.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
+<style>
+    #TheForm {
+        border: inset;
+    }
+</style>
+@if (ViewBag.message != null)
+{
+    <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.message");
+    };</script>
+}
+
+@using (Html.BeginForm("Add_Service", "Service", FormMethod.Post, new { id = "TheForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Display("Search Products")
+
+
+        <div class="form-group">
+            @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("baseProductList", (IEnumerable<SelectListItem>)ViewBag.baseCategory, "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlbcat" })
+                @Html.ValidationMessage("Message", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Product Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.productCatId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlpcat", @onchange = "GetProductId()" })
+                @Html.ValidationMessageFor(model => model.productCatId, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group" style="background-color:antiquewhite">
+            <div id="partialPlaceHolder">
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Service Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.serviceName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.serviceName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Choose Location", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @foreach (var item in Model.locationList)
+                {
+                    <div>
+                        @Html.RadioButtonFor(m => m.selectedLocation, item.LocationId)
+                        @Html.Label(item.LocationName)
+                    </div>
+                }
+                @Html.ValidationMessageFor(m => m.selectedLocation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Delivery Charge", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.deliveryCharge, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.deliveryCharge, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.serviceDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.serviceDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Service" class="btn btn-default" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cancel" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+   $(document).ready(function () {
+        $('#ddlbcat').change(function () {
+            $.ajax({
+                type: "post",
+                url: "/Service/GetProductCategory",
+                data: { id: $('#ddlbcat').val() },
+                datatype: "json",
+
+                success: function (data) {
+                    var category = "<select id='ddlpcat'>";
+                    category = category + '<option value="">--Select--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        category = category + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    }
+                    category = category + '</select>';
+                    $('#ddlpcat').html(category);
+                }
+            });
+        });
+    });
+    function GetProductId() {
+        var productCatId = $("#ddlpcat").val();
+        $.ajax({
+            url: '/Service/Image_PartialView',
+            type: 'Get',
+            data: { productCatId: productCatId },
+            success: function (result) {
+                $("#partialPlaceHolder").html(result);
+            },
+            error: function () {
+                alert("failed");
+            }
+        });
+    }
+
+</script>

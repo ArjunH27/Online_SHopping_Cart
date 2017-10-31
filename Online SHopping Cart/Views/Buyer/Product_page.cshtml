@@ -1,0 +1,144 @@
+﻿@model IEnumerable<Online_SHopping_Cart.ViewModel.Buyer_Product>
+
+@{
+    ViewBag.Title = "Product_page";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="~/Content/materialize.css" rel="stylesheet" />
+<style>
+.filter{
+
+margin-top:5px;
+margin-left:15px;
+}
+#cr{
+    height:400px;
+    width:300px;
+    margin:25px;
+    float:left;
+}
+</style>
+
+<div class="filter">
+    <a class="dropdown-button btn btn-floating pulse " data-activates='dropdown1'><i class="material-icons">menu</i></a>
+    <ul id='dropdown1' class='dropdown-content'>    
+        <li style="text-align:center;"><h6>FILTER BY PRICE</h6></li>
+        <li><button id="filter1" class="btn waves-effect waves-light">FIlter : Low - High</button></li>
+        <li class="divider"></li>
+        <li><button id="filter2" class="btn waves-effect waves-light">FIlter : High - Low</button></li>
+    </ul>
+   
+    
+    </div>
+
+    @foreach (var item in Model)
+    {
+        var base64 = Convert.ToBase64String(item.BinaryImage);
+        var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+
+        <div class="card" id="cr">
+
+            <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" style="height:300px;" src="@imgSrc" /><br />
+             </div>
+
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">@Html.DisplayFor(modelItem => item.ProductName)<i class="material-icons right">more_vert</i></span>
+            </div>
+
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">@Html.DisplayFor(modelItem => item.ProductName)<i class="material-icons right">close</i></span>
+                @Html.DisplayFor(modelItem => item.ProductName)<br />
+
+                @Html.DisplayFor(modelItem => item.ProductPrice)<br />
+
+                @Html.DisplayFor(modelItem => item.ProductDesc)<br />
+
+                @foreach (var item1 in ViewBag.no_stock)
+                {
+                    if (item.ProductId == item1)
+                    {
+                        <h4 style="color:red">Out Of Stock</h4>
+                    }
+                    else
+                    {
+                        <br /><br />
+                    }
+                }
+
+
+                @Html.ActionLink("View", "order", new { id = item.ProductId }, new { @class = "btn waves-effect waves-light" })
+                <br /><br />
+                <button id=@(item.ProductId) class="btn waves-effect waves-light" onclick="cart(this)">Add to Cart </button>
+                
+            </div>    
+
+       </div>
+    }
+
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/scripts/materialize.js"></script>
+  
+    <script>
+
+        function cart(element) {
+            var btn = element.id;
+            $.ajax({
+                type: "POST",
+                url: "add_cart",
+                data: '{id: "' + btn + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("Added to Cart");
+                    window.location.href = data.Url;
+                },
+                failure: function (response) {
+                    alert("Not found");
+                },
+                error: function (response) {
+                    alert("error");
+                }
+            });
+
+        }
+
+        $("#filter1").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "fill1",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    window.location.href = "Product_page";
+                }
+            });
+
+        })
+        $("#filter2").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "fill2",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    window.location.href = "Product_page";
+                }
+            });
+
+        })
+       
+        $('.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: false, // Does not change width of dropdown to that of the activator
+            hover: true, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: true, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+        }
+  );
+    </script>

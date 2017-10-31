@@ -1,0 +1,23 @@
+﻿@model Online_SHopping_Cart.Models.Image_Table
+
+@{
+    ViewBag.Title = "UploadImages";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+}
+
+<h2>UploadImages</h2>
+
+@using (Html.BeginForm("UploadImages", "Buyer", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+{
+    <div class="container">
+        <h3>UploadImages</h3>
+        
+        <div class="form-group">
+            <label for="file">Filename:</label>
+            <input type="file" name="file" id="file" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+}  

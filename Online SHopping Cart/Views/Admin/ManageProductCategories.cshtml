@@ -1,0 +1,220 @@
+﻿@model Online_SHopping_Cart.Models.ProductCategory_Table
+@{
+    ViewBag.Title = "ManageProductCategories";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>ManageProductCategories</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Add New Product Category</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+        <div class="form-group">
+
+            @Html.Label("Base Category Name", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.DropDownList("basecategory", "Select Item")
+                @Html.ValidationMessageFor(model => model.BaseCatid, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group ">
+
+            @Html.LabelFor(model => model.ProductCatName, "Product Category", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ProductCatName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductCatName, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+
+
+        <div class="form-group ">
+            @Html.LabelFor(model => model.ProductCatDesc, " Category Description", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ProductCatDesc, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductCatDesc, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div id="ajaxgrid">
+    @{
+        var gridview = new WebGrid(ViewBag.ProductCategories, ajaxUpdateContainerId: "ajaxgrid", canSort: true, rowsPerPage: 5);
+    }
+    @gridview.GetHtml(
+        tableStyle: "webGrid",
+        headerStyle: "header",
+        alternatingRowStyle: "altColor",
+        selectedRowStyle: "clickable",
+        //tableStyle: "webgrid-table",
+        //headerStyle: "webgrid-header",
+        //footerStyle: "webgrid-footer",
+        //selectedRowStyle: "webgrid-selected-row",
+        //rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+    columns: new[]
+
+{
+
+
+     gridview.Column(columnName:"ProductCatName", header: "Product Category Name",format: @<span>
+        <span id="CatName" class="read">@item.ProductCatName</span>
+        @Html.TextBox("ProductCatName", (string)item.ProductCatName, new { @class = "edit",@style="display:none" })
+        <label id="label1" class="text-danger"></label>
+
+    </span>),
+    gridview.Column(columnName:"BaseCatName", header: "Base Category",format: @<span>
+        <span id="BaseName" class="readid">@item.BaseCatName </span>
+    </span>),
+
+     gridview.Column(columnName: "ProductCatDesc", header: " Product Category Description", format: @<span>
+        <span id="CatDescription" class="read">@item.ProductCatDesc</span>
+        @Html.TextBox("ProductCatDescription", (string)item.ProductCatDesc, new { @class = "edit",@style="display:none" })
+        <label id="label2" class="text-danger"></label>
+
+    </span> ),
+
+     gridview.Column("", style: "button",
+                format:
+
+                @<text>
+                    <button class="edit-case read" id="@item.ProductCatId">Edit</button>
+                    <button class="delete-case read" id="@item.ProductCatId">Delete</button>
+                    <button class="update-case edit" id="@item.ProductCatId">Update</button>
+                    <button class="cancel-case edit" id="@item.ProductCatId">Cancel</button>
+                </text>)
+
+    }
+)
+</div>
+<div>
+    <hr />
+    @Html.ActionLink("Back to Home Page", "Home")
+</div>
+<style type="text/css">
+    /*.webgrid-table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 1.2em;
+        width: 100%;
+        display: table;
+        border-collapse: separate;
+        border: solid 1px #000000;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #000000;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header {
+        background-color: #000000;
+        color: #ffffff !important;
+        padding-bottom: 4px;
+        padding-top: 5px;
+        text-align: left;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }*/
+
+    .webGrid {
+        border: 1px solid;
+        margin-top: 30px;
+        width: 1200px;
+    }
+
+        .webGrid tr {
+            border: 1px solid #C0C0C0;
+            height: 50px;
+        }
+
+            .webGrid tr :hover {
+                background-color: #F5F5F5;
+            }
+
+        .webGrid th, .webGrid td {
+            padding-left: 20px;
+            width: 50px;
+            color: black !important;
+            border: 1px solid #C0C0C0;
+        }
+
+    .header {
+        background-color: #e8eef4;
+        height: 40px;
+        margin-left: 10px;
+    }
+
+        .header th {
+            border: 1px solid #C0C0C0;
+            padding-left: 20px;
+        }
+
+    .altColor {
+        background-color: lightgray;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 1px 0 rgba(0,0,0,0.19);
+    }
+
+
+    .clickable {
+        cursor: pointer;
+        background: #ffff99;
+    }
+
+    .update-case {
+        display: none;
+    }
+
+    .cancel-case {
+        display: none;
+    }
+
+    h3 {
+        padding-left: 30px;
+        color: gray;
+    }
+
+    .form-horizontal {
+        border: solid #C0C0C0;
+        width: 600px;
+        padding-left: 30px;
+        padding-right: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        text-align: left;
+    }
+</style>
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+<script src="~/scripts/jquery.validate.min.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/scripts/Product.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />

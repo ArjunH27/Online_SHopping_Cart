@@ -1,0 +1,134 @@
+﻿@model List<Online_SHopping_Cart.Models.BaseCategory_Table>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+    WebGrid grid = new WebGrid(source: ViewBag.list);
+}
+<style>
+  .mySlides{
+      display:none;
+        width:100%;
+      height:700px;
+  }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 100%;
+        border-radius: 5px;
+        /*background-image: url('http://www.webdesigndev.com/wp-content/uploads/2015/02/7-Halftone-Textures.jpg');*/
+        text-align: center;
+    }
+    .card1 {
+        text-align:center;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 100%;
+        margin-left:35px;
+        margin-top:20px;
+        margin-bottom:20px;
+        font-size:larger;
+        background-color:white;
+        
+    }
+</style>
+
+<link href="~/Content/materialize.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="col s12" >
+    <div class="card">
+        <img class="mySlides" src="https://www.concept-phones.com/wp-content/uploads/2017/07/Google-Pixel-2XL-Concept-Creator-render-2.jpg" style="width:100%">
+        <img class="mySlides" src="http://www.appliancesconnection.com/blog/wp-content/uploads/2016/05/Whirlpool.jpg" style="width:100%">
+        <img class="mySlides" src="https://static.wforwoman.com/website-ver17/images/home/Home_Page_Banner_Desktop_Mughal_Gown_27_09_2017.jpg" style="width:100%">
+        <script>
+var slideIndex = 0;
+carousel();
+
+function carousel() {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > x.length) {slideIndex = 1}
+    x[slideIndex-1].style.display = "block";
+    setTimeout(carousel, 2000);
+}
+        </script>
+    </div>
+</div>
+<br /><br />
+
+
+    @*<div class="col s3" style="width:400px;">
+        <a class="dropdown-button btn " data-activates='dropdown1'>Choose Category<i class="material-icons">  menu</i></a>
+        <ul id='dropdown1' class='dropdown-content'>
+            @grid.GetHtml(
+ columns: new[]{
+     grid.Column(columnName: "BaseCatName", header: " ",format:@<l1> @item.GetSelectLink(item.BaseCatName.ToString())</l1>)
+ }
+ )
+
+            @if (grid.HasSelection)
+            {
+                var base_cat = (Online_SHopping_Cart.Models.BaseCategory_Table)grid.Rows[grid.SelectedIndex].Value;
+                Session["base_cat"] = @base_cat.BaseCatId;
+                Response.Redirect("Buyer/Product_cat");
+            }
+        </ul>
+    </div>*@
+
+    <div style="margin-left:10%;">
+        @foreach (var item in Model)
+        {
+            <button id=@(item.BaseCatId) class="btn waves-effect waves-light" onclick="cato(this)">@(item.BaseCatName)</button>
+        }
+    </div>
+
+<div class="row">
+    <div class="col s3"> 
+        <div class="carousel">
+            <a class="carousel-item" href="#one!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+            <a class="carousel-item" href="#two!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+            <a class="carousel-item" href="#three!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+            <a class="carousel-item" href="#four!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+            <a class="carousel-item" href="#five!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+        </div>
+    </div>
+
+    <div class="col 7 text-center" style="height: 450px">
+        <h5>NEW ARRIVALS</h5>
+        <div>
+            @{Html.RenderAction("new_product", "Buyer");}
+        </div>
+
+    </div>
+
+</div>
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/materialize.js"></script>
+<script>
+    function cato(element) {
+        var btn = element.id;
+        $.ajax({
+            type: "POST",
+            url: "Buyer/find_base_cat_id",
+            data: '{id: "' + btn + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                window.location.href = data.Url;
+            },
+            failure: function (response) {
+                alert("Not found");
+            },
+            error: function (response) {
+                alert("error");
+            }
+        });
+
+    }
+    $(document).ready(function () {
+        $('.carousel').carousel();
+    });
+</script>

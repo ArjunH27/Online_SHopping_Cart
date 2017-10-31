@@ -1,0 +1,66 @@
+﻿@model IEnumerable< Online_SHopping_Cart.ViewModel.OrderHistory_ViewModel>
+
+@{
+    ViewBag.Title = "OrderHistoryDetails";
+    Layout = "~/Views/Shared/_BuyerLayout.cshtml";
+}
+
+
+
+<h2>Order Details</h2>
+
+<style>
+    #main-wrap {
+        /* overflow to handle inner floating block */
+        overflow: hidden;
+        border-style: inset;
+        height: auto;
+    }
+
+    #sidebar {
+        text-align: center;
+        float: left;
+        width: 30%;
+    }
+
+    #content-wrap {
+        float: right;
+        width: 70%;
+    }
+</style>
+
+<br />
+@foreach (var item in Model)
+{
+    var image = Convert.ToBase64String(item.BinaryImage);
+    var src = "data:image/png;base64," + image;
+    <div id="main-wrap">
+        <div id="sidebar">
+
+            <img src="@src" style="width:150px; height:150px;" /><br />
+
+        </div>
+
+        <div id="content-wrap">
+            @Html.Label("Product Name:")
+            @Html.Raw(item.ProductName)<br />
+            @Html.Label("Product Description:")
+            @Html.Raw(item.ProductDesc)<br />
+            @Html.Label("Deliverd To:")
+            @Html.Raw(item.OrderDelivryAddress)<br />
+            @Html.Label("Total Amount:")
+            @Html.Raw(item.Amount)<br />
+            @Html.Label("Deliverd On:")
+            @Html.Raw(item.OrderDeliveryDate.ToShortDateString())<br />
+            @Html.Label("Delivered By:")
+            @Html.Raw(item.ServiceName)<br />
+
+        </div>
+
+    </div>
+    <br /><br /><br />
+
+}
+<p>
+    @Html.ActionLink("BACK", "OrderHistoryList")
+</p>
