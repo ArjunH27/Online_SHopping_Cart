@@ -130,6 +130,8 @@
     <Content Include="Content\adminhomestyle.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\materialize-social.css" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\StyleSheet1.css" />
@@ -139,10 +141,19 @@
     <Content Include="Global.asax" />
     <Content Include="Images\back1.jpg" />
     <Content Include="Images\dashboard.png" />
+    <Content Include="Images\homeappl.jpg" />
     <Content Include="Images\left.png" />
+    <Content Include="Images\pixel.jpg" />
+    <Content Include="Images\profile.png" />
     <Content Include="Images\right.png" />
+    <Content Include="Images\sl1.jpg" />
+    <Content Include="Images\sl2.jpg" />
+    <Content Include="Images\sl3.jpg" />
+    <Content Include="Images\sl4.jpg" />
+    <Content Include="Images\sl5.jpg" />
     <Content Include="Images\upload.png" />
     <Content Include="Images\user.png" />
+    <Content Include="Images\wow.jpg" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -250,6 +261,7 @@
     <Compile Include="ViewModel\OrderHistory_ViewModel.cs" />
     <Compile Include="ViewModel\SellerViewModel.cs" />
     <Compile Include="ViewModel\Service_ViewModel.cs" />
+    <Compile Include="ViewModel\UserModel.cs" />
     <Compile Include="ViewModel\Viewmodel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -303,6 +315,7 @@
     <Content Include="Views\Buyer\purchase_all.cshtml" />
     <Content Include="Views\Buyer\try1.cshtml" />
     <Content Include="Views\Service\View.cshtml" />
+    <Content Include="Views\Buyer\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

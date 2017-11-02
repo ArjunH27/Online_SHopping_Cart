@@ -6,16 +6,31 @@
 }
 
 <style>
+    .sl{
+        height:300px;
+        width:400px;
+    }
 
 </style>
 <link href="~/Content/materialize.css" rel="stylesheet" />
 
+<div class="row" style="margin-left:30%; margin-top:5%;margin-right:30%;" >
+    @foreach (var item in Model)
+    {
+        <button id=@(item.ProductCatId) class="btn waves-effect waves-light" onclick="cato(this)">@(item.ProductCatName)</button>
+    }
+</div>
+<div>
 
-@foreach (var item in Model)
-{
-    <button id=@(item.ProductCatId) class="btn waves-effect waves-light" onclick="cato(this)" >@(item.ProductCatName)</button>
-}
+    <div class="carousel" >
+        <a class="carousel-item" ><img src="~/Images/sl1.jpg" class="sl"></a>
+        <a class="carousel-item"><img src="~/Images/sl2.jpg" class="sl"></a>
+        <a class="carousel-item"><img src="~/Images/sl3.jpg" class="sl"></a>
+        <a class="carousel-item"><img src="~/Images/sl4.jpg" class="sl"></a>
+        <a class="carousel-item"><img src="~/Images/sl5.jpg" class="sl"></a>
+    </div>
 
+</div>
 
 <script src="~/scripts/jquery-1.10.2.js"></script>
 <script src="~/scripts/materialize.js"></script>
@@ -41,4 +56,8 @@
         });
 
     }
+
+        $(document).ready(function () {
+        $('.carousel').carousel();
+    });
 </script>

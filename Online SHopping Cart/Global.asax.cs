@@ -14,5 +14,6 @@ namespace Online_SHopping_Cart
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+
     }
 }

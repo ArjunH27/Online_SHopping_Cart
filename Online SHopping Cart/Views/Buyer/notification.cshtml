@@ -4,33 +4,46 @@
     ViewBag.Title = "notification";
     Layout = "~/Views/Shared/_BuyerLayout.cshtml";
 }
+<style>
+    .wrapper{
+            margin-left: 200px;
+        width: 600px;
+        height: 400px;
+        text-align: center;
+    }
+</style>
 
 <h3>Notifications</h3>
+<link href="~/Content/materialize.css" rel="stylesheet" />
+<script src="~/scripts/materialize.js"></script>
+<div class="wrapper" >
+    <table class="bordered responsive-table ">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderId)
+                </th>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderId)
-        </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderId)
+                        <p>Your Order Will BE Delivered By @Html.DisplayFor(modelItem => item.OrderDeliveryDate)</p>
+                    </td>
 
-        <th></th>
-    </tr>
+                    <td>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderId)
-                <p>Your Order Will BE Delivered By @Html.DisplayFor(modelItem => item.OrderDeliveryDate)</p>
-            </td>
+                        @Html.ActionLink("Details", "OrderHistoryDetails", new { @class = "btn waves-effect waves-light", id = item.OrderId })
 
-            <td>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-                @Html.ActionLink("Details", "OrderHistoryDetails", new { id = item.OrderId })
-
-            </td>
-        </tr>
-    }
-
-</table>
-
+</div>

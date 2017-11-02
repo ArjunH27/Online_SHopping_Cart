@@ -7,18 +7,21 @@
 
 <html>
 <head>
+   
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/Content/materialize.css" rel="stylesheet" />
+    <link href="~/Content/materialize-social.css" rel="stylesheet" />
 </head>
 <body style="padding:0px;margin:0px;">
     
     <nav>
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <li><h4>shopFactory</h4></li>
+                <li><h4 id="menu">shopFactory</h4></li>
                 </ul>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
                     
@@ -29,7 +32,7 @@
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     @if (Session["count"] != null)
             {
-                        <li>@Html.ActionLink("Cart(" + @Session["count"].ToString() + ")", "cart")</li>
+                        <li>@Html.ActionLink("Cart(" + @Session["count"].ToString()+ ")", "cart")</li>
                     }
                     else
                     {
@@ -55,13 +58,13 @@
             <li>
                 <div class="user-view" style="height:300px;">
                     <div class="background">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png">
+                        <img src="~/Images/profile.png">
                     </div>
                 </div>
             </li>
-            <li><a class="waves-effect" href="#!">NAME : @Session["user"].ToString()</a> </li>
+            <li><a class="waves-effect" href="#!">NAME : @Session["name"].ToString()</a> </li>
             <li><a class="waves-effect" href="#!">UserName : @Session["user"].ToString()</a> </li>
-            <li><a class="waves-effect" href="#!">Email : @Session["user"].ToString()</a></li>
+            <li><a class="waves-effect" href="#!">Email : @Session["m"].ToString()</a></li>
             <li><div class="divider"></div></li>
             <li ><div class="chip">
                  @Html.ActionLink("EDIT PROFILE", "profile")
@@ -70,7 +73,7 @@
             </li>
             <li>
                 <div class="chip">
-                    @Html.ActionLink("CHANGE PASSWORD", "")
+                    @Html.ActionLink("CHANGE PASSWORD", "ChangePassword")
                     <i class="material-icons"> edit</i>
                 </div>
             </li>
@@ -84,13 +87,39 @@
 </ul>
         
     
+    <div>
 
+        <!-- Tap Target Structure -->
+        <div class="tap-target" data-activates="menu">
+            <div class="tap-target-content">
+                <div>
+                    <p>Contact Us</p>
+                    <p><i class="material-icons prefix">email</i>factoryforshop@gmail.com</p>
+                </div>
+                <div class="row">
+                    <p>Keep In Touch</p>
+                    <a class="waves-effect waves-light btn-floating social google">
+                        <i class="fa fa-google"></i> Sign in with google
+                    </a>
+                    <a class="waves-effect waves-light btn-floating social twitter">
+                        <i class="fa fa-twitter"></i> Sign in with twitter
+                    </a>
+                    <a class="waves-effect waves-light btn-floating social facebook">
+                        <i class="fa fa-facebook"></i> Sign in with facebook
+                    </a>
+                    <a class="waves-effect waves-light btn-floating social linkedin">
+                        <i class="fa fa-linkedin"></i> Sign in with linkedin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
   
     <div >
         @RenderBody()
        
     </div>
-   
+
 
 </body>
 </html>
@@ -106,4 +135,11 @@
 
     }
   );
+     $(document).ready(function () {
+         $("#menu").click(function () {
+             $('.tap-target').tapTarget('open');
+
+         })
+
+     });
 </script>

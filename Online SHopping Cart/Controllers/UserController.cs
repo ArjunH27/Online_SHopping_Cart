@@ -63,6 +63,8 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult login()
         {
+            ViewBag.message1 = TempData["message1"];
+            ViewBag.message2 = TempData["message2"];
             return View();
         }
 
@@ -92,6 +94,8 @@ namespace Online_SHopping_Cart.Controllers
                     else if (obj.Roleid == 4)
                     {
                         Session["user"] = obj.UserName;
+                        Session["name"] = obj.FirstName;
+                        Session["m"] = obj.UserEmail;
                         string name = obj.UserName;
                         int id = db.User_Table.Where(x => x.UserName == name).Select(x=>x.UserId).FirstOrDefault();
                         var oder_id = db.Order_Table.Where(x => x.Userid == id & x.OrderStatus == 0 & x.OrderIsDeleted == false).Select(x => x.OrderId).FirstOrDefault();
@@ -107,14 +111,16 @@ namespace Online_SHopping_Cart.Controllers
                 }
                 else
                 {
-                    return View();
+                    TempData["message2"] = "Password Dont Match";
+                    return RedirectToAction("login", "User");
 
 
                 }
             }
             else
             {
-                return View();
+                TempData["message1"] = "User Does Not Exist";
+                return RedirectToAction("login", "User");
             }
             return View();
         }
@@ -143,14 +149,14 @@ namespace Online_SHopping_Cart.Controllers
                    
                 MailMessage mail = new MailMessage();
 
-                var fromAddress = "arjunhariharasubramani27@gmail.com";
+                var fromAddress = "factoryforshop@gmail.com";
 
                 var toAddress = email;
 
-                const string fromPassword = "h7736509721";
+                const string fromPassword = "shopfactory123";
 
                 string mailSubject = " New Password ";
-                string mailBody = "user123";
+                string mailBody = "New Password : user123";
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.gmail.com";
@@ -177,6 +183,33 @@ namespace Online_SHopping_Cart.Controllers
             return View();
         }
 
+        public JsonResult IsNameExist(string UserName)
+        {
+            var validateName = db.User_Table.Where(x => x.UserName == UserName && x.UserIsDeleted == false).FirstOrDefault();   //Details of base category that has same name of Entered rolename and which are active is taken
+
+            if (validateName != null)                                                                                                          //If no such details exist false is returned 
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            else                                                                                                                                //If details exist true is returned which dispalys error message given with validation of Base Category
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult IsmailExist(string UserEmail)
+        {
+            var validateName = db.User_Table.Where(x => x.UserEmail == UserEmail && x.UserIsDeleted == false).FirstOrDefault();   //Details of base category that has same name of Entered rolename and which are active is taken
+
+            if (validateName != null)                                                                                                          //If no such details exist false is returned 
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            else                                                                                                                                //If details exist true is returned which dispalys error message given with validation of Base Category
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 
   }

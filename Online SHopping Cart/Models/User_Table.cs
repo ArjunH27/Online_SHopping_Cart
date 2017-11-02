@@ -12,6 +12,7 @@ namespace Online_SHopping_Cart.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public partial class User_Table
     {
@@ -31,12 +32,18 @@ namespace Online_SHopping_Cart.Models
         [Required]
         public string LastName { get; set; }
         [Required][EmailAddress]
+        [Remote("IsmailExist", "User",
+             ErrorMessage = "Email ID name already exists")]
         public string UserEmail { get; set; }
         [Required]
         public string UserAddress { get; set; }
         [Required]
+        [Remote("IsNameExist", "User",
+             ErrorMessage = "Username already exists")]
         public string UserName { get; set; }
         [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         public string UserCreatedBy { get; set; }
         public System.DateTime UserCreatedDate { get; set; }

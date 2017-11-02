@@ -9,29 +9,25 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/Content/materialize.css" rel="stylesheet" />
+    <link href="~/Content/materialize-social.css" rel="stylesheet" />
+   
+    
     <title>try1</title>
 </head>
 <body>
-    <div> 
-        <ul class="collapsible" data-collapsible="accordion">
-            <li>
-                <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-            </li>
-        </ul>
+    <a id="menu" class="waves-effect waves-light btn btn-floating "><i class="material-icons">menu</i></a>
 
-
-       
-    </div>
+    <!-- Tap Target Structure -->
+    <div class="tap-target" data-activates="menu">
+        <div class="tap-target-content">
+            <a class="waves-effect waves-light social-icon btn windows ">
+                <i class="fa fa-windows "></i>
+            </a>
+        </div>
+    </div> 
+   
     
 </body>
 
@@ -40,6 +36,10 @@
 <script src="~/scripts/materialize.js"></script>
 <script>
     $(document).ready(function () {
-        $('.collapsible').collapsible();
+        $("#menu").click(function () {
+            $('.tap-target').tapTarget('open');
+          
+        })
+  
     });
 </script>

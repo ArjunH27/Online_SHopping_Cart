@@ -30,15 +30,19 @@
         background-color:white;
         
     }
+    .sl{
+        height:200px;
+        
+    }
 </style>
 
 <link href="~/Content/materialize.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="col s12" >
     <div class="card">
-        <img class="mySlides" src="https://www.concept-phones.com/wp-content/uploads/2017/07/Google-Pixel-2XL-Concept-Creator-render-2.jpg" style="width:100%">
-        <img class="mySlides" src="http://www.appliancesconnection.com/blog/wp-content/uploads/2016/05/Whirlpool.jpg" style="width:100%">
-        <img class="mySlides" src="https://static.wforwoman.com/website-ver17/images/home/Home_Page_Banner_Desktop_Mughal_Gown_27_09_2017.jpg" style="width:100%">
+        <img class="mySlides" src="~/Images/pixel.jpg" style="width:100%">
+        <img class="mySlides" src="~/Images/homeappl.jpg" style="width:100%">
+        <img class="mySlides" src="~/Images/wow.jpg" style="width:100%">
         <script>
 var slideIndex = 0;
 carousel();
@@ -59,44 +63,25 @@ function carousel() {
 </div>
 <br /><br />
 
-
-    @*<div class="col s3" style="width:400px;">
-        <a class="dropdown-button btn " data-activates='dropdown1'>Choose Category<i class="material-icons">  menu</i></a>
-        <ul id='dropdown1' class='dropdown-content'>
-            @grid.GetHtml(
- columns: new[]{
-     grid.Column(columnName: "BaseCatName", header: " ",format:@<l1> @item.GetSelectLink(item.BaseCatName.ToString())</l1>)
- }
- )
-
-            @if (grid.HasSelection)
-            {
-                var base_cat = (Online_SHopping_Cart.Models.BaseCategory_Table)grid.Rows[grid.SelectedIndex].Value;
-                Session["base_cat"] = @base_cat.BaseCatId;
-                Response.Redirect("Buyer/Product_cat");
-            }
-        </ul>
-    </div>*@
-
     <div style="margin-left:10%;">
         @foreach (var item in Model)
         {
             <button id=@(item.BaseCatId) class="btn waves-effect waves-light" onclick="cato(this)">@(item.BaseCatName)</button>
         }
     </div>
-
+<br /><br />
 <div class="row">
     <div class="col s3"> 
         <div class="carousel">
-            <a class="carousel-item" href="#one!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
-            <a class="carousel-item" href="#two!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
-            <a class="carousel-item" href="#three!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
-            <a class="carousel-item" href="#four!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
-            <a class="carousel-item" href="#five!"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png"></a>
+            <a class="carousel-item" ><img src="~/Images/sl1.jpg" class="sl"></a>
+            <a class="carousel-item" ><img src="~/Images/sl2.jpg" class="sl"></a>
+            <a class="carousel-item" ><img src="~/Images/sl3.jpg" class="sl"></a>
+            <a class="carousel-item" ><img src="~/Images/sl4.jpg" class="sl"></a>
+            <a class="carousel-item" ><img src="~/Images/sl5.jpg" class="sl"></a>
         </div>
     </div>
 
-    <div class="col 7 text-center" style="height: 450px">
+    <div class="col 7 z-depth-4" style="height: 450px;text-align:center ">
         <h5>NEW ARRIVALS</h5>
         <div>
             @{Html.RenderAction("new_product", "Buyer");}

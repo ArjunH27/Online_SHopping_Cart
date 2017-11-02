@@ -561,6 +561,48 @@ namespace Online_SHopping_Cart.Controllers
 
         }
 
+        public ActionResult ChangePassword()
+        {
+            ViewBag.message = TempData["message"];
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+           
+            User_Table obj = new User_Table();
+            string name = Session["user"].ToString();
+            User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
+            if (details.Password == model.OldPassword)
+            {
+                if(details.Password==model.NewPassword)
+                {
+                    TempData["message"] = "your old password and new password are same!!!";
+                }
+                else if (model.NewPassword == model.ConfirmPassword)
+                {
+                    details.Password = model.NewPassword;
+                    db.SaveChanges();
+                    TempData["message"] = "password changes successfully!!";
+                }
+                else
+                {
+                    TempData["message"] = "confirm password an new password does not match";
+                }
+            }
+            else
+            {
+                TempData["message"] = "your old password is incorrect ";
+            }
+            return RedirectToAction("ChangePassword");
+        }
+
         public void logout()
         {
             Session["user"] = null;
