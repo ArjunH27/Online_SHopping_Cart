@@ -94,22 +94,20 @@
                 <h1 class="brand">shopFactory</h1>
                 <ul class="nav navbar-nav navbar-right" id="h">
                     @*<li><a href="#"><span class="glyphicon glyphicon-bell">@(Session["notif-count"])</span> Notification</a></li>*@
-
                     <li class="dropdown">
                         <a id="navcol" class="dropdown-toggle notif-class " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
                         <ul class="dropdown-menu">
-
                             @foreach (var item in ViewBag.ordering)
                             {
-                                <li>@item.Orderid</li>
+                                <li>@item.OrderId</li>
+                                <li>@item.OrderDeliveryAddress</li>
+                                <li>@item.OrderDeliveryDate</li>
 
                                 <li class="divider"></li>
                             }
-
+                            @Html.ActionLink("View Details", "View_Service", new { @class = "notif-class" })
                         </ul>
-
                     </li>
-
                     <li><a href="#" onclick="openNav()"><span class="glyphicon glyphicon-user"></span> @Session["user"].ToString()</a></li>
                 </ul>
             </div>
@@ -119,7 +117,6 @@
                 <li><a href="/Service/Manage_Service">Manage Service</a></li>
                 <li><a href="/Service/View_Service">View Service</a></li>
             </ul>
-
         </div>
     </nav>
     <div id="mySidenav" class="sidenav">
@@ -132,7 +129,6 @@
     </div>
     <div>
         @RenderBody()
-
 
     </div>
     <script>
@@ -166,6 +162,5 @@ $(".notif-class").click(function (e) {
 
 });
     </script>
-
 </body>
 </html>

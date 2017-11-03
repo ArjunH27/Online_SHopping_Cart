@@ -45,6 +45,9 @@ namespace Online_SHopping_Cart.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+
+
         public string UserCreatedBy { get; set; }
         public System.DateTime UserCreatedDate { get; set; }
         public string UserUpdateBy { get; set; }

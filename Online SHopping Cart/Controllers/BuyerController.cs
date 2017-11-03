@@ -133,6 +133,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult order(Book obj,string amt)
         {
+
             string name = Session["user"].ToString();
             int pid = Convert.ToInt32(Session["pro_id"].ToString());
             int stock = db.Product_Table.Where(x => x.ProductId == pid).Select(x => x.ProductStock).FirstOrDefault();
@@ -156,7 +157,9 @@ namespace Online_SHopping_Cart.Controllers
                 int oid = order.OrderId;
                 order_detail.Orderid = oid;
                 order_detail.Productid = pid;
-                order_detail.Serviceid = obj.ServiceId;
+                int lid = Convert.ToInt32(Session["location"]);
+                Service_Table serboj = db.Service_Table.Where(x => x.ServiceProviderid == obj.UserId && x.Locationid == lid).FirstOrDefault();
+                order_detail.Serviceid = serboj.ServiceProviderid;
                 order_detail.Quantity = obj.Quantity;
                 order_detail.Amount = Convert.ToInt32(amt);
                 db.OrderDetail_Table.Add(order_detail);
@@ -165,6 +168,7 @@ namespace Online_SHopping_Cart.Controllers
                 pobj.ProductStock = stock - obj.Quantity;
                 db.SaveChanges();
             }
+            Session["location"] = null;
             return RedirectToAction("OrderHistoryList");
         }
 
@@ -198,6 +202,7 @@ namespace Online_SHopping_Cart.Controllers
             Order_Table order= db.Order_Table.Where(x => x.OrderStatus == 0 & x.OrderIsDeleted == false & x.Userid == usid).FirstOrDefault();
             order.OrderDeliveryAddress = obj.OrderDelivryAddress;
             order.TotalAmount = Convert.ToInt32(TempData["tcart_amt"]);
+            order.OrderNotification = "00";
             order.OrderDeliveryDate = System.DateTime.Now.AddDays(5);
             order.OrderStatus = 1;
             db.SaveChanges();
@@ -221,8 +226,9 @@ namespace Online_SHopping_Cart.Controllers
                 }
                 if(flag==1)
                 {
-                    
-                    obj1.Serviceid = obj.ServiceId;
+                    int lid = Convert.ToInt32(Session["location"]);
+                    Service_Table serboj = db.Service_Table.Where(x => x.ServiceProviderid == obj.UserId && x.Locationid == lid).FirstOrDefault();
+                    obj1.Serviceid = serboj.ServiceProviderid;
                     db.SaveChanges();
                 }
                 else
@@ -232,11 +238,13 @@ namespace Online_SHopping_Cart.Controllers
                 }
             }
             count_cart();
+            Session["location"] = null;
             return RedirectToAction("OrderHistoryList");
         }
 
         public ActionResult service_name(string id)
         {
+            Session["location"] = id;
             int pid = Convert.ToInt32(Session["pro_id"].ToString());
             int locId;
             List<SelectListItem> ServiceList = new List<SelectListItem>();
@@ -246,10 +254,11 @@ namespace Online_SHopping_Cart.Controllers
                 List<Service_Table> ser = db.Service_Table.Where(x => x.Locationid == locId & x.Productid == pid).ToList();
                 foreach (var item in ser)
                 {
+                    User_Table obj = db.User_Table.Where(x => x.UserId == item.ServiceProviderid).FirstOrDefault();
                     ServiceList.Add(new SelectListItem
                     {
-                        Text = item.ServiceName.ToString(),
-                        Value = item.ServiceId.ToString(),
+                        Text = obj.UserName.ToString(),
+                        Value = obj.UserId.ToString(),
 
                     });
                 }
@@ -261,6 +270,7 @@ namespace Online_SHopping_Cart.Controllers
 
         public ActionResult service_name_all(string id)
         {
+            Session["location"] = id;
             List<SelectListItem> ServiceList = new List<SelectListItem>();
             List<Service_Table> s = new List<Service_Table>();
             
@@ -297,10 +307,11 @@ namespace Online_SHopping_Cart.Controllers
                 if(count== total_pro)
                 {
                     string sname = db.Service_Table.Where(x => x.ServiceProviderid == item1.ServiceProviderid).Select(x => x.ServiceName).FirstOrDefault();
+                    User_Table uobj = db.User_Table.Where(x => x.UserId == item1.ServiceProviderid).FirstOrDefault();
                     ServiceList.Add(new SelectListItem
                     {
-                        Text = sname,
-                        Value = item1.ServiceId.ToString(),
+                        Text = uobj.UserName,
+                        Value = uobj.UserId.ToString(),
 
                     });
                 }
@@ -474,13 +485,18 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult OrderHistoryDetails(int id)
         {
 
+
             List<OrderHistory_ViewModel> ohvmlist = new List<OrderHistory_ViewModel>();
             var obj = db.OrderDetail_Table.Where(x => x.Orderid == id).ToList();
+            Service_Table s = new Service_Table();
+            User_Table uobj = new User_Table();
             foreach (var item in obj)
             {
 
                 var service = db.OrderDetail_Table.Where(x => x.Orderid == id).Select(x => x.Serviceid).FirstOrDefault();
-                var servicename = db.Service_Table.Where(x => x.ServiceId == service).Select(x => x.ServiceName).FirstOrDefault();
+                // var servicename = db.Service_Table.Where(x => x.ServiceId == service).Select(x => x.ServiceName).FirstOrDefault();
+                s = db.Service_Table.Where(x => x.ServiceId == service).FirstOrDefault();
+                uobj = db.User_Table.Where(x => x.UserId == s.ServiceProviderid).FirstOrDefault();
                 var product_desc = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductDesc).FirstOrDefault();
                 var product = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductName).FirstOrDefault();
                 var deliveryadd = db.Order_Table.Where(x => x.OrderId == id).Select(x => x.OrderDeliveryAddress).FirstOrDefault();
@@ -490,9 +506,9 @@ namespace Online_SHopping_Cart.Controllers
                 obj1.ProductName = product;
                 obj1.ProductDesc = product_desc;
                 obj1.OrderDelivryAddress = deliveryadd;
-                obj1.Amount =(decimal) item.Amount;
-                obj1.OrderDeliveryDate =(DateTime)deliverydate;
-                obj1.ServiceName = servicename;
+                obj1.Amount = (decimal)item.Amount;
+                obj1.OrderDeliveryDate = (DateTime)deliverydate;
+                obj1.ServiceName = uobj.UserName;
                 obj1.BinaryImage = image;
                 ohvmlist.Add(obj1);
             }

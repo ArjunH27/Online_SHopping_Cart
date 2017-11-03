@@ -23,19 +23,27 @@ namespace Online_SHopping_Cart.Controllers
         {
             string name = Session["user"].ToString();
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
-            List<OrderDetail_Table> orderlist = new List<OrderDetail_Table>();
-            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "10" select o).ToList();
+            List<Order_Table> orderlist = new List<Order_Table>();
+            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "10" select o);
             foreach (var item in orders)
             {
-                OrderDetail_Table order = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid && or.Serviceid == serviceProviderId select or).FirstOrDefault();
-                if (order != null)
+                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
+                foreach (var item1 in serviceids)
                 {
-                    orderlist.Add(order);
-                }
 
+                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
+                    if (serid == serviceProviderId)
+                    {
+
+                        orderlist.Add(item);
+                    }
+                }
             }
-            ViewBag.ordering = orderlist;
-            Session["notif-count"] = orderlist.Count();
+            var l = orderlist.DistinctBy(x => x.OrderId).ToList();
+            // ViewBag.ordering = orderlist;
+            ViewBag.ordering = l;
+            //Session["notif-count"] = orderlist.Count();
+            Session["notif-count"] = l.Count();
         }
         public void DisableNotification()
         {
@@ -111,7 +119,7 @@ namespace Online_SHopping_Cart.Controllers
 
             List<Image_Table> imageList = new List<Image_Table>();
             var products = (from p in db.Product_Table
-                            where p.ProductCatid == productCatId
+                            where p.ProductCatid == productCatId && p.ProductIsDeleted == false
                             select p).ToList();
             foreach (var item in products)
             {
@@ -240,16 +248,32 @@ namespace Online_SHopping_Cart.Controllers
         }
         public ActionResult View_Service()
         {
+            DisableNotification();
             Notofication_Count();
             string name = Session["user"].ToString();
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
             List<Order_Table> orderList = new List<Order_Table>();
-            var services = (from o in db.OrderDetail_Table where o.Serviceid == serviceProviderId select o.Orderid).ToList();
-            foreach (var item in services)
-            {
-                Order_Table order = (from o in db.Order_Table where o.OrderId == item select o).FirstOrDefault();
-                orderList.Add(order);
+            //var services = (from o in db.OrderDetail_Table where o.Serviceid == serviceProviderId select o.Orderid).ToList();
+            //foreach (var item in services)
+            //{
+            //    Order_Table order = (from o in db.Order_Table where o.OrderId == item select o).FirstOrDefault();
+            //    orderList.Add(order);
 
+            //}
+            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
+            foreach (var item in orders)
+            {
+                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
+                foreach (var item1 in serviceids)
+                {
+
+                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
+                    if (serid == serviceProviderId)
+                    {
+
+                        orderList.Add(item);
+                    }
+                }
             }
             ViewBag.OrderList = orderList.DistinctBy(x => x.OrderId).ToList();
 

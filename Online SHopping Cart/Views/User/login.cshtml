@@ -24,7 +24,10 @@
     <div class="wrapper">
         <h3 style="color:#80cbc4" >LOGIN</h3>
         <form class="col s12" method="post" action="">
-
+            @if (ViewBag.message3 != null)
+            {
+                <p style="color:red;">@ViewBag.message3</p>
+            }
             <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
                 <input type="text" name="user" class="validate">
@@ -33,6 +36,7 @@
             {
                     <p style="color:red;">@ViewBag.message1</p>
                 }
+               
             </div>
 
             <div class="input-field col s12">
@@ -44,7 +48,7 @@
                     <p style="color:red;">@ViewBag.message2</p>
                 }
             </div>
-
+          
             <div>
                 <button class="btn waves-effect waves-light" type="submit">
                     Submit

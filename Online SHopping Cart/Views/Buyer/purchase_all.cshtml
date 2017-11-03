@@ -13,7 +13,7 @@
             @Html.DropDownList("place", (IEnumerable<SelectListItem>)ViewBag.location_list, "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlbcat" })
 
             <h6>Service</h6>
-            @Html.DropDownListFor(model => model.ServiceId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlpcat" })
+            @Html.DropDownListFor(model => model.UserId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlpcat" })
 
             <h6>Delivery Adddress</h6><br />
             @Html.TextAreaFor(model => model.OrderDelivryAddress)

@@ -6,44 +6,29 @@
 }
 <style>
     .wrapper{
-            margin-left: 200px;
+        margin-left: 200px;
         width: 600px;
         height: 400px;
         text-align: center;
     }
 </style>
 
-<h3>Notifications</h3>
+<h3 style="text-align:center">Notifications</h3>
 <link href="~/Content/materialize.css" rel="stylesheet" />
 <script src="~/scripts/materialize.js"></script>
-<div class="wrapper" >
-    <table class="bordered responsive-table ">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.OrderId)
-                </th>
-
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row">
+    <div class="col s4"></div>
+    <div class="col s4">
+        <div class="collection">
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OrderId)
-                        <p>Your Order Will BE Delivered By @Html.DisplayFor(modelItem => item.OrderDeliveryDate)</p>
-                    </td>
+                <div class="collection-item">
+                    <p>Order ID:  @Html.DisplayFor(modelItem => item.OrderId)</p>
+                    <p>Your Order Will BE Delivered By @Html.DisplayFor(modelItem => item.OrderDeliveryDate)</p>
+                    @Html.ActionLink("Details", "OrderHistoryDetails", new { @class = "btn waves-effect waves-light", id = item.OrderId })
 
-                    <td>
-
-                        @Html.ActionLink("Details", "OrderHistoryDetails", new { @class = "btn waves-effect waves-light", id = item.OrderId })
-
-                    </td>
-                </tr>
+                </div>
             }
-        </tbody>
-    </table>
-
+        </div>
+    </div>
 </div>

@@ -29,7 +29,7 @@ namespace Online_SHopping_Cart.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult create(User_Table obj, string x)
+        public ActionResult create(User_Table obj)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +65,7 @@ namespace Online_SHopping_Cart.Controllers
         {
             ViewBag.message1 = TempData["message1"];
             ViewBag.message2 = TempData["message2"];
+            ViewBag.message3 = TempData["message3"];
             return View();
         }
 
@@ -76,36 +77,45 @@ namespace Online_SHopping_Cart.Controllers
             {
                 if (obj.Password == password)
                 {
-                    if (obj.Roleid == 1 && obj.UserIsDeleted == false)
+                    if (obj.UserIsDeleted == false)
                     {
-                        Session["user"] = obj.UserName;
-                        return RedirectToAction("Homepage", "Admin");
-                    }
-                    else if (obj.Roleid == 2 && obj.UserIsDeleted == false)
-                    {
-                        Session["user"] = obj.UserName;
-                        return RedirectToAction("Index", "Seller");
-                    }
-                    else if (obj.Roleid == 3 && obj.UserIsDeleted == false)
-                    {
-                        Session["user"] = obj.UserName;
-                        return RedirectToAction("Service_Home", "Service");
-                    }
-                    else if (obj.Roleid == 4)
-                    {
-                        Session["user"] = obj.UserName;
-                        Session["name"] = obj.FirstName;
-                        Session["m"] = obj.UserEmail;
-                        string name = obj.UserName;
-                        int id = db.User_Table.Where(x => x.UserName == name).Select(x=>x.UserId).FirstOrDefault();
-                        var oder_id = db.Order_Table.Where(x => x.Userid == id & x.OrderStatus == 0 & x.OrderIsDeleted == false).Select(x => x.OrderId).FirstOrDefault();
-                        int count = db.OrderDetail_Table.Where(x => x.Orderid == oder_id).Count();
-                        Session["count"] = count;
-                        return RedirectToAction("loader", "User");
+
+                        if (obj.Roleid == 1 )
+                        {
+                            Session["user"] = obj.UserName;
+                            return RedirectToAction("Homepage", "Admin");
+                        }
+                        else if (obj.Roleid == 2 )
+                        {
+                            Session["user"] = obj.UserName;
+                            return RedirectToAction("Index", "Seller");
+                        }
+                        else if (obj.Roleid == 3 )
+                        {
+                            Session["user"] = obj.UserName;
+                            return RedirectToAction("Service_Home", "Service");
+                        }
+                        else if (obj.Roleid == 4)
+                        {
+                            Session["user"] = obj.UserName;
+                            Session["name"] = obj.FirstName;
+                           
+                            string name = obj.UserName;
+                            int id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+                            var oder_id = db.Order_Table.Where(x => x.Userid == id & x.OrderStatus == 0 & x.OrderIsDeleted == false).Select(x => x.OrderId).FirstOrDefault();
+                            int count = db.OrderDetail_Table.Where(x => x.Orderid == oder_id).Count();
+                            Session["count"] = count;
+                            return RedirectToAction("loader", "User");
+                        }
+                        else
+                        {
+                            return RedirectToAction("errror");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("errror");
+                        TempData["message3"] = "Not an Autharized User";
+                        return RedirectToAction("login", "User");
                     }
 
                 }
@@ -181,6 +191,17 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult loader()
         {
             return View();
+        }
+
+        public JsonResult confirm_pass(string pass, string cp)
+        {
+            int res = 0;
+            if(pass==cp)
+            {
+                res = 1;
+                return Json(res, JsonRequestBehavior.AllowGet);
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult IsNameExist(string UserName)

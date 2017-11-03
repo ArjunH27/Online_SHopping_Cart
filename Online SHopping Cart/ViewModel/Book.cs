@@ -25,5 +25,6 @@ namespace Online_SHopping_Cart.ViewModel
         public int Quantity { get; set; }
         public decimal Amount { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
+        public string UserName { get; set; }
     }
 }

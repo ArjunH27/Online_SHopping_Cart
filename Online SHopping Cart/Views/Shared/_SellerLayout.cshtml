@@ -2,7 +2,6 @@
 
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +12,6 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-
     <style>
         .navbar {
             background: #000080;
@@ -109,11 +107,8 @@
             left: -3px;
         }
     </style>
-
 </head>
 <body style="padding:0px;" id="mains">
-
-
 
 
     <nav class="navbar navbar-inverse" role="navigation">
@@ -131,32 +126,27 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" id="navcol" data-toggle="dropdown">Products <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/Seller/Create">Manage Product</a></li>
                         <li class="divider"></li>
                         <li><a href="/Seller/display">View Products</a></li>
+                        <li><a href="/Seller/Notification">Notification</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-
                 <li class="dropdown">
-                    <a id="navcol" href="/Seller/Notification" class="dropdown-toggle god " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
+                    <a id="navcol" class="dropdown-toggle god " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
                     <ul class="dropdown-menu">
-
                         @foreach (var item in ViewBag.ordering)
                         {
                             <li>@item.Orderid</li>
                             <li class="divider"></li>
                         }
-
                     </ul>
-
                 </li>
-
                 <li>
                     <a id="navcol">
                         <span style="cursor:pointer;" onclick="openNav()">
@@ -165,12 +155,10 @@
                         @*@Html.ActionLink(Session["user"].ToString(), "", "", new { area = "" }, new { @class = "navbar-brand ", @id = "sidebarCollapse" })*@
                     </a>
                 </li>
-
             </ul>
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <img src="~/Images/user.png" style="height:150px;width:150px;" />
-
                 <a href="/Seller/profile">
                     <span class="glyphicon glyphicon-edit ">  </span>
                     Edit Profile
@@ -179,17 +167,13 @@
                     <span class="glyphicon glyphicon-cog">  </span>
                     ChangePassword
                 </a>
-
                 @*@Html.ActionLink("Edit Profile", "profile", new { @class = "glyphicons glyphicons - edit" })*@
                 <a href="/Seller/Logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
-
             </div>
-
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container-fluid -->
     </nav>
-
     <script>
         $('ul.nav li.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
@@ -223,7 +207,6 @@ $(".god").click(function(e){
 });
 
     </script>
-
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -231,9 +214,7 @@ $(".god").click(function(e){
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-
     @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
         <script src="~/Scripts/bootstrap.min.js"></script>*@
-
 </body>
 </html>

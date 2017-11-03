@@ -63,16 +63,6 @@
                     <label>User Email</label>
                 </div>
 
-
-
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">location_on</i>
-                    @Html.EditorFor(model => model.UserAddress, new { htmlAttributes = new { @class = "validate" } })
-                    @Html.ValidationMessageFor(model => model.UserAddress, "", new { @class = "text-danger" })
-                    <label>User Address</label>
-                </div>
-
-
                 <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
                     @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "validate" } })
@@ -82,13 +72,26 @@
                
                 <div class="input-field col s12">
                     <i class="material-icons prefix">lock_outline</i>
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "validate",@id="pass" } })
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     <label>Password</label>
                 </div>
 
-              
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">lock_outline</i>
+                    <input type="password" name="Confirmpassword" id="cp" class="validate">
+                    <label>Confirm Password</label>
+                </div>
+                <div id="msg">
 
+                </div>
+
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">location_on</i>
+                    @Html.EditorFor(model => model.UserAddress, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.ValidationMessageFor(model => model.UserAddress, "", new { @class = "text-danger" })
+                    <label>User Address</label>
+                </div>
                 <div>
                     <button class="btn waves-effect waves-light" type="submit">
                         Register
@@ -106,7 +109,43 @@
 
     </div>
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    
 </body>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#cp").change(function () {
+
+            var pass = $('#pass').val();
+            var cp = $('#cp').val();
+            $.ajax({
+                type: "post",
+                url: "/User/confirm_pass",
+                data: { pass: pass, cp: cp },
+                datatype: "json",
+                success: function (data) {
+                    if (data == 1) {
+                        $("#msg").hide();
+                    }
+                    else {
+                        
+                        $("#pass").val("");
+                        $("#cp").val("");
+                        $('#msg').html('<p>Password Do Not Match</h6>')
+                    }
+
+                }
+
+
+            });
+
+        });
+
+
+    });
+
+</script>

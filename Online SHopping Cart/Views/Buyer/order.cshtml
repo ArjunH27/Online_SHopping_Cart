@@ -133,19 +133,27 @@
         <h5> @Html.DisplayFor(modelItem => modelItem.ProductDesc)</h5>
         <h5>Price : @Html.DisplayFor(modelItem => modelItem.ProductPrice)</h5>
         <h5>Stock : @Html.DisplayFor(modelItem => modelItem.ProductStock)</h5>
+        @if (Model.ProductStock == 0)
+            {
+            <h3 style="color:red">Out of Stock</h3>
+        }
     </div>
 
     <div class="col s4">
+        <p id="valid_info" style="color:red;">Please select Location and Service Provide</p>
+        <p id="stock_msg" style="color:red;">Sorry Stock Not Available</p>
+        <p id="d_add" style="color:red;">Enter Delivery Address</p>
+        <h6>Booking Details</h6>
         <form method="post" action="/Buyer/order">
 
             <h6>Location</h6>
             @Html.DropDownList("place", (IEnumerable<SelectListItem>)ViewBag.location_list, "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlbcat" })
             <br />
             <h6>Service Provide</h6>
-            @Html.DropDownListFor(model => model.ServiceId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlpcat" })
+            @Html.DropDownListFor(model => model.UserId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlpcat" })
             <br />
             <h6>Delivery Address</h6>
-            @Html.TextAreaFor(model => model.OrderDelivryAddress)
+            @Html.TextAreaFor(model => model.OrderDelivryAddress, new { htmlAttributes = new { @id = "address" } })
             <br />
             <h6>Quantity</h6>
             @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" ,@id="qty" } })
@@ -153,16 +161,14 @@
             <div id="tamt">
 
             </div>
-            @if (Model.ProductStock != 0)
+            <div id="order_btn">
+                @if (Model.ProductStock != 0)
             {
-                <button type="submit" class="btn waves-effect waves-light">
-                     BOOK
-                </button>
-            }
-            @if (Model.ProductStock == 0)
-            {
-                <h3 style="color:red">Out of Stock</h3>
-            }
+                    <button type="submit" class="btn waves-effect waves-light">
+                        BOOK
+                    </button>
+                }
+            </div>
         </form>
     </div>
     <div class="col s4">
@@ -199,7 +205,10 @@
     }
 
     $(document).ready(function () {
-       
+        $("#d_add").hide();
+        $("#stock_msg").hide();
+        $("#order_btn").hide();
+        $("#valid_info").hide();
         $('#ddlbcat').change(function () {
             $.ajax({
                 type: "post",
@@ -222,27 +231,43 @@
         $('#qty').change(function () {
             var qty = $('#qty').val();
             var service_id = $('#ddlpcat').val();
-            $.ajax({
-                type: "post",
-                url: "/Buyer/calculate_amt",
-                data: { qty: qty, service_id: service_id },
-                datatype: "json",
-                success: function (data) {
-                    if (data == 0)
-                    {
-                        alert("Stock not available");
-                    }
-                    else {
-                        var total_amt = data;
-                        $("#amt").val(total_amt);
-                        $('#tamt').html('<h6>Total Amount : ' + total_amt + '</h6>')
-                    }
-                    
-                }
-               
+            //var del_address = $('#address').text();
+          
+            if (service_id != 0) {
+                //if (del_address == " ")
+                //{
+                    $("#valid_info").hide();
+                $.ajax({
+                    type: "post",
+                    url: "/Buyer/calculate_amt",
+                    data: { qty: qty, service_id: service_id },
+                    datatype: "json",
+                    success: function (data) {
+                        if (data == 0) {
+                            $("#stock_msg").show();
+                            $("#order_btn").hide();
+                        }
+                        else {
+                            var total_amt = data;
+                            $("#amt").val(total_amt);
+                            $('#tamt').html('<h6>Total Amount : ' + total_amt + '</h6>')
+                            $("#order_btn").show();
+                        }
 
-            });
+                    }
 
+
+                });
+                //}
+                //else {
+                //    $("#d_add").show();
+                //    $("#order_btn").hide();
+                //}
+            }
+            else {
+                $("#valid_info").show();
+                $("#order_btn").hide();
+            }
         })
 
 
