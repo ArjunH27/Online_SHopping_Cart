@@ -33,13 +33,13 @@ namespace Online_SHopping_Cart.Models
         public string LastName { get; set; }
         [Required][EmailAddress]
         [Remote("IsmailExist", "User",
-             ErrorMessage = "Email ID name already exists")]
+             ErrorMessage = "User mail already exists")]
         public string UserEmail { get; set; }
         [Required]
         public string UserAddress { get; set; }
         [Required]
         [Remote("IsNameExist", "User",
-             ErrorMessage = "Username already exists")]
+             ErrorMessage = "User Name already exists")]
         public string UserName { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

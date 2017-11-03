@@ -41,11 +41,12 @@
     </div>
 
 }
-<div id="ajaxgrid">
-    @{
-        var gridview = new WebGrid(ViewBag.BaseCategories, ajaxUpdateContainerId: "ajaxgrid", canSort: true, rowsPerPage: 5);
-    }
-    @gridview.GetHtml(
+<form>
+    <div id="ajaxgrid">
+        @{
+            var gridview = new WebGrid(ViewBag.BaseCategories, ajaxUpdateContainerId: "ajaxgrid", canSort: true, rowsPerPage: 5);
+        }
+        @gridview.GetHtml(
         tableStyle: "webGrid",
         headerStyle: "header",
         alternatingRowStyle: "altColor",
@@ -61,35 +62,42 @@
 {
 
      gridview.Column(columnName:"BaseCatName", header: "Base Category Name",format: @<span>
-        <span id="BaseName" class="read">@item.BaseCatName</span>
-        @Html.TextBox("BaseCatName", (string)item.BaseCatName, new { @class = "edit",@style="display:none" })
-        <label id="label1" class="text-danger"></label>
-    </span>),
+            <span id="BaseName" class="read">@item.BaseCatName</span>
+
+            @Html.TextBox("BaseCatName", (string)item.BaseCatName, new { @class = "edit cat",@style="display:none" })
+
+            <label id="label1" class="text-danger"></label>
+        </span>),
 
      gridview.Column(columnName: "BaseCatDesc", header: " Base Category Description", format: @<span>
-        <span id="BaseDescription" class="read">@item.BaseCatDesc</span>
-        @Html.TextBox("BaseCatDescription", (string)item.BaseCatDesc, new { @class = "edit",@style="display:none" })
-        <label id="label2" class="text-danger"></label>
-    </span> ),
+            <span id="BaseDescription" class="readid">@item.BaseCatDesc</span>
+            @Html.TextBox("BaseCatDescription", (string)item.BaseCatDesc, new { @class = "edit",@style="display:none" })
+            <label id="label2" class="text-danger"></label>
+        </span> ),
 
      gridview.Column("", style: "button",
                 format:
                 @<text>
-                    <button class="edit-case read" id="@item.BaseCatId">Edit</button>
-                    <button class="delete-case read" id="@item.BaseCatId">Delete</button>
-                    <button class="update-case edit" id="@item.BaseCatId">Update</button>
-                    <button class="cancel-case edit" id="@item.BaseCatId">Cancel</button>
+                    <button class="edit-case read btn btn-default btn-sm" id="@item.BaseCatId">
+                        <span class="glyphicon glyphicon-pencil"></span>Edit
+                    </button>
+                    <button class="delete-case read btn btn-default btn-sm" id="@item.BaseCatId">
+                        <span class="glyphicon glyphicon-trash"></span>Delete
+                    </button>
+                    <button class="update-case edit btn btn-default btn-sm" id="@item.BaseCatId" style="display:none" type="submit">Update</button>
+                    <button class="cancel-case edit btn btn-default btn-sm" id="@item.BaseCatId" style="display:none">Cancel</button>
                 </text>),
 
 
 
     }
 )
-</div>
-<div>
-    <hr />
-    @Html.ActionLink("Back to Home Page", "Home")
-</div>
+    </div>
+</form>
+@*<div>
+        <hr />
+        @Html.ActionLink("Back to Home Page", "Home")
+    </div>*@
 
 <style type="text/css">
     /*.webgrid-table {
@@ -192,9 +200,9 @@
         margin-right: 0px;
     }
 </style>
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
 
 <script src="~/scripts/jquery.validate.min.js"></script>
 <script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/scripts/jquery-1.10.2.min.js"></script>
 <script src="~/scripts/BaseCategory.js"></script>
 <link href="~/Content/bootstrap.css" rel="stylesheet" />

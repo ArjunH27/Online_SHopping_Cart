@@ -11,6 +11,7 @@ namespace Online_SHopping_Cart.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     public partial class ProductCategory_Table
@@ -24,8 +25,10 @@ namespace Online_SHopping_Cart.Models
         public int ProductCatId { get; set; }
         public int BaseCatid { get; set; }
         [Remote("IsProductCategoryNameExist", "Admin",
-              ErrorMessage = "Product Category name already exists")]
+             ErrorMessage = "Product Category name already exists")]
+        [Required]
         public string ProductCatName { get; set; }
+        [Required]
         public string ProductCatDesc { get; set; }
         public string ProductCatCreatedBy { get; set; }
         public System.DateTime ProductCatCreatedDate { get; set; }

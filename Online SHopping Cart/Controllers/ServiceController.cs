@@ -15,11 +15,52 @@ namespace Online_SHopping_Cart.Controllers
         // GET: Service
         public ActionResult Service_Home()
         {
+            Notofication_Count();
             return View();
         }
+
+        public void Notofication_Count()
+        {
+            string name = Session["user"].ToString();
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            List<OrderDetail_Table> orderlist = new List<OrderDetail_Table>();
+            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "10" select o).ToList();
+            foreach (var item in orders)
+            {
+                OrderDetail_Table order = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid && or.Serviceid == serviceProviderId select or).FirstOrDefault();
+                if (order != null)
+                {
+                    orderlist.Add(order);
+                }
+
+            }
+            ViewBag.ordering = orderlist;
+            Session["notif-count"] = orderlist.Count();
+        }
+        public void DisableNotification()
+        {
+            Order_Table obj = new Order_Table();
+            var order = (from a in db.Order_Table select a).ToList();
+            foreach (var item in order)
+            {
+                if (item.OrderNotification == "00")
+                {
+                    item.OrderNotification = "01";
+                }
+                else if (item.OrderNotification == "10")
+                {
+                    item.OrderNotification = "11";
+                }
+
+            }
+            db.SaveChanges();
+            Notofication_Count();
+        }
+
         [HttpGet]
         public ActionResult Add_Service()
         {
+            Notofication_Count();
             ViewBag.message = TempData["message"];
             Service_ViewModel svm = new Service_ViewModel();
             List<BaseCategory_Table> category = new List<BaseCategory_Table>();
@@ -91,6 +132,7 @@ namespace Online_SHopping_Cart.Controllers
         {
             try
             {
+                Notofication_Count();
                 string name = Session["user"].ToString();
                 int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
                 List<Order_Table> orderList = new List<Order_Table>();
@@ -138,6 +180,7 @@ namespace Online_SHopping_Cart.Controllers
         }
         public ActionResult Manage_Service()
         {
+            Notofication_Count();
             string name = Session["user"].ToString();
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
 
@@ -197,7 +240,7 @@ namespace Online_SHopping_Cart.Controllers
         }
         public ActionResult View_Service()
         {
-
+            Notofication_Count();
             string name = Session["user"].ToString();
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
             List<Order_Table> orderList = new List<Order_Table>();
@@ -243,12 +286,13 @@ namespace Online_SHopping_Cart.Controllers
 
             }
             ViewBag.list = list.Distinct();
-            return View(ohvmlist);
+            return PartialView("OrderDetails", ohvmlist);
         }
 
         [HttpGet]
         public ActionResult profile()
         {
+            Notofication_Count();
             string name = Session["user"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             return View(obj);
@@ -257,7 +301,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult profile(User_Table obj)
         {
-
+            Notofication_Count();
             string name = Session["user"].ToString();
             User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             user.FirstName = obj.FirstName;
@@ -268,6 +312,50 @@ namespace Online_SHopping_Cart.Controllers
             db.SaveChanges();
 
             return View();
+        }
+
+        public ActionResult ChangePassword()
+        {
+            Notofication_Count();
+            ViewBag.message = TempData["message"];
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            Notofication_Count();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            User_Table obj = new User_Table();
+            string name = Session["user"].ToString();
+            User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
+            if (details.Password == model.OldPassword)
+            {
+                if (details.Password == model.NewPassword)
+                {
+                    TempData["message"] = "your old password and new password are same!!!";
+                }
+                else if (model.NewPassword == model.ConfirmPassword)
+                {
+                    details.Password = model.NewPassword;
+                    db.SaveChanges();
+                    TempData["message"] = "password changes successfully!!";
+                }
+                else
+                {
+                    TempData["message"] = "confirm password an new password does not match";
+                }
+            }
+            else
+            {
+                TempData["message"] = "your old password is incorrect ";
+            }
+            return RedirectToAction("ChangePassword");
         }
 
         public void logout()

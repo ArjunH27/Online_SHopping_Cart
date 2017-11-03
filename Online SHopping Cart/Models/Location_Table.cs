@@ -11,6 +11,7 @@ namespace Online_SHopping_Cart.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     public partial class Location_Table
@@ -24,8 +25,11 @@ namespace Online_SHopping_Cart.Models
         public int LocationId { get; set; }
         [Remote("IsLocationNameExist", "Admin",
               ErrorMessage = "Location name already exists")]
+        [Required]
         public string LocationName { get; set; }
+        [Required]
         public int LocationPIN { get; set; }
+        [Required]
         public string LocationDesc { get; set; }
         public string LocationCreatedBy { get; set; }
         public System.DateTime LocationCreatedDate { get; set; }

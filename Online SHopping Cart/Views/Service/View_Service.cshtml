@@ -3,19 +3,26 @@
     ViewBag.Title = "View_Service";
     Layout = "~/Views/Shared/_ServiceLayout.cshtml";
 }
-
-<h2>View_Service</h2><br /><br /><br />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
 <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"
       rel="stylesheet" type="text/css" />
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 
-
-@{
-    var gridview = new WebGrid(ViewBag.OrderList, ajaxUpdateContainerId: "ajaxgrid", rowsPerPage: 7);
-}
-@gridview.GetHtml(
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />*@
+<br /><br /><br /><br /><br />
+<div class="container">
+    <h2>
+        View Service
+    </h2>
+    @{
+        var gridview = new WebGrid(ViewBag.OrderList, ajaxUpdateContainerId: "ajaxgrid", rowsPerPage: 10);
+    }
+    @gridview.GetHtml(
     //tableStyle: "webgrid-table",
     // headerStyle: "webgrid-header",
     // footerStyle: "webgrid-footer",
@@ -31,11 +38,12 @@
         gridview.Column(columnName:"OrderDeliveryDate", header: "Deliver Before", format: (item) => string.Format("{0:dd-MMM-yyyy}", item.OrderDeliveryDate)),
         gridview.Column(columnName:"TotalAmount",header:"Total Amount",format: @<text>@String.Format("{0:0.00}", (decimal)(item.TotalAmount)) </text>),
         gridview.Column(columnName:"Userid", header: "User Id",format: @<text>
-            <span id="UserId" class="read">@item.Userid</span></text>) ,
+        <span id="UserId" class="read">@item.Userid</span></text>) ,
         gridview.Column(format: @<text> <a class="details" href="javascript:void(0);  ">View Details</a></text>
         )
         }
         )
+</div>
 <style type="text/css">
     /*.webgrid-table {
                 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -77,7 +85,7 @@
             height: 50px;
         }
 
-            .webGrid tr :hover {
+            .webGrid tr:hover {
                 background-color: #F5F5F5;
             }
 
@@ -90,7 +98,7 @@
 
 
     .header {
-        background-color: #e8eef4;
+        background-color: #E5E7E9;
         height: 40px;
         color: black !important;
         margin-left: 10px;
@@ -118,9 +126,6 @@
 </style>
 <div id="dialog" style="display: none">
 </div>
-
-
-
 
 
 <script type="text/javascript">

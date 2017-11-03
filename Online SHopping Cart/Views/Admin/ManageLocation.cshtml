@@ -72,7 +72,7 @@
 
      gridview.Column(columnName:"LocationName", header: "Location Name",format: @<span>
         <span id="LName" class="read">@item.LocationName</span>
-        @Html.TextBox("LocationName", (string)item.LocationName, new { @class = "edit",@style="display:none" })
+        @Html.TextBox("LocationName", (string)item.LocationName, new { @class = "edit cat ",@style="display:none" })
         <label id="label1" class="text-danger"></label>
     </span>),
       gridview.Column(columnName:"LocationPIN", header: "Location Pincode",format: @<span>
@@ -90,19 +90,23 @@
       gridview.Column("", style: "button",
                 format:
                 @<text>
-                    <button class="edit-case read" id="@item.LocationId">Edit</button>
-                    <button class="delete-case read" id="@item.LocationId">Delete</button>
-                    <button class="update-case edit" id="@item.LocationId">Update</button>
-                    <button class="cancel-case edit" id="@item.LocationId">Cancel</button>
+                    <button class="edit-case read btn btn-default btn-sm" id="@item.LocationId">
+                        <span class="glyphicon glyphicon-pencil"></span>Edit
+                    </button>
+                    <button class="delete-case read btn btn-default btn-sm" id="@item.LocationId">
+                        <span class="glyphicon glyphicon-trash"></span>Delete
+                    </button>
+                    <button class="update-case edit btn btn-default btn-sm" id="@item.LocationId" style="display:none">Update</button>
+                    <button class="cancel-case edit btn btn-default btn-sm" id="@item.LocationId" style="display:none">Cancel</button>
                 </text>)
 
     }
 )
 </div>
-<div>
-    <hr />
-    @Html.ActionLink("Back to Home Page", "Home")
-</div>
+@*<div>
+        <hr />
+        @Html.ActionLink("Back to Home Page", "Home")
+    </div>*@
 <style type="text/css">
     /*.webgrid-table {
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -214,8 +218,8 @@
 
 
 
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+<script src="~/scripts/jquery.validate.min.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>
 <script src="~/scripts/Location.js"></script>
 <link href="~/Content/bootstrap.css" rel="stylesheet" />

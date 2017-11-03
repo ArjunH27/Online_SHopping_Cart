@@ -150,6 +150,7 @@ namespace Online_SHopping_Cart.Controllers
                 order.OrderUpdatedDate = System.DateTime.Now;
                 order.OrderIsDeleted = false;
                 order.OrderStatus = 1;
+                order.OrderNotification = "00";
                 db.Order_Table.Add(order);
                 db.SaveChanges();
                 int oid = order.OrderId;

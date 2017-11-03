@@ -11,6 +11,7 @@ namespace Online_SHopping_Cart.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     public partial class Role_Table
@@ -23,8 +24,9 @@ namespace Online_SHopping_Cart.Models
     
         public int RoleId { get; set; }
         [Remote("IsRoleNameExist", "Admin",
-           ErrorMessage = "Role name already exists")]
+              ErrorMessage = "Role name already exists")][Required]
         public string RoleName { get; set; }
+        [Required]
         public string RoleDesc { get; set; }
         public string RoleCreatedBy { get; set; }
         public System.DateTime RoleCreatedDate { get; set; }

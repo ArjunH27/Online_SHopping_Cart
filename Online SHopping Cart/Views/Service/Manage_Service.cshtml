@@ -4,9 +4,9 @@
     Layout = "~/Views/Shared/_ServiceLayout.cshtml";
 }
 
-<h2>Manage_Service</h2>
-<br /><br />
-<div id="ajaxgrid">
+<br /><br /><br /><br /><br />
+<div id="ajaxgrid" class="container">
+    <h2>Manage Service</h2>
     @{
         var gridview = new WebGrid(ViewBag.Services, ajaxUpdateContainerId: "ajaxgrid", rowsPerPage: 7);
     }
@@ -31,11 +31,9 @@
     </span> ),
          gridview.Column(columnName: "LocationName", header: "Available Locations", format: @<span>
         <span id="LocationName" class="unread">@item.LocationName</span>
-
     </span> ),
         gridview.Column(columnName: "ProductName", header: "Produtcs", format: @<span>
         <span id="ProductName" class="unread">@item.ProductName</span>
-
     </span> ), gridview.Column("", style: "button",
                 format:
 
@@ -51,7 +49,6 @@
     }
 )
 </div>
-
 <style type="text/css">
     /*.webgrid-table {
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -92,7 +89,7 @@
             height: 50px;
         }
 
-            .webGrid tr :hover {
+            .webGrid tr:hover {
                 background-color: #F5F5F5;
             }
 
@@ -105,7 +102,7 @@
 
 
     .header {
-        background-color: dimgrey;
+        background-color: #E5E7E9;
         height: 40px;
         margin-left: 10px;
     }

@@ -64,7 +64,7 @@
 
      gridview.Column(columnName:"RoleName", header: "Role Name",format: @<span>
         <span id="Name" class="read">@item.RoleName</span>
-        @Html.TextBox("RoleName", (string)item.RoleName, new { @class = "edit",@style="display:none" })
+        @Html.TextBox("RoleName", (string)item.RoleName, new { @class = "edit cat",@style="display:none" })
         <label id="label1" class="text-danger"></label>
     </span>),
 
@@ -85,8 +85,8 @@
                     <button class="delete-case read btn btn-default btn-sm" id="@item.RoleId">
                         <span class="glyphicon glyphicon-trash"></span>Delete
                     </button>
-                    <button class="update-case edit btn btn-default btn-sm" id="@item.RoleId">Update</button>
-                    <button class="cancel-case edit btn btn-default btn-sm" id="@item.RoleId">Cancel</button>
+                    <button class="update-case edit btn btn-default btn-sm" id="@item.RoleId" style="display:none">Update</button>
+                    <button class="cancel-case edit btn btn-default btn-sm" id="@item.RoleId" style="display:none">Cancel</button>
                 </text>)
 
     }

@@ -15,49 +15,54 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <style>
-       .navbar-inverse ,.navbar-fixed-top{
-            background-color:gray !important;
-            height:30px;
+        .navbar-inverse, .navbar-fixed-top {
+            background-color: gray !important;
+            height: 30px;
         }
-        .nav ul{
-             display:none;
-             list-style-type:none;
-             width:300px;
-              background-color:gainsboro;            
 
-         }
-         .nav li:hover > ul {
-                display: block;
-                color:dimgrey;
-                
-            }
-         
-        .tab1{
+        .nav ul {
+            display: none;
+            list-style-type: none;
+            width: 300px;
+            background-color: gainsboro;
+        }
 
-            width:300px;
-            background-color:black;
-            color:white;
+        .nav li:hover > ul {
+            display: block;
+            color: dimgrey;
         }
-        a:hover{
-            color:#708090;
+
+        .tab1 {
+            width: 300px;
+            background-color: black;
+            color: white;
         }
+
+        a:hover {
+            color: #708090;
+        }
+
         a {
-            color:black !important;
+            color: black !important;
             text-decoration: solid;
             font-size: medium;
         }
-        .nav li{
-            width:200px;
-            color:black !important
+
+        .nav li {
+            width: 200px;
+            color: black !important;
         }
-        .navbar-right li{
-            width:150px;
-            color:black !important
+
+        .navbar-right li {
+            width: 150px;
+            color: black !important;
         }
-        .navbar-right ul{
-            width:100px;
+
+        .navbar-right ul {
+            width: 100px;
         }
-              .body {
+
+        .body {
             font-family: "Lato", sans-serif;
         }
 
@@ -67,7 +72,7 @@
             position: fixed;
             z-index: 1;
             top: 0;
-            left: 0;
+            right: 0;
             background-color: #111;
             overflow-x: hidden;
             transition: 0.5s;
@@ -92,7 +97,7 @@
                 top: 0;
                 right: 25px;
                 font-size: 36px;
-                margin-left: 50px;
+                margin-right: 50px;
             }
 
         #main {
@@ -109,16 +114,20 @@
                     font-size: 18px;
                 }
         }
+
+        .navbar-brand {
+            font-size: 25px !important;
+        }
     </style>
 
 </head>
-<body style="padding-top:0px;">
+<body style="padding-top:0px;" id="main">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">shopFactory</a>
+                <a class="navbar-brand" href="#" >shopFactory</a>
             </div>
-            <ul class="nav navbar-nav main">
+            <ul class="nav navbar-nav main" style="height:30px;">
                 <li class="tab">
                     @*<a href="/Buyer/Index">Home</a>*@
                     @Html.ActionLink("Home", "Homepage")
@@ -135,7 +144,7 @@
                 </li>
 
                 <li class="tab"><a href="/Admin/ManageUser">Manage Users</a></li>
-                
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Session["user"] != null)
@@ -148,7 +157,7 @@
                 {
                     Response.Redirect("User/login");
                 }
-               
+
             </ul>
 
             <div id="mySidenav" class="sidenav">
@@ -156,7 +165,7 @@
                 <img src="~/Images/user.png" style="height:150px;width:150px;" />
                 <a href="#">Profile</a>
                 @Html.ActionLink("Edit Profile", "profile")
-                <a href="#">Change Password</a>
+               @Html.ActionLink("Change Password", "ChangePassword")
                 @Html.ActionLink("LOGOUT", "logout")
 
             </div>
@@ -171,12 +180,12 @@
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("main").style.marginRight = "250px";
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("main").style.marginRight = "0";
     document.body.style.backgroundColor = "white";
 }
     </script>
@@ -184,8 +193,8 @@ function closeNav() {
         @RenderBody()
 
     </div>
-    </body>
+</body>
 </html>
 
-    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>*@
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>*@

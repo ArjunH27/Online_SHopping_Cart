@@ -10,16 +10,65 @@ namespace Online_SHopping_Cart.Controllers
 {
     public class SellerController : Controller
     {
+        public int sellercount = 0;
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         SellerViewModel svm = new SellerViewModel();
         // GET: Seller
+        [HttpGet]
         public ActionResult Index()
         {
+            Notification_Count();
+
             return View();
         }
+        public void Notification_Count()
+        {
+            string name = Session["user"].ToString();
+            int Id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            List<OrderDetail_Table> orderlist = new List<OrderDetail_Table>();
+            var product = (from a in db.Product_Table where a.SellerId == Id && a.ProductIsDeleted == false select a).ToList();
+
+            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "01" select o).ToList();
+            foreach (var item in orders)
+            {
+                foreach (var item1 in product)
+                {
+                    OrderDetail_Table order = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid && or.Productid == item1.ProductId select or).FirstOrDefault();
+                    if (order != null)
+                    {
+                        orderlist.Add(order);
+                    }
+
+                }
+            }
+            ViewBag.ordering = orderlist;
+            Session["notif-count"] = orderlist.Count();
+        }
+
+
+        public void DisableNotification()
+        {
+            Order_Table obj = new Order_Table();
+            var order = (from a in db.Order_Table select a).ToList();
+            foreach (var item in order)
+            {
+                if (item.OrderNotification == "00")
+                {
+                    item.OrderNotification = "10";
+                }
+                else if (item.OrderNotification == "01")
+                {
+                    item.OrderNotification = "11";
+                }
+
+            }
+            db.SaveChanges();
+        }
+
         [HttpGet]
         public ActionResult Create()
         {
+            Notification_Count();
             List<BaseCategory_Table> category = new List<BaseCategory_Table>();
             category = db.BaseCategory_Table.ToList();
             var productlist = new List<SelectListItem>();
@@ -65,6 +114,7 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult Create(Image_Table model, Product_Table product)
         {
             int j;
+            Notification_Count();
             Image_Table image = new Image_Table();
             if (ModelState.IsValid)
             {
@@ -151,7 +201,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult display()
         {
-
+            Notification_Count();
             string uname = Session["user"].ToString();
             int uid = (from a in db.User_Table where a.UserName == uname select a.UserId).FirstOrDefault();
             List<SellerViewModel> obj1 = new List<SellerViewModel>();
@@ -180,7 +230,10 @@ namespace Online_SHopping_Cart.Controllers
                     var image = (from a in db.Image_Table where a.Productid == b.ProductId && a.ImageIsDeleted == false select a.BinaryImage).FirstOrDefault();
 
                     obj.BinaryImage = image;
-                    obj1.Add(obj);
+                    if (obj.BinaryImage != null)
+                    {
+                        obj1.Add(obj);
+                    }
                 }
             }
             // ViewBag.pro = obj1;
@@ -190,7 +243,7 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult display(string SearchKey)
         {
             List<SellerViewModel> prolist = new List<SellerViewModel>();
-
+            Notification_Count();
             string uname = Session["user"].ToString();
             int uid = (from a in db.User_Table where a.UserName == uname select a.UserId).FirstOrDefault();
             List<SellerViewModel> obj2 = new List<SellerViewModel>();
@@ -299,6 +352,7 @@ namespace Online_SHopping_Cart.Controllers
 
         public ActionResult Notification()
         {
+            Notification_Count();
             string name = Session["user"].ToString();
             List<SellerViewModel> list = new List<SellerViewModel>();
 
@@ -307,13 +361,13 @@ namespace Online_SHopping_Cart.Controllers
             foreach (var item in product)
             {
                 SellerViewModel obj = new SellerViewModel();
-                var order = (from d in db.OrderDetail_Table where d.Productid == item select d).ToList();
+                var order = (from d in db.OrderDetail_Table where d.Productid == item && d.Serviceid != null select d).ToList();
 
                 foreach (var item1 in order)
                 {
                     if (item1 != null)
                     {
-                        var service = (from c in db.Service_Table where c.Productid == item && c.ServiceIsDeleted == false select c.ServiceName).FirstOrDefault();
+                        var service = (from c in db.Service_Table where c.ServiceId == item1.Serviceid && c.ServiceIsDeleted != true select c.ServiceName).FirstOrDefault();
                         obj.ServiceName = service;
                         obj.OrderId = item1.Orderid;
                         list.Add(obj);
@@ -329,12 +383,50 @@ namespace Online_SHopping_Cart.Controllers
         }
         public ActionResult changepassword()
         {
+            Notification_Count();
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            User_Table obj = new User_Table();
+            string name = Session["user"].ToString();
+            User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
+            if (details.Password == model.OldPassword)
+            {
+                if (details.Password == model.NewPassword)
+                {
+                    TempData["message"] = "your old password and new password are same!!!";
+                }
+                else if (model.NewPassword == model.ConfirmPassword)
+                {
+                    details.Password = model.NewPassword;
+                    db.SaveChanges();
+                    TempData["message"] = "password changes successfully!!";
+                }
+                else
+                {
+                    TempData["message"] = "confirm password an new password does not match";
+                }
+            }
+            else
+            {
+                TempData["message"] = "your old password is incorrect ";
+            }
+            return RedirectToAction("ChangePassword");
         }
 
         [HttpGet]
         public ActionResult profile()
         {
+            Notification_Count();
             string name = Session["user"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             return View(obj);
@@ -343,7 +435,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult profile(User_Table obj)
         {
-
+            Notification_Count();
             string name = Session["user"].ToString();
             User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             user.FirstName = obj.FirstName;
@@ -362,6 +454,7 @@ namespace Online_SHopping_Cart.Controllers
             Session.Abandon();
             Response.Redirect("~/User/login");
         }
+
 
     }
 }

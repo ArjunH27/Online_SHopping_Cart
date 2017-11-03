@@ -17,6 +17,7 @@
         var BaseCatId = $(this).prop('id');
         var BaseCatName = tr.find('#BaseCatName').val();
         var BaseCatDescription = tr.find('#BaseCatDescription').val();
+
         if (BaseCatName == "") {
             tr.find('#label1').html("Field cannot be empty");
             return false;
@@ -76,4 +77,33 @@
             });
         }
     });
+   
+        $('.cat').change(function () {
+
+            var $current = $(this);
+            $(this).attr('class', 'thiss');
+
+            $('.cat').each(function () {
+                if ($(this).val() == $current.val() && $(this).attr('class') != $current.attr('class')) {
+                    alert('duplicate found!');
+                    $current.removeClass("thiss");
+                    //$current.addClass("edit");
+                    //$current.addClass("cat");
+                    $('.update-case').prop('disabled', true);
+                    return false;
+                }
+                else {
+                    $('.update-case').prop('disabled', false);
+                    $current.addClass("edit");
+                    $current.addClass("cat");
+                    //$('.edit').hide();
+
+                }
+
+                   
+
+            });
+        });
+    
+
 });

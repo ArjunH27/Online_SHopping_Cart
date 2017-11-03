@@ -1,4 +1,5 @@
 ﻿@{
+
     Layout = null;
 }
 
@@ -13,11 +14,43 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
-
     <style>
+        .navbar {
+            background: #000080;
+            border: black;
+        }
+
+            .navbar #navcol {
+                color: white;
+                font-size: 20px;
+            }
+
+                .navbar #navcol:hover {
+                    /*//color: black;*/
+                    font-size: 23px;
+                }
+
+            .navbar #logo {
+                color: white;
+            }
+
+                .navbar #logo:hover {
+                    /*color: black;*/
+                    /*font-size:5px;*/
+                }
+
         .body {
+            transition: background-color .5s;
             font-family: "Lato", sans-serif;
         }
+
+        .dropdown-menu {
+            background: transparent;
+        }
+
+            .dropdown-menu li:hover {
+                font-size: large;
+            }
 
         .sidenav {
             height: 100%;
@@ -26,7 +59,7 @@
             z-index: 1;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: rgba(0, 0, 0, 0.4);
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -35,14 +68,14 @@
             .sidenav a {
                 padding: 8px 8px 8px 32px;
                 text-decoration: none;
-                font-size: 25px;
-                color: #818181;
+                font-size: 22px;
+                color: black;
                 display: block;
                 transition: 0.3s;
             }
 
                 .sidenav a:hover {
-                    color: #f1f1f1;
+                    font-size: 25px;
                 }
 
             .sidenav .closebtn {
@@ -53,7 +86,8 @@
                 margin-left: 50px;
             }
 
-        #main {
+        #mains {
+            background-color: #D7DBDD;
             transition: margin-left .5s;
             padding: 16px;
         }
@@ -67,35 +101,17 @@
                     font-size: 18px;
                 }
         }
+
+        .badge-notify {
+            background: red;
+            position: relative;
+            top: -10px;
+            left: -3px;
+        }
     </style>
 
-
 </head>
-<body style="padding:0px;" id="main">
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Seller", new { area = "" }, new { @class = "navbar-brand" })
-                    @Html.ActionLink("Manage Product", "Create", "Seller", new { area = "" }, new { @class = "navbar-brand" })
-                    @Html.ActionLink("View Product", "display", "Seller", new { area = "" }, new { @class = "navbar-brand" })
-                    @Html.ActionLink("Notification", "Notification", "Seller", new { area = "" }, new { @class = "navbar-brand" })
-
-                      @Html.ActionLink("cp", "ChangePassword", "User", new { area = "" }, new { @class = "navbar-brand" })
-                     @Html.ActionLink(Session["user"].ToString(), "", "", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-
-                    <ul class="nav navbar-nav">
-                    </ul>
-                </div>
-            </div>
-        </div>*@
-
+<body style="padding:0px;" id="mains">
 
 
 
@@ -109,56 +125,70 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/Seller/Index" style="font-size:30px">shopFactory</a>
+                <a class="navbar-brand" id="logo" href="/Seller/Index" style="font-size:35px;">shopFactory</a>
             </div>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
-
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" id="navcol" data-toggle="dropdown">Products <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/Seller/Create">Manage Product</a></li>
-
                         <li class="divider"></li>
-
                         <li><a href="/Seller/display">View Products</a></li>
-
                     </ul>
                 </li>
             </ul>
-
             <ul class="nav navbar-nav navbar-right">
-                <span style="font-size:30px;cursor:pointer;color:#aaa" ; onclick="openNav()">&#9776; @Session["user"].ToString()</span>
-                @*@Html.ActionLink(Session["user"].ToString(), "", "", new { area = "" }, new { @class = "navbar-brand ", @id = "sidebarCollapse" })*@
 
+                <li class="dropdown">
+                    <a id="navcol" href="/Seller/Notification" class="dropdown-toggle god " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
+                    <ul class="dropdown-menu">
 
-                <li><a href="/Seller/Notification">Notification</a></li>
+                        @foreach (var item in ViewBag.ordering)
+                        {
+                            <li>@item.Orderid</li>
+                            <li class="divider"></li>
+                        }
 
+                    </ul>
 
+                </li>
+
+                <li>
+                    <a id="navcol">
+                        <span style="cursor:pointer;" onclick="openNav()">
+                            <span class="glyphicon glyphicon-user ">  </span>
+                        </span>
+                        @*@Html.ActionLink(Session["user"].ToString(), "", "", new { area = "" }, new { @class = "navbar-brand ", @id = "sidebarCollapse" })*@
+                    </a>
+                </li>
 
             </ul>
-
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <img src="~/Images/user.png" style="height:150px;width:150px;" />
-                <a href="#">Profile</a>
-                @Html.ActionLink("Edit Profile","profile")
-                <a href="#">Change Password</a>
-                @Html.ActionLink("LOGOUT", "logout")
+
+                <a href="/Seller/profile">
+                    <span class="glyphicon glyphicon-edit ">  </span>
+                    Edit Profile
+                </a>
+                <a href="/Seller/ChangePassword">
+                    <span class="glyphicon glyphicon-cog">  </span>
+                    ChangePassword
+                </a>
+
+                @*@Html.ActionLink("Edit Profile", "profile", new { @class = "glyphicons glyphicons - edit" })*@
+                <a href="/Seller/Logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
 
             </div>
-
-
 
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container-fluid -->
     </nav>
-
 
     <script>
         $('ul.nav li.dropdown').hover(function () {
@@ -168,17 +198,31 @@
         });
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
-    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    document.getElementById("mySidenav").style.width = "270px";
+
+    document.body.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
 }
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
-    document.body.style.backgroundColor = "white";
-}
-    </script>
 
+    document.body.style.backgroundColor = "#D7DBDD";
+}
+
+$(".god").click(function(e){
+
+    e.preventDefault();
+    $.ajax({
+
+        url: "/Seller/DisableNotification", // comma here instead of semicolon
+        success: function(){
+
+        }
+
+    });
+
+});
+
+    </script>
 
     <div class="container body-content">
         @RenderBody()
@@ -188,10 +232,8 @@ function closeNav() {
         </footer>
     </div>
 
-
     @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
         <script src="~/Scripts/bootstrap.min.js"></script>*@
-
 
 </body>
 </html>

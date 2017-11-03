@@ -11,6 +11,7 @@ namespace Online_SHopping_Cart.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     public partial class BaseCategory_Table
@@ -23,8 +24,9 @@ namespace Online_SHopping_Cart.Models
     
         public int BaseCatId { get; set; }
         [Remote("IsBaseCategoryNameExist", "Admin",
-             ErrorMessage = "Base Category name already exists")]
+             ErrorMessage = "Base Category name already exists")][Required]
         public string BaseCatName { get; set; }
+        [Required]
         public string BaseCatDesc { get; set; }
         public string BaseCatCreatedBy { get; set; }
         public System.DateTime BaseCatCreateDate { get; set; }

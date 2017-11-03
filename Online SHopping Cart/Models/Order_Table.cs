@@ -31,6 +31,7 @@ namespace Online_SHopping_Cart.Models
         public string OrderUpdatedBy { get; set; }
         public System.DateTime OrderUpdatedDate { get; set; }
         public bool OrderIsDeleted { get; set; }
+        public string OrderNotification { get; set; }
     
         public virtual User_Table User_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

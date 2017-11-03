@@ -79,12 +79,13 @@
 
      gridview.Column(columnName:"ProductCatName", header: "Product Category Name",format: @<span>
         <span id="CatName" class="read">@item.ProductCatName</span>
-        @Html.TextBox("ProductCatName", (string)item.ProductCatName, new { @class = "edit",@style="display:none" })
+        @Html.TextBox("ProductCatName", (string)item.ProductCatName, new { @class = "edit cat",@style="display:none" })
         <label id="label1" class="text-danger"></label>
 
     </span>),
     gridview.Column(columnName:"BaseCatName", header: "Base Category",format: @<span>
         <span id="BaseName" class="readid">@item.BaseCatName </span>
+        @*@Html.DropDownList("basecategory", null, "", new { id = "BaseCategoryName", @class = "edit form-control" })*@
     </span>),
 
      gridview.Column(columnName: "ProductCatDesc", header: " Product Category Description", format: @<span>
@@ -98,19 +99,23 @@
                 format:
 
                 @<text>
-                    <button class="edit-case read" id="@item.ProductCatId">Edit</button>
-                    <button class="delete-case read" id="@item.ProductCatId">Delete</button>
-                    <button class="update-case edit" id="@item.ProductCatId">Update</button>
-                    <button class="cancel-case edit" id="@item.ProductCatId">Cancel</button>
+                    <button class="edit-case read btn btn-default btn-sm" id="@item.ProductCatId">
+                        <span class="glyphicon glyphicon-pencil"></span>Edit
+                    </button>
+                    <button class="delete-case read btn btn-default btn-sm" id="@item.ProductCatId">
+                        <span class="glyphicon glyphicon-trash"></span>Delete
+                    </button>
+                    <button class="update-case edit btn btn-default btn-sm" id="@item.ProductCatId" style="display:none">Update</button>
+                    <button class="cancel-case edit btn btn-default btn-sm" id="@item.ProductCatId" style="display:none">Cancel</button>
                 </text>)
 
     }
 )
 </div>
-<div>
-    <hr />
-    @Html.ActionLink("Back to Home Page", "Home")
-</div>
+@*<div>
+        <hr />
+        @Html.ActionLink("Back to Home Page", "Home")
+    </div>*@
 <style type="text/css">
     /*.webgrid-table {
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
