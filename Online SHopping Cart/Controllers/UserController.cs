@@ -73,6 +73,7 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult login(string user, string password)
         {
             User_Table obj = db.User_Table.Where(x => x.UserName == user).FirstOrDefault();
+            Role_Table robj = db.Role_Table.Where(x => x.RoleId == obj.Roleid).FirstOrDefault();
             if (obj != null)
             {
                 if (obj.Password == password)
@@ -80,22 +81,22 @@ namespace Online_SHopping_Cart.Controllers
                     if (obj.UserIsDeleted == false)
                     {
 
-                        if (obj.Roleid == 1 )
+                        if (robj.RoleName == "Super_Admin")
                         {
                             Session["user"] = obj.UserName;
                             return RedirectToAction("Homepage", "Admin");
                         }
-                        else if (obj.Roleid == 2 )
+                        else if (robj.RoleName == "Seller")
                         {
                             Session["user"] = obj.UserName;
                             return RedirectToAction("Index", "Seller");
                         }
-                        else if (obj.Roleid == 3 )
+                        else if (robj.RoleName == "Courier_Service")
                         {
                             Session["user"] = obj.UserName;
                             return RedirectToAction("Service_Home", "Service");
                         }
-                        else if (obj.Roleid == 4)
+                        else if (robj.RoleName == "Buyer")
                         {
                             Session["user"] = obj.UserName;
                             Session["name"] = obj.FirstName;
