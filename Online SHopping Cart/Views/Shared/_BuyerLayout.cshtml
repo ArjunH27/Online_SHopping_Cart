@@ -21,7 +21,7 @@
     <nav>
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <li><h4 id="menu">shopFactory</h4></li>
+                <li style="cursor:pointer;"><h4 id="menu">shopFactory</h4></li>
                 </ul>
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
                     
@@ -41,9 +41,9 @@
 
                     @if (Session["user"] != null)
                     {
-                        <li>Welcome : @Session["user"].ToString() </li>
+                        <li data-activates="slide-out" class="button-collapse" style="cursor:pointer" >Welcome : @Session["user"].ToString() </li>
                         
-                        <li data-activates="slide-out" class="button-collapse">Profile</li>
+                        @*<li >Profile</li>*@
                     }
                     else
                     {
@@ -53,7 +53,10 @@
                 </ul>
 </div>
     </nav>
-    
+    <div>
+      
+     </div>  
+ 
         <ul id="slide-out" class="side-nav">
             <li>
                 <div class="user-view" style="height:300px;">
@@ -64,11 +67,12 @@
             </li>
             <li><a class="waves-effect" href="#!">NAME : @Session["name"].ToString()</a> </li>
             <li><a class="waves-effect" href="#!">UserName : @Session["user"].ToString()</a> </li>
-            
+
             <li><div class="divider"></div></li>
-            <li ><div class="chip">
-                 @Html.ActionLink("EDIT PROFILE", "profile")
-                <i class="material-icons"> account_circle</i>
+            <li>
+                <div class="chip">
+                    @Html.ActionLink("EDIT PROFILE", "profile")
+                    <i class="material-icons"> account_circle</i>
                 </div>
             </li>
             <li>
@@ -83,42 +87,42 @@
                     <i class="material-icons"> backspace</i>
                 </div>
             </li>
-           
-</ul>
-        
-    
-    <div>
 
-        <!-- Tap Target Structure -->
-        <div class="tap-target" data-activates="menu">
-            <div class="tap-target-content">
-                <div>
-                    <p>Contact Us</p>
-                    <p><i class="material-icons prefix">email</i>factoryforshop@gmail.com</p>
-                </div>
-                <div class="row">
-                    <p>Keep In Touch</p>
-                    <a class="waves-effect waves-light btn-floating social google">
-                        <i class="fa fa-google"></i> Sign in with google
-                    </a>
-                    <a class="waves-effect waves-light btn-floating social twitter">
-                        <i class="fa fa-twitter"></i> Sign in with twitter
-                    </a>
-                    <a class="waves-effect waves-light btn-floating social facebook">
-                        <i class="fa fa-facebook"></i> Sign in with facebook
-                    </a>
-                    <a class="waves-effect waves-light btn-floating social linkedin">
-                        <i class="fa fa-linkedin"></i> Sign in with linkedin
-                    </a>
+        </ul>
+
+
+        <div>
+
+            <!-- Tap Target Structure -->
+            <div class="tap-target" data-activates="menu">
+                <div class="tap-target-content">
+                    <div>
+                        <p>Contact Us</p>
+                        <p><i class="material-icons prefix">email</i>factoryforshop@gmail.com</p>
+                    </div>
+                    <div class="row">
+                        <p>Keep In Touch</p>
+                        <a class="waves-effect waves-light btn-floating social google">
+                            <i class="fa fa-google"></i> Sign in with google
+                        </a>
+                        <a class="waves-effect waves-light btn-floating social twitter">
+                            <i class="fa fa-twitter"></i> Sign in with twitter
+                        </a>
+                        <a class="waves-effect waves-light btn-floating social facebook">
+                            <i class="fa fa-facebook"></i> Sign in with facebook
+                        </a>
+                        <a class="waves-effect waves-light btn-floating social linkedin">
+                            <i class="fa fa-linkedin"></i> Sign in with linkedin
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-  
-    <div >
-        @RenderBody()
-       
-    </div>
+
+        <div>
+            @RenderBody()
+
+        </div>
 
 
 </body>
@@ -127,6 +131,7 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/scripts/materialize.js"></script>
 <script>
+    
      $('.button-collapse').sideNav({
          menuWidth: 300, // Default is 300
          edge: 'right', // Choose the horizontal origin

@@ -129,7 +129,7 @@
 <div class="row">
     <div class="col s3">
         <h5> @Html.DisplayFor(modelItem => modelItem.ProductName)</h5>
-        <h4>Discription</h4>
+        <h4>Discreption</h4>
         <h5> @Html.DisplayFor(modelItem => modelItem.ProductDesc)</h5>
         <h5>Price : @Html.DisplayFor(modelItem => modelItem.ProductPrice)</h5>
         <h5>Stock : @Html.DisplayFor(modelItem => modelItem.ProductStock)</h5>
@@ -140,6 +140,7 @@
     </div>
 
     <div class="col s4">
+        <p id="no_msg" style="color:red;">Sorry no Service Provide available to currect Location</p>
         <p id="valid_info" style="color:red;">Please select Location and Service Provide</p>
         <p id="stock_msg" style="color:red;">Sorry Stock Not Available</p>
         <p id="d_add" style="color:red;">Enter Delivery Address</p>
@@ -156,7 +157,7 @@
             @Html.TextAreaFor(model => model.OrderDelivryAddress, new { htmlAttributes = new { @id = "address" } })
             <br />
             <h6>Quantity</h6>
-            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" ,@id="qty" } })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" ,@id="qty",@min="0" } })
             <input type="hidden" value="" name="amt" id="amt" />
             <div id="tamt">
 
@@ -205,6 +206,7 @@
     }
 
     $(document).ready(function () {
+        $("#no_msg").hide();
         $("#d_add").hide();
         $("#stock_msg").hide();
         $("#order_btn").hide();
@@ -217,6 +219,8 @@
                 datatype: "json",
 
                 success: function (data) {
+                    if (data.length > 0) {
+                    $("#no_msg").hide();
                     var category = "<select id='ddlpcat'>";
                     category = category + '<option value="">--Select--</option>';
                     for (var i = 0; i < data.length; i++) {
@@ -224,6 +228,10 @@
                     }
                     category = category + '</select>';
                     $('#ddlpcat').html(category);
+                    }
+                    else {
+                        $("#no_msg").show();
+                    }
                 }
             });
         });
@@ -232,10 +240,11 @@
             var qty = $('#qty').val();
             var service_id = $('#ddlpcat').val();
             //var del_address = $('#address').text();
-          
+            if(qty<1)
+            {
+                $("#order_btn").hide();
+            }
             if (service_id != 0) {
-                //if (del_address == " ")
-                //{
                     $("#valid_info").hide();
                 $.ajax({
                     type: "post",
@@ -248,21 +257,18 @@
                             $("#order_btn").hide();
                         }
                         else {
+                            $("#stock_msg").hide();
                             var total_amt = data;
                             $("#amt").val(total_amt);
                             $('#tamt').html('<h6>Total Amount : ' + total_amt + '</h6>')
                             $("#order_btn").show();
+
                         }
 
                     }
 
 
                 });
-                //}
-                //else {
-                //    $("#d_add").show();
-                //    $("#order_btn").hide();
-                //}
             }
             else {
                 $("#valid_info").show();

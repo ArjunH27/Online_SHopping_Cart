@@ -11,9 +11,12 @@ namespace Online_SHopping_Cart.Controllers
 {
     public class BuyerController : Controller
     {
-        public List<int> avail_list = new List<int>();
+         public List<int> avail_list = new List<int>();
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         // GET: Buyer
+
+    
+
         public ActionResult Index()
         {
             List<BaseCategory_Table> cato = new List<BaseCategory_Table>();
@@ -27,6 +30,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult profile()
         {
+            ViewBag.fill_msg = TempData["fill_msg"];
             string name = Session["user"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             return View(obj);
@@ -35,7 +39,8 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult profile(User_Table obj)
         {
-
+           if(obj.FirstName!=null && obj.LastName!=null && obj.UserEmail!=null && obj.UserAddress!=null )
+            { 
             string name = Session["user"].ToString();
             User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             user.FirstName = obj.FirstName;
@@ -44,7 +49,12 @@ namespace Online_SHopping_Cart.Controllers
             user.UserAddress = obj.UserAddress;
             user.UserUpdatedDate = System.DateTime.Now;
             db.SaveChanges();
-
+            }
+            else
+            {
+                TempData["fill_msg"] = "Please Enter The Details";
+                return RedirectToAction("profile");
+            }
             return View();
         }
 
@@ -159,7 +169,7 @@ namespace Online_SHopping_Cart.Controllers
                 order_detail.Productid = pid;
                 int lid = Convert.ToInt32(Session["location"]);
                 Service_Table serboj = db.Service_Table.Where(x => x.ServiceProviderid == obj.UserId && x.Locationid == lid).FirstOrDefault();
-                order_detail.Serviceid = serboj.ServiceProviderid;
+                order_detail.Serviceid = serboj.ServiceId;
                 order_detail.Quantity = obj.Quantity;
                 order_detail.Amount = Convert.ToInt32(amt);
                 db.OrderDetail_Table.Add(order_detail);
@@ -228,7 +238,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     int lid = Convert.ToInt32(Session["location"]);
                     Service_Table serboj = db.Service_Table.Where(x => x.ServiceProviderid == obj.UserId && x.Locationid == lid).FirstOrDefault();
-                    obj1.Serviceid = serboj.ServiceProviderid;
+                    obj1.Serviceid = serboj.ServiceId;
                     db.SaveChanges();
                 }
                 else
@@ -628,8 +638,25 @@ namespace Online_SHopping_Cart.Controllers
             Response.Redirect("~/User/login");
         }
 
+        [HttpPost]
+        public JsonResult AutoComplete(string prefix)
+        {
+
+            var proname = (from pro in db.ProductCategory_Table
+                             where pro.ProductCatName.StartsWith(prefix)
+                             select new
+                             {
+                               pro.ProductCatName
+                             }).ToList();
+
+            return Json(proname, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult try1()
             {
+            List<string> proname = db.ProductCategory_Table.Where(x => x.ProductCatIsDeleted == false).Select(x=>x.ProductCatName).ToList();
+            ViewBag.inc = proname;
+           
             return View();
             }
     }

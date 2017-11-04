@@ -7,8 +7,9 @@
 <link href="~/Content/materialize.css" rel="stylesheet" />
 <div style="margin-left:20%;margin-top:8%;">
     <div class="row">
+        <h5 >Booking Details</h5>
         <form method="post" action="/Buyer/purchase_all" class="col s3">
-
+            <h6 style="color:red;" id="no_msg">Sorry no Service Provider available to current Location</h6>
             <h6>Location</h6>
             @Html.DropDownList("place", (IEnumerable<SelectListItem>)ViewBag.location_list, "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlbcat" })
 
@@ -16,12 +17,13 @@
             @Html.DropDownListFor(model => model.UserId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "dropdown-button btn", id = "ddlpcat" })
 
             <h6>Delivery Adddress</h6><br />
-            @Html.TextAreaFor(model => model.OrderDelivryAddress)
+            @Html.TextAreaFor(model => model.OrderDelivryAddress, htmlAttributes: new { id = "address" })
             <br />
-            <button type="submit" class="btn waves-effect waves-light">
-                BOOK
-            </button>
-
+            <div id="bookbtn">
+                <button type="submit" class="btn waves-effect waves-light">
+                    BOOK
+                </button>
+            </div>
         </form>
 
 
@@ -37,7 +39,8 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1V0ctVqyVwcbQXzT6xXDk6rUKpocVFGg&callback=myMap"></script>
     <script>
         $(document).ready(function () {
-
+            $("#no_msg").hide();
+            $("#bookbtn").hide();
             $('#ddlbcat').change(function () {
                 $.ajax({
                     type: "post",
@@ -48,14 +51,24 @@
                     success: function (data) {
                         var category = "<select id='ddlpcat'>";
                         category = category + '<option value="">--Select--</option>';
-                        for (var i = 0; i < data.length; i++) {
-                            category = category + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                category = category + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                            }
+                            category = category + '</select>';
+                            $('#ddlpcat').html(category);
+                            $("#no_msg").hide();
+                            $("#bookbtn").show();
                         }
-                        category = category + '</select>';
-                        $('#ddlpcat').html(category);
+                        else {
+                            $("#no_msg").show();
+                            $("#bookbtn").hide();
+                        }
                     }
                 });
             });
+
+        
 
         });
 

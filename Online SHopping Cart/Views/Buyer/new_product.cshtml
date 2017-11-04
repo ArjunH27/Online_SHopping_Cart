@@ -52,13 +52,13 @@
                 var btn = element.id;
                 $.ajax({
                     type: "POST",
-                    url: "Buyer/add_cart",
+                    url: "add_cart",
                     data: '{id: "' + btn + '" }',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
                         alert("Added to Cart");
-                        window.location.href = "Buyer/cart";
+                        window.location.href = "cart";
                     },
                     failure: function (response) {
                         alert("Not found");

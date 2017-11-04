@@ -97,7 +97,7 @@ function carousel() {
         var btn = element.id;
         $.ajax({
             type: "POST",
-            url: "Buyer/find_base_cat_id",
+            url: "find_base_cat_id",
             data: '{id: "' + btn + '" }',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
