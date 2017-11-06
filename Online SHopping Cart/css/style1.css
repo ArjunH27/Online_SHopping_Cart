@@ -187,7 +187,7 @@ transition: 1s ease;
 -webkit-transform: scale(1.03);
 -ms-transform: scale(1.03);
 transform: scale(1.03);
-transition: 1s ease;
+transition: 0.1s ease;
 
 }
 h1{ 
@@ -279,6 +279,8 @@ stats-left {
     padding: 0px;
     margin-top:60px;
     box-shadow: 0 -1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+  
+
     
 
 }
@@ -293,6 +295,8 @@ stats-left {
     padding: 0px;
     box-shadow: 0 -1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     
+
+    
  }
  .states-last{
      background-color:rgba(79, 82, 186, 0.88);
@@ -304,6 +308,14 @@ stats-left {
      border: 1px solid #F5F1F1;
      padding: 0px;
      box-shadow: 0 -1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+     
+
+ }
+ .first:hover, .states-mdl:hover, .states-last:hover{
+     -webkit-transform: scale(1.08);
+    -ms-transform: scale(1.08);
+    transform: scale(1.08);
+    transition: 0.1s ease;
  }
  one{
       margin-top:30px;

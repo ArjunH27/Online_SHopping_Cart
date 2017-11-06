@@ -26,10 +26,12 @@ namespace Online_SHopping_Cart.Models
         [Remote("IsLocationNameExist", "Admin",
               ErrorMessage = "Location name already exists")]
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string LocationName { get; set; }
         [Required]
         public int LocationPIN { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string LocationDesc { get; set; }
         public string LocationCreatedBy { get; set; }
         public System.DateTime LocationCreatedDate { get; set; }

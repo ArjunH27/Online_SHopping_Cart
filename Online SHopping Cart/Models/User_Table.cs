@@ -19,18 +19,20 @@ namespace Online_SHopping_Cart.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User_Table()
         {
+            this.Notify_table = new HashSet<Notify_table>();
             this.Order_Table = new HashSet<Order_Table>();
             this.Product_Table = new HashSet<Product_Table>();
             this.Service_Table = new HashSet<Service_Table>();
-            this.Notify_table = new HashSet<Notify_table>();
         }
 
         public int UserId { get; set; }
         [Required]
         public int Roleid { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string FirstName { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string LastName { get; set; }
         [Required]
         [EmailAddress]
@@ -47,15 +49,18 @@ namespace Online_SHopping_Cart.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required][DataType(DataType.PhoneNumber)]
+        [Required]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Use numbers only please.")]
         [StringLength(10, ErrorMessage = "The {0} must be {2} characters long.", MinimumLength = 10)]
-        public int UserPhno { get; set; }
-
+        public string UserPhno { get; set; }
         public string UserCreatedBy { get; set; }
         public System.DateTime UserCreatedDate { get; set; }
         public string UserUpdateBy { get; set; }
         public System.DateTime UserUpdatedDate { get; set; }
         public bool UserIsDeleted { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notify_table> Notify_table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Table> Order_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -63,7 +68,5 @@ namespace Online_SHopping_Cart.Models
         public virtual Role_Table Role_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Service_Table> Service_Table { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Notify_table> Notify_table { get; set; }
     }
 }

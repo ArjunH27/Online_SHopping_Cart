@@ -80,10 +80,10 @@
             });
         }
     });
-    $('.cat').change(function () {
+    $(document).on('change', '.cat', function () {
 
         var $current = $(this);
-        $(this).attr('class', 'thiss');
+        $current.addClass("thiss");
 
         $('.cat').each(function () {
             if ($(this).val() == $current.val() && $(this).attr('class') != $current.attr('class')) {
@@ -92,6 +92,7 @@
                 //$current.addClass("edit");
                 //$current.addClass("cat");
                 $('.update-case').prop('disabled', true);
+                location.reload(true);
                 return false;
             }
             else {
@@ -101,10 +102,8 @@
                 //$('.edit').hide();
 
             }
-
-
-
         });
+        $current.removeClass("thiss");
     });
 
     //$(document).on('click', ".btn", function (e) {

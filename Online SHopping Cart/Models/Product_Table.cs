@@ -18,9 +18,9 @@ namespace Online_SHopping_Cart.Models
         public Product_Table()
         {
             this.Image_Table = new HashSet<Image_Table>();
+            this.Notify_table = new HashSet<Notify_table>();
             this.OrderDetail_Table = new HashSet<OrderDetail_Table>();
             this.Service_Table = new HashSet<Service_Table>();
-            this.Notify_table = new HashSet<Notify_table>();
         }
     
         public int ProductId { get; set; }
@@ -39,12 +39,12 @@ namespace Online_SHopping_Cart.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Image_Table> Image_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notify_table> Notify_table { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail_Table> OrderDetail_Table { get; set; }
         public virtual ProductCategory_Table ProductCategory_Table { get; set; }
         public virtual User_Table User_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Service_Table> Service_Table { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Notify_table> Notify_table { get; set; }
     }
 }

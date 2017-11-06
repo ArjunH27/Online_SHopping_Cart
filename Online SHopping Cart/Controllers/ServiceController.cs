@@ -13,15 +13,46 @@ namespace Online_SHopping_Cart.Controllers
     {
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         // GET: Service
+       
+       
         public ActionResult Service_Home()
         {
             Notofication_Count();
+            order_count();
             return View();
         }
 
+        public void order_count()
+        {
+            string name = Session["user"].ToString();
+            int orderCount = 0;
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            List<Order_Table> orderList = new List<Order_Table>();
+            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
+            foreach (var item in orders)
+            {
+                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
+                foreach (var item1 in serviceids)
+                {
+
+                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
+                    if (serid == serviceProviderId)
+                    {
+                        if (item.OrderDeliveryDate > System.DateTime.Now)
+                        {
+                            orderCount++;
+                        }
+
+                        orderList.Add(item);
+                    }
+                    Session["ordercount"] = orderCount;
+                }
+            }
+        }
         public void Notofication_Count()
         {
             string name = Session["user"].ToString();
+
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
             List<Order_Table> orderlist = new List<Order_Table>();
             var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "10" select o);
@@ -34,7 +65,6 @@ namespace Online_SHopping_Cart.Controllers
                     var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
                     if (serid == serviceProviderId)
                     {
-
                         orderlist.Add(item);
                     }
                 }
@@ -43,6 +73,7 @@ namespace Online_SHopping_Cart.Controllers
             // ViewBag.ordering = orderlist;
             ViewBag.ordering = l;
             //Session["notif-count"] = orderlist.Count();
+
             Session["notif-count"] = l.Count();
         }
         public void DisableNotification()
@@ -116,24 +147,34 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult Image_PartialView(int productCatId)
         {
-
-            List<Image_Table> imageList = new List<Image_Table>();
+            List<Buyer_Product> imageList = new List<Buyer_Product>();
             var products = (from p in db.Product_Table
                             where p.ProductCatid == productCatId && p.ProductIsDeleted == false
                             select p).ToList();
             foreach (var item in products)
             {
-                int productId = (from p in db.Product_Table where p.ProductId == item.ProductId select p.ProductId).FirstOrDefault();
-                var imageId = (from i in db.Image_Table where i.Productid == productId select i.ImageId);
-                foreach (var images in imageId)
-                {
 
-                    var imagelist = (from im in db.Image_Table where im.ImageId == images select im).FirstOrDefault();
-                    imageList.Add(imagelist);
+                Buyer_Product obj = new Buyer_Product();
+                obj.ProductName = item.ProductName;
+                obj.ProductId = item.ProductId;
+                obj.ProductPrice = item.ProductPrice;
+                obj.ProductDesc = item.ProductDesc;
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
+                obj.BinaryImage = img.BinaryImage;
+                imageList.Add(obj);
 
-                }
             }
-            return PartialView("Products_PartialView", imageList.DistinctBy(x => x.Productid).ToList());
+            ViewBag.imglist = imageList.DistinctBy(x => x.ProductId).ToList();
+            return PartialView("Products_PartialView");
+        }
+        [HttpPost]
+        public ActionResult imagedisplay(int id)
+        {
+            Product_Table product = db.Product_Table.Find(id);
+
+            var image = (from a in db.Image_Table where a.Productid == product.ProductId && a.ImageIsDeleted == false select a).ToList();
+            ViewBag.imlist = image.ToList();
+            return PartialView("imagedisplay");
         }
         [HttpPost]
         public ActionResult Add_Service(Service_ViewModel model, string[] ids)
@@ -250,16 +291,10 @@ namespace Online_SHopping_Cart.Controllers
         {
             DisableNotification();
             Notofication_Count();
+
             string name = Session["user"].ToString();
             int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
             List<Order_Table> orderList = new List<Order_Table>();
-            //var services = (from o in db.OrderDetail_Table where o.Serviceid == serviceProviderId select o.Orderid).ToList();
-            //foreach (var item in services)
-            //{
-            //    Order_Table order = (from o in db.Order_Table where o.OrderId == item select o).FirstOrDefault();
-            //    orderList.Add(order);
-
-            //}
             var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
             foreach (var item in orders)
             {
@@ -271,10 +306,13 @@ namespace Online_SHopping_Cart.Controllers
                     if (serid == serviceProviderId)
                     {
 
+
                         orderList.Add(item);
                     }
+
                 }
             }
+
             ViewBag.OrderList = orderList.DistinctBy(x => x.OrderId).ToList();
 
             return View();
@@ -313,9 +351,12 @@ namespace Online_SHopping_Cart.Controllers
             return PartialView("OrderDetails", ohvmlist);
         }
 
+
         [HttpGet]
         public ActionResult profile()
         {
+            Notofication_Count();
+            ViewBag.fill_msg = TempData["fill_msg"];
             Notofication_Count();
             string name = Session["user"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
@@ -326,15 +367,24 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult profile(User_Table obj)
         {
             Notofication_Count();
-            string name = Session["user"].ToString();
-            User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
-            user.FirstName = obj.FirstName;
-            user.LastName = obj.LastName;
-            user.UserEmail = obj.UserEmail;
-            user.UserAddress = obj.UserAddress;
-            user.UserUpdatedDate = System.DateTime.Now;
-            db.SaveChanges();
-
+            if (obj.FirstName != null && obj.LastName != null && obj.UserEmail != null && obj.UserAddress != null && obj.UserPhno != null)
+            {
+                string name = Session["user"].ToString();
+                User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
+                user.FirstName = obj.FirstName;
+                user.LastName = obj.LastName;
+                user.UserEmail = obj.UserEmail;
+                user.UserAddress = obj.UserAddress;
+                user.UserPhno = obj.UserPhno;
+                user.UserUpdateBy = name;
+                user.UserUpdatedDate = System.DateTime.Now;
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["fill_msg"] = "Please Enter The Details";
+                return RedirectToAction("profile");
+            }
             return View();
         }
 
@@ -387,7 +437,7 @@ namespace Online_SHopping_Cart.Controllers
             Session["user"] = null;
             Session["count"] = null;
             Session.Abandon();
-            Response.Redirect("~/User/login");
+            Response.Redirect("/User/login");
         }
     }
 }

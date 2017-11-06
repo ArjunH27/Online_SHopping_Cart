@@ -244,22 +244,9 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult ManageProductCategories()
         {
             var categoryexist = (from b in db.BaseCategory_Table where b.BaseCatIsDeleted == false select b).ToList();
-            List<SelectListItem> selectedlist = new List<SelectListItem>();
-
-            foreach (var basename in categoryexist)                                 //values required in dropdown list of Base Category is obtained from BaseCategory_Table
-            {
-                SelectListItem selectlistitem = new SelectListItem
-                {
-                    Text = basename.BaseCatName,
-                    Value = basename.BaseCatId.ToString()                                                  //selected item is stored with its text and corresponding value
-
-
-
-                };
-                selectedlist.Add(selectlistitem);                                                         //selected item passed to list which contain text and value 
-            }
-
-            ViewBag.basecategory = selectedlist;                               //list passed to viewbag to display in dropdown
+                                   //list passed to viewbag to display in dropdown
+            SelectList selectlist = new SelectList(categoryexist, "BaseCatId", "BaseCatName");
+            ViewBag.basecategory = selectlist;
             var details = (from c in db.ProductCategory_Table                                       //Details of product category table obtained by joining two tables BaseCategory_Table and ProductCategory_Table
                            join e in db.BaseCategory_Table on c.BaseCatid equals e.BaseCatId
                            where c.ProductCatIsDeleted == false
@@ -268,7 +255,8 @@ namespace Online_SHopping_Cart.Controllers
                                c.ProductCatId,
                                c.ProductCatName,
                                c.ProductCatDesc,
-                               e.BaseCatName
+                               e.BaseCatName,
+                               e.BaseCatId
                            });
 
 
@@ -432,13 +420,13 @@ namespace Online_SHopping_Cart.Controllers
                 vm.LastName = s.LastName;
                 vm.UserEmail = s.UserEmail;
                 vm.UserAddress = s.UserAddress;
+                vm.UserCreatedDate = s.UserCreatedDate.Date;
                 vm.UserIsDeleted = s.UserIsDeleted;
                 var user = (from r in db.Role_Table where r.RoleId == vm.Roleid select r.RoleName).FirstOrDefault();      //Rolename corresponding to Roleid in User_Table is obtained and stored in viewmodel
                 vm.RoleName = user;
                 if (vm.Roleid != 4)
                     vlist.Add(vm);                                                                                            //Values are added to list of type viewmodel 
             }
-            ViewBag.message = TempData["message"];
             return View(vlist.ToList());
         }
         /// <summary>
@@ -458,10 +446,28 @@ namespace Online_SHopping_Cart.Controllers
             confirmuser.UserUpdatedDate = DateTime.Now;
             confirmuser.UserUpdateBy = Session["user"].ToString();
             TempData["user"] = confirmuser.UserName;
+            if (confirmuser.Roleid == 2)
+            {
+                var seller = (from s in db.Product_Table where s.SellerId == UserId select s).ToList();
+                foreach (var item in seller)
+                {
+                    item.ProductIsDeleted = false;
+                }
+            }
+            else if (confirmuser.Roleid == 3)
+            {
+                var service = (from sp in db.Service_Table where sp.ServiceProviderid == UserId select sp).ToList();
+                foreach (var item in service)
+                {
+                    item.ServiceIsDeleted = false;
+
+                }
+
+            }
+
             db.SaveChanges();
             bool result = true;
-            var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");
-            //var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageUser", "Admin");                          //passing url to which control to be navigated is stored in a variable
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");                          //passing url to which control to be navigated is stored in a variable
             return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);                                   //Values updated and url is returned back to ajax success function
 
 
@@ -477,11 +483,30 @@ namespace Online_SHopping_Cart.Controllers
             confirmuser.UserUpdatedDate = DateTime.Now;
             confirmuser.UserUpdateBy = Session["user"].ToString();
             TempData["user"] = confirmuser.UserName;
+            if (confirmuser.Roleid == 2)
+            {
+                var seller = (from s in db.Product_Table where s.SellerId == UserId select s).ToList();
+                foreach (var item in seller)
+                {
+                    item.ProductIsDeleted = true;
+                }
+            }
+            else if (confirmuser.Roleid == 3)
+            {
+                var service = (from sp in db.Service_Table where sp.ServiceProviderid == UserId select sp).ToList();
+                foreach (var item in service)
+                {
+                    item.ServiceIsDeleted = true;
+
+                }
+
+            }
             db.SaveChanges();
             bool result = true;
-            var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");
-            //var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageUser", "Admin");                           //passing url to which control to be navigated is stored in a variable
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");                           //passing url to which control to be navigated is stored in a variable
             return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);                                    //Values updated and url is returned back to ajax success function
+
+
 
 
 
@@ -490,6 +515,8 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult profile()
         {
+
+            ViewBag.fill_msg = TempData["fill_msg"];
             string name = Session["user"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             return View(obj);
@@ -499,18 +526,25 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult profile(User_Table obj)
         {
 
-            string name = Session["user"].ToString();
-            User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
-            user.FirstName = obj.FirstName;
-            user.LastName = obj.LastName;
-            user.UserEmail = obj.UserEmail;
-            user.UserAddress = obj.UserAddress;
-            user.UserUpdatedDate = System.DateTime.Now;
-            db.SaveChanges();
-
+            if (obj.FirstName != null && obj.LastName != null && obj.UserEmail != null && obj.UserAddress != null && obj.UserPhno != null)
+            {
+                string name = Session["user"].ToString();
+                User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
+                user.FirstName = obj.FirstName;
+                user.LastName = obj.LastName;
+                user.UserEmail = obj.UserEmail;
+                user.UserAddress = obj.UserAddress;
+                user.UserPhno = obj.UserPhno;
+                user.UserUpdatedDate = System.DateTime.Now;
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["fill_msg"] = "Please Enter The Details";
+                return RedirectToAction("profile");
+            }
             return View();
         }
-
         public ActionResult SendMail()
         {
             string username = TempData["user"].ToString();

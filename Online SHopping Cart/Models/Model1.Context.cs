@@ -28,6 +28,7 @@ namespace Online_SHopping_Cart.Models
         public virtual DbSet<BaseCategory_Table> BaseCategory_Table { get; set; }
         public virtual DbSet<Image_Table> Image_Table { get; set; }
         public virtual DbSet<Location_Table> Location_Table { get; set; }
+        public virtual DbSet<Notify_table> Notify_table { get; set; }
         public virtual DbSet<Order_Table> Order_Table { get; set; }
         public virtual DbSet<OrderDetail_Table> OrderDetail_Table { get; set; }
         public virtual DbSet<Product_Table> Product_Table { get; set; }
@@ -35,6 +36,5 @@ namespace Online_SHopping_Cart.Models
         public virtual DbSet<Role_Table> Role_Table { get; set; }
         public virtual DbSet<Service_Table> Service_Table { get; set; }
         public virtual DbSet<User_Table> User_Table { get; set; }
-        public virtual DbSet<Notify_table> Notify_table { get; set; }
     }
 }

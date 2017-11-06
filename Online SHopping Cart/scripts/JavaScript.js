@@ -21,34 +21,58 @@ $(function () {
         var price = tr.find('#ProductPrice').val();
         var desc = tr.find('#ProductDesc').val();
         var stock = tr.find('#ProductStock').val();
-        $.ajax({
-
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "/Seller/Edit",
-            data: JSON.stringify({ "id": id, "name": name, "price": price, "features": desc, "stock": stock }),
-
-            success: function (data) {
-                tr.find('.edit, .read').toggle();
-                $('.edit').hide();
-                
-                tr.find('#ProductCatName').text(data.pt.ProductCatName);
-                tr.find('#ProductName').text(data.pt.ProductName);
-                tr.find('#ProductPrice').text(data.pt.ProductPrice);
-                tr.find('#ProductDesc').text(data.pt.ProductDesc);
-                tr.find('#ProductStock').text(data.pt.ProductStock);
-                window.location.href = "/Seller/Display";
-            },
 
 
-        });
-        window.location.reload(true);
+        if (ProductName == "") {
+            tr.find('#label1').html("Field cannot be empty");
+            return false;
+        }
+        if (ProductPrice == "") {
+            tr.find('#label2').html("Field cannot be empty");
+            return false;
+        }
+        if (ProductDesc == "") {
+            tr.find('#label3').html("Field cannot be empty");
+            return false;
+        }
+        if (ProductStock == "") {
+            tr.find('#label4').html("Field cannot be empty");
+            return false;
+        }
+        else {
+            $.ajax({
+
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Seller/Edit",
+                data: JSON.stringify({ "id": id, "name": name, "price": price, "features": desc, "stock": stock }),
+
+                success: function (data) {
+                    tr.find('.edit, .read').toggle();
+                    $('.edit').hide();
+
+                    tr.find('#ProductCatName').text(data.pt.ProductCatName);
+                    tr.find('#ProductName').text(data.pt.ProductName);
+                    tr.find('#ProductPrice').text(data.pt.ProductPrice);
+                    tr.find('#ProductDesc').text(data.pt.ProductDesc);
+                    tr.find('#ProductStock').text(data.pt.ProductStock);
+                    window.location.href = "/Seller/Display";
+                },
+
+
+            });
+            window.location.reload(true);
+        }
     });
     $('.cancel-case').on('click', function (e) {
         e.preventDefault();
         var tr = $(this).parents('tr:first');
         var id = $(this).prop('id');
         tr.find('.edit, .read').toggle();
+        tr.find('#label1').html("");
+        tr.find('#label2').html("");
+        tr.find('#label3').html("");
+        tr.find('#label4').html("");
         $('.edit').hide();
     });
     $('.delete-case').on('click', function (e) {

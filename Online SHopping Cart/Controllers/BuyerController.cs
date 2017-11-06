@@ -17,6 +17,7 @@ namespace Online_SHopping_Cart.Controllers
 
         public ActionResult Index()
         {
+            check_stock();
             List<BaseCategory_Table> cato = new List<BaseCategory_Table>();
             cato = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted == false).ToList();
             
@@ -53,7 +54,8 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult profile(User_Table obj)
         {
-           if(obj.FirstName!=null && obj.LastName!=null && obj.UserEmail!=null && obj.UserAddress!=null )
+          
+           if(obj.FirstName!=null && obj.LastName!=null && obj.UserEmail!=null && obj.UserAddress!=null && obj.UserPhno!=null )
             { 
             string name = Session["user"].ToString();
             User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
@@ -61,6 +63,7 @@ namespace Online_SHopping_Cart.Controllers
             user.LastName = obj.LastName;
             user.UserEmail = obj.UserEmail;
             user.UserAddress = obj.UserAddress;
+            user.UserPhno = obj.UserPhno;
             user.UserUpdatedDate = System.DateTime.Now;
             db.SaveChanges();
             }
@@ -114,7 +117,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     not_avail_product.Add(item.ProductId);
                 }
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted==false).FirstOrDefault();
                 obj.BinaryImage =  img.BinaryImage;
                 plist.Add(obj);
             }
@@ -155,7 +158,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     not_avail_product.Add(item.ProductId);
                 }
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted==false).FirstOrDefault();
                 obj.BinaryImage = img.BinaryImage;
                 plist.Add(obj);
             }
@@ -191,7 +194,7 @@ namespace Online_SHopping_Cart.Controllers
             obj.ProductDesc = pro.ProductDesc;
             obj.ProductPrice = pro.ProductPrice;
             obj.ProductStock = pro.ProductStock;
-            ViewBag.image_list = db.Image_Table.Where(x => x.Productid == id).ToList();
+            ViewBag.image_list = db.Image_Table.Where(x => x.Productid == id && x.ImageIsDeleted==false).ToList();
             return View(obj);
         }
 
@@ -434,7 +437,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     not_avail_product.Add(pobj.ProductId);
                 }
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item1).FirstOrDefault();
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item1 && x.ImageIsDeleted==false).FirstOrDefault();
                 bobj.BinaryImage = img.BinaryImage;
                 plist.Add(bobj);
             }
@@ -538,6 +541,62 @@ namespace Online_SHopping_Cart.Controllers
             Session["count"] = count;
         }
 
+        public void check_stock()
+        {
+            try
+            {
+                int flag = 0;
+                List<string> proname = new List<string>();
+                string name = Session["user"].ToString();
+                int id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+                List<int> nlist = db.Notify_table.Where(x => x.Userid == id && x.flag == 0).Select(x => x.Productid).ToList();
+                foreach (int item in nlist)
+                {
+                    Notify_table nobj = db.Notify_table.Where(x => x.Userid == id && x.Productid == item).FirstOrDefault();
+                    Product_Table pobj = db.Product_Table.Where(x => x.ProductId == item).FirstOrDefault();
+                    if (pobj.ProductStock > 0)
+                    {
+                        flag = 1;
+                        proname.Add(pobj.ProductName);
+                        //nobj.flag = 1;
+                        db.SaveChanges();
+                    }
+                }
+                if (flag == 1)
+                {
+                    ViewBag.stock_list = proname;
+                }
+                else
+                {
+                    ViewBag.stock_list = null;
+                }
+            }
+            catch
+            {
+                Response.Redirect("~/User/login");
+            }
+        }
+
+        public void del_check_stock()
+        {
+           
+            string name = Session["user"].ToString();
+            int id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            List<int> nlist = db.Notify_table.Where(x => x.Userid == id && x.flag == 0).Select(x => x.Productid).ToList();
+            foreach (int item in nlist)
+            {
+                Notify_table nobj = db.Notify_table.Where(x => x.Userid == id && x.Productid == item).FirstOrDefault();
+                Product_Table pobj = db.Product_Table.Where(x => x.ProductId == item).FirstOrDefault();
+                if (pobj.ProductStock > 0)
+                {
+                    
+                    nobj.flag = 1;
+                    db.SaveChanges();
+                }
+            }
+            
+        }
+
         [HttpGet]
         public ActionResult OrderHistoryList()
         {
@@ -585,6 +644,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult notification()
         {
+           
             string name = Session["user"].ToString();
             int id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
             DateTime today = System.DateTime.Now;
@@ -647,7 +707,27 @@ namespace Online_SHopping_Cart.Controllers
             return Json(new { Url = redirectUrl }, JsonRequestBehavior.AllowGet);
         }
 
-
+        [HttpPost]
+        public JsonResult remind(int id)
+        {
+            string name = Session["user"].ToString();
+            User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
+            Notify_table nobj = db.Notify_table.Where(x => x.Userid == obj.UserId && x.Productid == id && x.flag == 0).FirstOrDefault();
+            if(nobj!=null)
+            { 
+           
+            }
+            else
+            {
+                Notify_table nobj1 = new Notify_table();
+                nobj1.Userid = obj.UserId;
+                nobj1.Productid = id;
+                nobj1.flag = 0;
+                db.Notify_table.Add(nobj1);
+                db.SaveChanges();
+            }
+            return Json(new {  }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult fill1()
         {
             Session["filter1"] = 1;
@@ -708,32 +788,15 @@ namespace Online_SHopping_Cart.Controllers
 
         public void logout()
         {
+            del_check_stock();
             Session["user"] = null;
             Session["count"] = null;
             Session.Abandon();
             Response.Redirect("~/User/login");
         }
 
-        [HttpPost]
-        public JsonResult AutoComplete(string prefix)
-        {
+        
 
-            var proname = (from pro in db.ProductCategory_Table
-                             where pro.ProductCatName.StartsWith(prefix)
-                             select new
-                             {
-                               pro.ProductCatName
-                             }).ToList();
-
-            return Json(proname, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult try1()
-            {
-            List<string> proname = db.ProductCategory_Table.Where(x => x.ProductCatIsDeleted == false).Select(x=>x.ProductCatName).ToList();
-            ViewBag.inc = proname;
-           
-            return View();
-            }
+        
     }
 }

@@ -67,6 +67,7 @@
                     if (item.ProductId == item1)
                     {
                     <h4 style="color:red">Out Of Stock</h4>
+                    <a class="btn-floating btn-large waves-effect waves-light red" id=@(item.ProductId) onclick="remind(this)"><i class="material-icons">bookmark_border</i></a>
                 }
                 else
                 {
@@ -112,6 +113,30 @@
             });
 
         }
+
+        function remind(element) {
+            var btn = element.id;
+            $.ajax({
+                type: "POST",
+                url: "remind",
+                data: '{id: "' + btn + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    alert("Reminder Set");
+                    //window.location.href = data.Url;
+                },
+                failure: function (response) {
+                    alert("Not found");
+                },
+                error: function (response) {
+                    alert("error");
+                }
+            });
+
+        }
+
 
         $("#filter1").click(function () {
             $.ajax({

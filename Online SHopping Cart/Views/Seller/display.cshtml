@@ -110,27 +110,31 @@
                         @<text>
                             <span id="name" class="read ">@item.ProductName</span>
                             @Html.TextBox("ProductName", (string)item.ProductName, new { @class = "edit form-control" })
-                        </text>, style: "name"),
+                          <label id="label1" class="text-danger"></label>                    
+                          </text>, style: "name"),
 
 
                          grid.Column("ProductPrice", "Rate", format:
                         @<text>
                             <span id="price" class="read ">@item.ProductPrice</span>
                             @Html.TextBox("ProductPrice", (decimal)item.ProductPrice, new { @class = "edit form-control" })
-                        </text>, style: "name"),
+                         <label id="label2" class="text-danger"></label>
+                         </text>, style: "name"),
 
 
                          grid.Column("ProductDesc", "Features", format:
                         @<text>
                             <span id="desc" class="read ">@item.ProductDesc</span>
                             @Html.TextBox("ProductDesc", (string)item.ProductDesc, new { @class = "edit form-control" })
+    <label id="label3" class="text-danger"></label>
                         </text>, style: "name"),
 
                         grid.Column("ProductStock", "Stock", format:
                         @<text>
                             <span id="stock" class="read ">@item.ProductStock</span>
                             @Html.TextBox("ProductStock", (int)item.ProductStock, new { @class = "edit form-control" })
-                        </text>, style: "name"),
+    <label id="label4" class="text-danger"></label>                   
+     </text>, style: "name"),
 
 
 

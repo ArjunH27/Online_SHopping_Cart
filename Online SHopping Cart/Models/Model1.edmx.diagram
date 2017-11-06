@@ -4,20 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="57f7d2000fd241618794f3d2a05e9a16" Name="Diagram1">
-        <EntityTypeShape EntityType="ShoppingCartDbModel.BaseCategory_Table" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Image_Table" Width="1.5" PointX="7.5" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Location_Table" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Order_Table" Width="1.5" PointX="8.25" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.OrderDetail_Table" Width="1.5" PointX="10.5" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Product_Table" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.ProductCategory_Table" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Role_Table" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Service_Table" Width="1.5" PointX="7.5" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.User_Table" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="65de64f65c47411e90a5cd3a8d513353" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoppingCartDbModel.BaseCategory_Table" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Image_Table" Width="1.5" PointX="7.5" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Location_Table" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Notify_table" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Order_Table" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.OrderDetail_Table" Width="1.5" PointX="7.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Product_Table" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.ProductCategory_Table" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Role_Table" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Service_Table" Width="1.5" PointX="10.5" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.User_Table" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_ProductCategory_Table_BaseCategory_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Image_Table_Product_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Service_Table_Location_Table" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_Product_Table" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_User_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Order_Table_User_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_OrderDetail_Table_Order_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_OrderDetail_Table_Product_Table" ManuallyRouted="false" />
@@ -25,11 +28,8 @@
         <AssociationConnector Association="ShoppingCartDbModel.FK_Product_Table_ProductCategory_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Product_Table_User_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Service_Table_Service_Table" ManuallyRouted="false" />
-        <AssociationConnector Association="ShoppingCartDbModel.FK_User_Table_User_Table" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCartDbModel.FK_User_Table_Role_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Service_Table_User_Table" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ShoppingCartDbModel.Notify_table" Width="1.5" PointX="10.5" PointY="3.375" />
-        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_Product_Table" />
-        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_User_Table" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

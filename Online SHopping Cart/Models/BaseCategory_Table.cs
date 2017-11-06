@@ -26,8 +26,10 @@ namespace Online_SHopping_Cart.Models
         [Remote("IsBaseCategoryNameExist", "Admin",
              ErrorMessage = "Base Category name already exists")]
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string BaseCatName { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string BaseCatDesc { get; set; }
         public string BaseCatCreatedBy { get; set; }
         public System.DateTime BaseCatCreateDate { get; set; }
@@ -38,7 +40,7 @@ namespace Online_SHopping_Cart.Models
             get; set;
         }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductCategory_Table> ProductCategory_Table { get; set; }
     }
 }

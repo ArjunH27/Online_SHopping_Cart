@@ -95,6 +95,7 @@ namespace Online_SHopping_Cart.Controllers
                         else if (robj.RoleName == "Courier_Service")
                         {
                             Session["user"] = obj.UserName;
+                            Session["name"] = obj.FirstName;
                             return RedirectToAction("Service_Home", "Service");
                         }
                         else if (robj.RoleName == "Buyer")

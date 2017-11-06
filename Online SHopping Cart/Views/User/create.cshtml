@@ -64,6 +64,13 @@
                 </div>
 
                 <div class="input-field col s12">
+                    <i class="material-icons prefix">phone</i>
+                    @Html.EditorFor(model => model.UserPhno, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.ValidationMessageFor(model => model.UserPhno, "", new { @class = "text-danger" })
+                    <label>Phone Number</label>
+                </div>
+
+                <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
                     @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })

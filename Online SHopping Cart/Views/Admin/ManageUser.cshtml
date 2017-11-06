@@ -25,6 +25,8 @@
     columns: new[]
 
 {
+        @*gridview.Column(columnName:"UserId", header: "User Id",format: @<span>
+            <span id="Id" class="read">@item.UserId</span> </span>),*@
 
      gridview.Column(columnName:"FirstName", header: "First Name",format: @<span>
         <span id="Name" class="read">@item.FirstName</span>
@@ -45,22 +47,26 @@
               gridview.Column(columnName: "UserAddress", header: "User Address", format: @<span>
         <span id="Description" class="read">@item.UserAddress</span>
     </span> ),
+          gridview.Column(columnName: "UserCreatedDate", header: "User Created Date", format: (item) => string.Format("{0:dd-MM-yyyy}",@item.UserCreatedDate )),
 
         gridview.Column("", style: "button",format:(item) => {
             if (item.UserIsDeleted == false)
             {
-                return Html.Raw(String.Format("<button class='decline' id="+@item.UserId+">Decline</button>"));
+                return Html.Raw(String.Format("<button class='decline btn btn-default btn-sm' id="+@item.UserId+">Decline</button>"));
             }
             else
             {
-                return Html.Raw("<button class='accept' id="+@item.UserId+">Accept</button><button class='decline' id="+@item.UserId+">Decline</button>");
+                return Html.Raw("<button class='accept btn btn-default btn-sm' id="+@item.UserId+">Accept</button><button class='decline' id="+@item.UserId+">Decline</button>");
 
             }
         })
 }
 )
 </div>
-
+@*<div>
+        <hr />
+        @Html.ActionLink("Back to Home Page", "Home")
+    </div>*@
 <script src="~/scripts/jquery-1.10.2.min.js"></script>
 <script src="~/scripts/Confirm.js"></script>
 <style type="text/css">
@@ -120,6 +126,21 @@
             display: none;
         }
 
-       
+        /*h3{
+        padding-left:30px;
+        color:gray;
+
+        }
+       .form-horizontal{
+        border: solid #C0C0C0;
+        width: 400px;
+        padding-left: 0px;
+        padding-right: 40px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }*/
 </style>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
 

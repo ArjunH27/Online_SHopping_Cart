@@ -18,17 +18,37 @@ $("input[name='ids']").click(function () {
         $("#selectAll").removeAttr("checked");
     }
 });
-function ZoomImage(image) {
 
-    document.getElementById("main").src = image;
-    $("#popupdiv").dialog({
-        width: 600,
-        height: 600,
-        modal: true,
-        buttons: {
-            Close: function () {
-                $(this).dialog('close');
+    
+    function ZoomImage(id) {
+        $("#popupdiv").dialog({
+            width: 500,
+            height: 500,
+            autoOpen: false,
+            modal: true,
+            title: "Product View"
+
+        });
+        $.ajax({
+            type: "POST",
+            url: "/Service/imagedisplay",
+            data: '{id: "' + id + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#popupdiv').html(response);
+
+                $('#popupdiv').dialog('open');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
             }
-        }
-    });
+
+        });
+    
+
 }

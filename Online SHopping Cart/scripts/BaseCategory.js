@@ -78,31 +78,29 @@
         }
     });
    
-        $('.cat').change(function () {
+    $(document).on('change', '.cat', function () {
+
 
             var $current = $(this);
-            $(this).attr('class', 'thiss');
+            $current.addClass("thiss");
 
             $('.cat').each(function () {
                 if ($(this).val() == $current.val() && $(this).attr('class') != $current.attr('class')) {
                     alert('duplicate found!');
                     $current.removeClass("thiss");
-                    //$current.addClass("edit");
-                    //$current.addClass("cat");
                     $('.update-case').prop('disabled', true);
+                    location.reload(true);
                     return false;
                 }
                 else {
                     $('.update-case').prop('disabled', false);
-                    $current.addClass("edit");
-                    $current.addClass("cat");
+                  
                     //$('.edit').hide();
 
                 }
 
-                   
-
             });
+            $current.removeClass("thiss");
         });
     
 

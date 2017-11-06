@@ -26,8 +26,10 @@ namespace Online_SHopping_Cart.Models
         [Remote("IsRoleNameExist", "Admin",
               ErrorMessage = "Role name already exists")]
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string RoleName { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string RoleDesc { get; set; }
         public string RoleCreatedBy { get; set; }
         public System.DateTime RoleCreatedDate { get; set; }

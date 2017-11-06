@@ -16,6 +16,7 @@
         .navbar {
             background: #000080;
             border: black;
+            height: 55px;
         }
 
             .navbar #navcol {
@@ -132,19 +133,21 @@
                         <li><a href="/Seller/Create">Manage Product</a></li>
                         <li class="divider"></li>
                         <li><a href="/Seller/display">View Products</a></li>
-                        <li><a href="/Seller/Notification">Notification</a></li>
+
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a id="navcol" class="dropdown-toggle god " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
+                    <a id="navcol" class="dropdown-toggle count " data-toggle="dropdown"><span class="glyphicon glyphicon-bell "><span class="badge badge-notify">@Convert.ToInt32(Session["notif-count"])</span></span></a>
                     <ul class="dropdown-menu">
-                        @foreach (var item in ViewBag.ordering)
+                        @foreach (var item in ViewBag.sellernotification)
                         {
-                            <li>@item.Orderid</li>
+                            <li>@item Sold</li>
                             <li class="divider"></li>
                         }
+
+                        <li><a href="/Seller/Notification">See All</a></li>
                     </ul>
                 </li>
                 <li>
@@ -192,7 +195,7 @@ function closeNav() {
     document.body.style.backgroundColor = "#D7DBDD";
 }
 
-$(".god").click(function(e){
+$(".count").click(function(e){
 
     e.preventDefault();
     $.ajax({

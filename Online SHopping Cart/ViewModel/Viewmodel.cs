@@ -16,5 +16,6 @@ namespace Online_SHopping_Cart.ViewModel
         public string UserAddress { get; set; }
         public string RoleName { get; set; }
         public bool UserIsDeleted { get; set; }
+        public System.DateTime UserCreatedDate { get; set; }
     }
 }

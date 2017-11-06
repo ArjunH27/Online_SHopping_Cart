@@ -1,0 +1,10 @@
+﻿@model Online_SHopping_Cart.Models.Image_Table
+
+<div>
+    @foreach (var item in ViewBag.imlist)
+    {
+        var image = Convert.ToBase64String(item.BinaryImage);
+        var src = "data:image/png;base64," + image;
+        <img src="@src" style="width:200px; height:200px;" />
+    }
+</div>

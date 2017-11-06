@@ -27,8 +27,10 @@ namespace Online_SHopping_Cart.Models
         [Remote("IsProductCategoryNameExist", "Admin",
              ErrorMessage = "Product Category name already exists")]
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string ProductCatName { get; set; }
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Use alphabets and spaces only please.")]
         public string ProductCatDesc { get; set; }
         public string ProductCatCreatedBy { get; set; }
         public System.DateTime ProductCatCreatedDate { get; set; }

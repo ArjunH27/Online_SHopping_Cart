@@ -21,6 +21,8 @@ namespace Online_SHopping_Cart.ViewModel
         public string BaseCatName { get; set; }
         public int OrderId { get; set; }
         public string ServiceName { get; set; }
+        public string UserName { get; set; }
+        public Nullable<int> Quantity { get; set; }
         public IList<BaseCategory_Table> BaseProducts { get; set; }
         public IList<Image_Table> image { get; set; }
 

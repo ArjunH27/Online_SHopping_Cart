@@ -33,7 +33,7 @@
         alert("@ViewBag.fill_msg");
     };</script>
         }
-
+        <div id="msg"></div>
         <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -55,6 +55,12 @@
             </div>
 
 
+            <div class="input-field col s12">
+                <i class="material-icons prefix">phone</i>
+                @Html.EditorFor(model => model.UserPhno, new { htmlAttributes = new { @class = "validate",id="phon" } })
+                @Html.ValidationMessageFor(model => model.UserPhno, "", new { @class = "text-danger" })
+                <label>Phone Number</label>
+            </div>
 
             <div class="input-field col s12">
                 <i class="material-icons prefix">email</i>
@@ -84,3 +90,30 @@
     }
 
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#msg").hide();
+
+        $("#phon").change(function () {
+            var num = $("#phon").val();
+            if (/^\d+$/.test($("#phon").val())) {
+                var n = num.length;
+                if(n==10)
+                {
+
+                }
+                else {
+                    $("#msg").show();
+                    $("#msg").append("<p>Phone Number Length Should be 10 numbers</p>");
+                }
+            }
+            else {
+                $("#msg").show();
+                $("#msg").append("<p>Please Enter Valid Number</p>");
+            }
+
+        });
+    });
+</script>
