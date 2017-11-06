@@ -139,6 +139,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult forget_pass()
         {
+            ViewBag.for_valid = TempData["for_valid"];
             return View();
         }
 
@@ -151,6 +152,11 @@ namespace Online_SHopping_Cart.Controllers
                 obj.Password = "user123";
                 db.SaveChanges();
                 return RedirectToAction("SendMail", new { email = email });
+            }
+            else
+            {
+                TempData["for_valid"] = "Enter the Correct Credentials";
+                return RedirectToAction("forget_pass", "User");
             }
             return View();
         }

@@ -147,6 +147,7 @@
     <Content Include="Images\courier.png" />
     <Content Include="Images\dashboard.png" />
     <Content Include="Images\empty_cart.png" />
+    <Content Include="Images\finaladd.mp4" />
     <Content Include="Images\homeappl.jpg" />
     <Content Include="Images\left.png" />
     <Content Include="Images\Location.jpg" />
@@ -323,7 +324,6 @@
     <Content Include="Views\Service\View_Service.cshtml" />
     <Content Include="Views\Service\profile.cshtml" />
     <Content Include="Views\Buyer\notification.cshtml" />
-    <Content Include="Views\Buyer\new_product.cshtml" />
     <Content Include="Views\User\loader.cshtml" />
     <Content Include="Views\Buyer\purchase_all.cshtml" />
     <Content Include="Views\Buyer\try1.cshtml" />
@@ -333,6 +333,7 @@
     <Content Include="Views\Service\ChangePassword.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
     <Content Include="Views\Service\OrderDetails.cshtml" />
+    <Content Include="Views\Buyer\Brand_page.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

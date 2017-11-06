@@ -258,9 +258,9 @@
                         }
                         else {
                             $("#stock_msg").hide();
-                            var total_amt = data;
+                            var total_amt = data.total;
                             $("#amt").val(total_amt);
-                            $('#tamt').html('<h6>Total Amount : ' + total_amt + '</h6>')
+                            $('#tamt').html('<h6>Total Amount : ' + total_amt + '</h6><h6>Devilery Charge : ' + data.del_charge + '</h6>')
                             $("#order_btn").show();
 
                         }

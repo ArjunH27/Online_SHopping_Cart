@@ -19,6 +19,13 @@ margin-left:15px;
     float:left;
 }
 </style>
+<div class="row">
+    <div class="col s3"></div>
+    <div class="input-field col s4">
+        <input id="cont" type="text" class="validate" placeholder="search by category, brand, product">
+        <a class="btn-floating btn-large waves-effect waves-light red" id="search"><i class="material-icons">search</i></a>
+    </div>
+</div>
 
 <div class="filter">
     <a class="dropdown-button btn btn-floating pulse " data-activates='dropdown1'><i class="material-icons">menu</i></a>
@@ -142,4 +149,32 @@ margin-left:15px;
             stopPropagation: false // Stops event propagation
         }
   );
+
+        $(document).ready(function () {
+
+            $("#search").click(function () {
+                var name = $("#cont").val();
+                $.ajax({
+                    type: "POST",
+                    url: "search",
+                    data: '{name: "' + name + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.res == 1) {
+                            window.location.href = data.Url;
+                        }
+                    },
+                    failure: function (response) {
+                        alert("Not found");
+                    },
+                    error: function (response) {
+                        alert("error");
+                    }
+                });
+
+
+            });
+        });
+
     </script>

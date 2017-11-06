@@ -15,8 +15,6 @@ namespace Online_SHopping_Cart.Controllers
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         // GET: Buyer
 
-    
-
         public ActionResult Index()
         {
             List<BaseCategory_Table> cato = new List<BaseCategory_Table>();
@@ -24,6 +22,22 @@ namespace Online_SHopping_Cart.Controllers
             
             Session["filter1"] = 0;
             Session["filter2"] = 0;
+
+            List<Product_Table> prods = db.Product_Table.OrderByDescending(x => x.ProductId).Take(3).ToList();
+            List<Buyer_Product> plist = new List<Buyer_Product>();
+            foreach (var item in prods)
+            {
+                Buyer_Product obj = new Buyer_Product();
+                obj.ProductName = item.ProductName;
+                obj.ProductId = item.ProductId;
+                obj.ProductPrice = item.ProductPrice;
+                obj.ProductDesc = item.ProductDesc;
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
+                obj.BinaryImage = img.BinaryImage;
+                plist.Add(obj);
+            }
+            ViewBag.newpro = plist;
+
             return View(cato);
         }
 
@@ -102,6 +116,47 @@ namespace Online_SHopping_Cart.Controllers
                 }
                 Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
                 obj.BinaryImage =  img.BinaryImage;
+                plist.Add(obj);
+            }
+            ViewBag.no_stock = not_avail_product;
+            Session["filter1"] = 0;
+            Session["filter2"] = 0;
+            return View(plist);
+        }
+
+        public ActionResult Brand_page()
+        {
+            int id = (int)Session["brand_id"];
+            int? f1 = (int)Session["filter1"];
+            int? f2 = (int)Session["filter2"];
+            List<Product_Table> prods = new List<Product_Table>();
+            if (f1 == 1)
+            {
+                prods = db.Product_Table.Where(x => x.SellerId == id & x.ProductIsDeleted == false).OrderBy(x => x.ProductPrice).ToList();
+            }
+            else if (f2 == 1)
+            {
+                prods = db.Product_Table.Where(x => x.SellerId == id & x.ProductIsDeleted == false).OrderByDescending(x => x.ProductPrice).ToList();
+            }
+            else
+            {
+                prods = db.Product_Table.Where(x => x.SellerId == id & x.ProductIsDeleted == false).ToList();
+            }
+            List<int> not_avail_product = new List<int>();
+            List<Buyer_Product> plist = new List<Buyer_Product>();
+            foreach (var item in prods)
+            {
+                Buyer_Product obj = new Buyer_Product();
+                obj.ProductName = item.ProductName;
+                obj.ProductId = item.ProductId;
+                obj.ProductPrice = item.ProductPrice;
+                obj.ProductDesc = item.ProductDesc;
+                if (item.ProductStock <= 0)
+                {
+                    not_avail_product.Add(item.ProductId);
+                }
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
+                obj.BinaryImage = img.BinaryImage;
                 plist.Add(obj);
             }
             ViewBag.no_stock = not_avail_product;
@@ -340,10 +395,10 @@ namespace Online_SHopping_Cart.Controllers
             if (quantity<=stock)
             { 
             int ser_id = Convert.ToInt32(service_id);
-            decimal del_charge = db.Service_Table.Where(x => x.ServiceId == ser_id & x.Productid == pid).Select(x => x.DeliveryCharge).FirstOrDefault();
+            decimal del_charge = db.Service_Table.Where(x => x.ServiceProviderid == ser_id & x.Productid == pid).Select(x => x.DeliveryCharge).FirstOrDefault();
             decimal price = db.Product_Table.Where(x => x.ProductId == pid).Select(x => x.ProductPrice).FirstOrDefault();
              total = (quantity * price) + del_charge;
-            return Json(total, JsonRequestBehavior.AllowGet);
+            return Json(new { total, del_charge } , JsonRequestBehavior.AllowGet);
             }
             return Json(total, JsonRequestBehavior.AllowGet);
         }
@@ -537,23 +592,44 @@ namespace Online_SHopping_Cart.Controllers
             return View(delivery_list.ToList());
         }
 
-        public ActionResult new_product()
+        [HttpPost]
+        public JsonResult search(string name)
         {
-            List<Product_Table> prods = db.Product_Table.OrderByDescending(x => x.ProductId).Take(3).ToList();
-            List<Buyer_Product> plist = new List<Buyer_Product>();
-            foreach (var item in prods)
+            int res = 0;
+            BaseCategory_Table obj = db.BaseCategory_Table.Where(x => x.BaseCatName == name && x.BaseCatIsDeleted==false).FirstOrDefault();
+            ProductCategory_Table obj1 = db.ProductCategory_Table.Where(x => x.ProductCatName == name && x.ProductCatIsDeleted==false).FirstOrDefault();
+            User_Table obj2 = db.User_Table.Where(x => x.UserName == name && x.UserIsDeleted == false).FirstOrDefault();
+            if (obj != null)
             {
-                Buyer_Product obj = new Buyer_Product();
-                obj.ProductName = item.ProductName;
-                obj.ProductId = item.ProductId;
-                obj.ProductPrice = item.ProductPrice;
-                obj.ProductDesc = item.ProductDesc;
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
-                obj.BinaryImage = img.BinaryImage;
-                plist.Add(obj);
+                res = 1;
+                Session["base_cat"] = obj.BaseCatId;
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Product_cat", "Buyer");
+                return Json(new {res, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
+
             }
-            return PartialView(plist);
+            else if (obj1 != null)
+            {
+                res = 1;
+                Session["prod_cat"] = obj1.ProductCatId;
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Product_page", "Buyer");
+                return Json(new {res, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
+
+            }
+            else if(obj2!=null)
+            {
+                res = 1;
+                Session["brand_id"] = obj2.UserId;
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Brand_page", "Buyer");
+                return Json(new { res, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                
+                return Json(new {res}, JsonRequestBehavior.AllowGet);
+            }
+
         }
+
 
         [HttpPost]
         public JsonResult find_pro_cat_id(int id)

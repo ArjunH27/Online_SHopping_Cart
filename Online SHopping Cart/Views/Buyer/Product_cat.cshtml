@@ -13,24 +13,28 @@
 
 </style>
 <link href="~/Content/materialize.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="row">
+    <div class="col s3"></div>
+    <div class="input-field col s4">
+        <input id="cont" type="text" class="validate" placeholder="search by category, brand, product">
+        <a class="btn-floating btn-large waves-effect waves-light red" id="search"><i class="material-icons">search</i></a>
+    </div>
+</div>
 
-<div class="row" style="margin-left:30%; margin-top:5%;margin-right:30%;" >
+<div class="row" style="margin-left:30%;margin-right:30%;" >
     @foreach (var item in Model)
     {
         <button id=@(item.ProductCatId) class="btn waves-effect waves-light" onclick="cato(this)">@(item.ProductCatName)</button>
     }
 </div>
-<div>
 
-    <div class="carousel" >
-        <a class="carousel-item" ><img src="~/Images/sl1.jpg" class="sl"></a>
-        <a class="carousel-item"><img src="~/Images/sl2.jpg" class="sl"></a>
-        <a class="carousel-item"><img src="~/Images/sl3.jpg" class="sl"></a>
-        <a class="carousel-item"><img src="~/Images/sl4.jpg" class="sl"></a>
-        <a class="carousel-item"><img src="~/Images/sl5.jpg" class="sl"></a>
-    </div>
-
+<div class="center col s4" >
+    <video class="responsive-video z-depth-3" autoplay loop style="width:700px;" >
+        <source src="~/Images/finaladd.mp4" type="video/mp4">
+    </video>
 </div>
+
 
 <script src="~/scripts/jquery-1.10.2.js"></script>
 <script src="~/scripts/materialize.js"></script>
@@ -57,7 +61,32 @@
 
     }
 
-        $(document).ready(function () {
-        $('.carousel').carousel();
+    $(document).ready(function () {
+       
+        $("#search").click(function () {
+            var name = $("#cont").val();
+            $.ajax({
+                type: "POST",
+                url: "search",
+                data: '{name: "' + name + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.res == 1) {
+                        window.location.href = data.Url;
+                    }
+                },
+                failure: function (response) {
+                    alert("Not found");
+                },
+                error: function (response) {
+                    alert("error");
+                }
+            });
+
+
+        });
     });
+
+
 </script>

@@ -18,6 +18,14 @@
 <script src="~/scripts/jquery-1.10.2.js"></script>
 <script src="~/scripts/materialize.js"></script>
 <body style="background-image:url('../../Images/back1.jpg')">
+
+    @if (ViewBag.for_valid != null)
+    {
+        <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.for_valid ");
+    };</script>
+    }
     <div class="wrapper">
         <h3 style="color:#80cbc4">User Details</h3>
         <form class="col s12" method="post" action="">
