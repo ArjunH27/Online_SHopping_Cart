@@ -21,10 +21,11 @@ namespace Online_SHopping_Cart.Models
         {
             this.ProductCategory_Table = new HashSet<ProductCategory_Table>();
         }
-    
+
         public int BaseCatId { get; set; }
         [Remote("IsBaseCategoryNameExist", "Admin",
-             ErrorMessage = "Base Category name already exists")][Required]
+             ErrorMessage = "Base Category name already exists")]
+        [Required]
         public string BaseCatName { get; set; }
         [Required]
         public string BaseCatDesc { get; set; }
@@ -32,9 +33,12 @@ namespace Online_SHopping_Cart.Models
         public System.DateTime BaseCatCreateDate { get; set; }
         public string BaseCatUpdatedBy { get; set; }
         public System.DateTime BaseCatUpdateDate { get; set; }
-        public bool BaseCatIsDeleted { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public bool BaseCatIsDeleted
+        {
+            get; set;
+        }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductCategory_Table> ProductCategory_Table { get; set; }
     }
 }

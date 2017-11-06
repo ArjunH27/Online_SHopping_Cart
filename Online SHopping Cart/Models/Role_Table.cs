@@ -21,10 +21,11 @@ namespace Online_SHopping_Cart.Models
         {
             this.User_Table = new HashSet<User_Table>();
         }
-    
+
         public int RoleId { get; set; }
         [Remote("IsRoleNameExist", "Admin",
-              ErrorMessage = "Role name already exists")][Required]
+              ErrorMessage = "Role name already exists")]
+        [Required]
         public string RoleName { get; set; }
         [Required]
         public string RoleDesc { get; set; }
@@ -33,7 +34,7 @@ namespace Online_SHopping_Cart.Models
         public string RoleUpdatedBy { get; set; }
         public System.DateTime RoleUpdateDate { get; set; }
         public bool RoleIsDeleted { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_Table> User_Table { get; set; }
     }

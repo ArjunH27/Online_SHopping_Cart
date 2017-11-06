@@ -21,7 +21,7 @@ namespace Online_SHopping_Cart.Models
         {
             this.Service_Table = new HashSet<Service_Table>();
         }
-    
+
         public int LocationId { get; set; }
         [Remote("IsLocationNameExist", "Admin",
               ErrorMessage = "Location name already exists")]
@@ -36,7 +36,7 @@ namespace Online_SHopping_Cart.Models
         public string LocationUpdatedBy { get; set; }
         public System.DateTime LocationUpdatedDate { get; set; }
         public bool LocationIsDeleted { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Service_Table> Service_Table { get; set; }
     }

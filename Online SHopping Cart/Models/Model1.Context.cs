@@ -35,5 +35,6 @@ namespace Online_SHopping_Cart.Models
         public virtual DbSet<Role_Table> Role_Table { get; set; }
         public virtual DbSet<Service_Table> Service_Table { get; set; }
         public virtual DbSet<User_Table> User_Table { get; set; }
+        public virtual DbSet<Notify_table> Notify_table { get; set; }
     }
 }

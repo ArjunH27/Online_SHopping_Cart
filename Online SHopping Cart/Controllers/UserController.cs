@@ -73,9 +73,10 @@ namespace Online_SHopping_Cart.Controllers
         public ActionResult login(string user, string password)
         {
             User_Table obj = db.User_Table.Where(x => x.UserName == user).FirstOrDefault();
-            Role_Table robj = db.Role_Table.Where(x => x.RoleId == obj.Roleid).FirstOrDefault();
+          
             if (obj != null)
             {
+                Role_Table robj = db.Role_Table.Where(x => x.RoleId == obj.Roleid).FirstOrDefault();
                 if (obj.Password == password)
                 {
                     if (obj.UserIsDeleted == false)

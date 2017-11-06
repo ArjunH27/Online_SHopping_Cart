@@ -45,6 +45,15 @@
           <Property Name="LocationUpdatedDate" Type="date" Nullable="false" />
           <Property Name="LocationIsDeleted" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Notify_table">
+          <Key>
+            <PropertyRef Name="Notifyid" />
+          </Key>
+          <Property Name="Notifyid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Userid" Type="int" Nullable="false" />
+          <Property Name="Productid" Type="int" Nullable="false" />
+          <Property Name="flag" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Order_Table">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -143,6 +152,7 @@
           <Property Name="FirstName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="LastName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="UserEmail" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserPhno" Type="int" Nullable="false" />
           <Property Name="UserAddress" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="UserName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
@@ -161,6 +171,30 @@
             </Principal>
             <Dependent Role="Image_Table">
               <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notify_table_Product_Table">
+          <End Role="Product_Table" Type="Self.Product_Table" Multiplicity="1" />
+          <End Role="Notify_table" Type="Self.Notify_table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Notify_table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notify_table_User_Table">
+          <End Role="User_Table" Type="Self.User_Table" Multiplicity="1" />
+          <End Role="Notify_table" Type="Self.Notify_table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Notify_table">
+              <PropertyRef Name="Userid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -284,22 +318,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_User_Table_User_Table">
-          <End Role="Role_Table" Type="Self.Role_Table" Multiplicity="1" />
-          <End Role="User_Table" Type="Self.User_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role_Table">
-              <PropertyRef Name="RoleId" />
-            </Principal>
-            <Dependent Role="User_Table">
-              <PropertyRef Name="Roleid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ShoppingCartDbModelStoreContainer">
           <EntitySet Name="BaseCategory_Table" EntityType="Self.BaseCategory_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image_Table" EntityType="Self.Image_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location_Table" EntityType="Self.Location_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notify_table" EntityType="Self.Notify_table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order_Table" EntityType="Self.Order_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail_Table" EntityType="Self.OrderDetail_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product_Table" EntityType="Self.Product_Table" Schema="dbo" store:Type="Tables" />
@@ -310,6 +333,14 @@
           <AssociationSet Name="FK_Image_Table_Product_Table" Association="Self.FK_Image_Table_Product_Table">
             <End Role="Product_Table" EntitySet="Product_Table" />
             <End Role="Image_Table" EntitySet="Image_Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notify_table_Product_Table" Association="Self.FK_Notify_table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Notify_table" EntitySet="Notify_table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notify_table_User_Table" Association="Self.FK_Notify_table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Notify_table" EntitySet="Notify_table" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_Table_User_Table" Association="Self.FK_Order_Table_User_Table">
             <End Role="User_Table" EntitySet="User_Table" />
@@ -350,10 +381,6 @@
           <AssociationSet Name="FK_Service_Table_User_Table" Association="Self.FK_Service_Table_User_Table">
             <End Role="User_Table" EntitySet="User_Table" />
             <End Role="Service_Table" EntitySet="Service_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Table_User_Table" Association="Self.FK_User_Table_User_Table">
-            <End Role="Role_Table" EntitySet="Role_Table" />
-            <End Role="User_Table" EntitySet="User_Table" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -457,6 +484,7 @@
           <NavigationProperty Name="ProductCategory_Table" Relationship="Self.FK_Product_Table_ProductCategory_Table" FromRole="Product_Table" ToRole="ProductCategory_Table" />
           <NavigationProperty Name="User_Table" Relationship="Self.FK_Product_Table_User_Table" FromRole="Product_Table" ToRole="User_Table" />
           <NavigationProperty Name="Service_Table" Relationship="Self.FK_Service_Table_Service_Table" FromRole="Product_Table" ToRole="Service_Table" />
+          <NavigationProperty Name="Notify_table" Relationship="ShoppingCartDbModel.FK_Notify_table_Product_Table" FromRole="Product_Table" ToRole="Notify_table" />
         </EntityType>
         <EntityType Name="ProductCategory_Table">
           <Key>
@@ -530,6 +558,8 @@
           <NavigationProperty Name="Product_Table" Relationship="Self.FK_Product_Table_User_Table" FromRole="User_Table" ToRole="Product_Table" />
           <NavigationProperty Name="Role_Table" Relationship="Self.FK_User_Table_User_Table" FromRole="User_Table" ToRole="Role_Table" />
           <NavigationProperty Name="Service_Table" Relationship="Self.FK_Service_Table_User_Table" FromRole="User_Table" ToRole="Service_Table" />
+          <Property Name="UserPhno" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Notify_table" Relationship="ShoppingCartDbModel.FK_Notify_table_User_Table" FromRole="User_Table" ToRole="Notify_table" />
         </EntityType>
         <Association Name="FK_ProductCategory_Table_BaseCategory_Table">
           <End Role="BaseCategory_Table" Type="Self.BaseCategory_Table" Multiplicity="1" />
@@ -734,7 +764,51 @@
             <End Role="User_Table" EntitySet="User_Table" />
             <End Role="Service_Table" EntitySet="Service_Table" />
           </AssociationSet>
+          <EntitySet Name="Notify_table" EntityType="ShoppingCartDbModel.Notify_table" />
+          <AssociationSet Name="FK_Notify_table_Product_Table" Association="ShoppingCartDbModel.FK_Notify_table_Product_Table">
+            <End Role="Product_Table" EntitySet="Product_Table" />
+            <End Role="Notify_table" EntitySet="Notify_table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notify_table_User_Table" Association="ShoppingCartDbModel.FK_Notify_table_User_Table">
+            <End Role="User_Table" EntitySet="User_Table" />
+            <End Role="Notify_table" EntitySet="Notify_table" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Notify_table">
+          <Key>
+            <PropertyRef Name="Notifyid" />
+          </Key>
+          <Property Name="Notifyid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Userid" Type="Int32" Nullable="false" />
+          <Property Name="Productid" Type="Int32" Nullable="false" />
+          <Property Name="flag" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product_Table" Relationship="ShoppingCartDbModel.FK_Notify_table_Product_Table" FromRole="Notify_table" ToRole="Product_Table" />
+          <NavigationProperty Name="User_Table" Relationship="ShoppingCartDbModel.FK_Notify_table_User_Table" FromRole="Notify_table" ToRole="User_Table" />
+        </EntityType>
+        <Association Name="FK_Notify_table_Product_Table">
+          <End Type="ShoppingCartDbModel.Product_Table" Role="Product_Table" Multiplicity="1" />
+          <End Type="ShoppingCartDbModel.Notify_table" Role="Notify_table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Table">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Notify_table">
+              <PropertyRef Name="Productid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notify_table_User_Table">
+          <End Type="ShoppingCartDbModel.User_Table" Role="User_Table" Multiplicity="1" />
+          <End Type="ShoppingCartDbModel.Notify_table" Role="Notify_table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_Table">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Notify_table">
+              <PropertyRef Name="Userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -882,6 +956,7 @@
           <EntitySetMapping Name="User_Table">
             <EntityTypeMapping TypeName="ShoppingCartDbModel.User_Table">
               <MappingFragment StoreEntitySet="User_Table">
+                <ScalarProperty Name="UserPhno" ColumnName="UserPhno" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Roleid" ColumnName="Roleid" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -895,6 +970,16 @@
                 <ScalarProperty Name="UserUpdateBy" ColumnName="UserUpdateBy" />
                 <ScalarProperty Name="UserUpdatedDate" ColumnName="UserUpdatedDate" />
                 <ScalarProperty Name="UserIsDeleted" ColumnName="UserIsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notify_table">
+            <EntityTypeMapping TypeName="ShoppingCartDbModel.Notify_table">
+              <MappingFragment StoreEntitySet="Notify_table">
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="Productid" ColumnName="Productid" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="Notifyid" ColumnName="Notifyid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

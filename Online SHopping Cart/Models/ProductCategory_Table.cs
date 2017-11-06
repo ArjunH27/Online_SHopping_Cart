@@ -21,7 +21,7 @@ namespace Online_SHopping_Cart.Models
         {
             this.Product_Table = new HashSet<Product_Table>();
         }
-    
+
         public int ProductCatId { get; set; }
         public int BaseCatid { get; set; }
         [Remote("IsProductCategoryNameExist", "Admin",
@@ -35,7 +35,7 @@ namespace Online_SHopping_Cart.Models
         public string ProductCateUpdatedBy { get; set; }
         public System.DateTime ProductCatUpdatedDate { get; set; }
         public bool ProductCatIsDeleted { get; set; }
-    
+
         public virtual BaseCategory_Table BaseCategory_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product_Table> Product_Table { get; set; }

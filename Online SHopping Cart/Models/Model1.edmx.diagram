@@ -27,6 +27,9 @@
         <AssociationConnector Association="ShoppingCartDbModel.FK_Service_Table_Service_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_User_Table_User_Table" ManuallyRouted="false" />
         <AssociationConnector Association="ShoppingCartDbModel.FK_Service_Table_User_Table" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ShoppingCartDbModel.Notify_table" Width="1.5" PointX="10.5" PointY="3.375" />
+        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_Product_Table" />
+        <AssociationConnector Association="ShoppingCartDbModel.FK_Notify_table_User_Table" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
