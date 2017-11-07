@@ -1,6 +1,7 @@
 ﻿using Online_SHopping_Cart.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,10 +12,12 @@ namespace Online_SHopping_Cart.ViewModel
     {
         public int ProductId { get; set; }
         public int ProductCatId { get; set; }
+        [Required]
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
         public string ProductDesc { get; set; }
         public int ProductStock { get; set; }
+        [Required]
         public byte[] BinaryImage { get; set; }
         public int ImageId { get; set; }
         public string ProductCatName { get; set; }

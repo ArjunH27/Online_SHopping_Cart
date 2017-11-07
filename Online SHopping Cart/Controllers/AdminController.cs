@@ -31,7 +31,7 @@ namespace Online_SHopping_Cart.Controllers
             ViewBag.AdminCount = AdminCount;
             var BuyerCount = (from u in db.User_Table where u.UserIsDeleted == false && u.Roleid == 4 select u).Count();
             ViewBag.BuyerCount = BuyerCount;
-            var Servicecount = (from u in db.User_Table where u.UserIsDeleted == false && u.Roleid == 4 select u).Count();
+            var Servicecount = (from u in db.User_Table where u.UserIsDeleted == false && u.Roleid == 3 select u).Count();
             ViewBag.Servicecount = Servicecount;
             var BaseCategoriesCount = (from b in db.BaseCategory_Table where b.BaseCatIsDeleted == false select b).Count();
             ViewBag.BaseCategoriesCount = BaseCategoriesCount;

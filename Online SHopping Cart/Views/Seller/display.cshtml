@@ -73,16 +73,37 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
 <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"
       rel="stylesheet" type="text/css" />
-
+@if (ViewBag.null_imagedisp != null)
+{
+    <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.null_imagedisp");
+    };</script>
+}
+@if (ViewBag.not_imagedisp != null)
+{
+    <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.not_imagedisp");
+    };</script>
+}
+@if (ViewBag.not_product != null)
+{
+    <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.not_product");
+    };</script>
+}
 @using (@Html.BeginForm("display", "Seller"))
 {
     <table width="97%" border="0">
         <tr>
             <td align="right">
-                Search by detail: @Html.TextBox("SearchKey", "")
+            @Html.Label("Search by Product Name", htmlAttributes: new { @class = "control-label " })
+                 @Html.TextBox("SearchKey", "",new { @class = "form-control" })
             </td>
             <td align="left">
-                <input type="submit" value="Search" />
+                <input type="submit" value="Search" class="btn btn-default"/>
             </td>
         </tr>
     </table>

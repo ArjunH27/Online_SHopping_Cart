@@ -103,7 +103,7 @@ namespace Online_SHopping_Cart.Controllers
             ViewBag.message = TempData["message"];
             Service_ViewModel svm = new Service_ViewModel();
             List<BaseCategory_Table> category = new List<BaseCategory_Table>();
-            category = db.BaseCategory_Table.ToList();
+            category = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted==false).ToList();
             var productlist = new List<SelectListItem>();
             foreach (var item in category)
             {
@@ -117,7 +117,7 @@ namespace Online_SHopping_Cart.Controllers
                 ViewBag.baseCategory = productlist;
             }
             TempData["categoryName"] = ViewBag.baseCategory;
-            svm.locationList = db.Location_Table.ToList();
+            svm.locationList = db.Location_Table.Where(x=>x.LocationIsDeleted==false).ToList();
             svm.selectedLocation = 0;
             return View(svm);
 
@@ -129,7 +129,7 @@ namespace Online_SHopping_Cart.Controllers
             if (!string.IsNullOrEmpty(id))
             {
                 baseCatId = Convert.ToInt32(id);
-                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId).ToList();
+                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId && x.ProductCatIsDeleted==false).ToList();
                 foreach (var item in productCategory)
                 {
                     productcategoryList.Add(new SelectListItem
@@ -159,9 +159,13 @@ namespace Online_SHopping_Cart.Controllers
                 obj.ProductId = item.ProductId;
                 obj.ProductPrice = item.ProductPrice;
                 obj.ProductDesc = item.ProductDesc;
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
-                obj.BinaryImage = img.BinaryImage;
-                imageList.Add(obj);
+                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted==false).FirstOrDefault();
+                if(img!=null)
+                {
+                    obj.BinaryImage = img.BinaryImage;
+                    imageList.Add(obj);
+                }
+                
 
             }
             ViewBag.imglist = imageList.DistinctBy(x => x.ProductId).ToList();
@@ -324,6 +328,8 @@ namespace Online_SHopping_Cart.Controllers
 
             List<OrderHistory_ViewModel> ohvmlist = new List<OrderHistory_ViewModel>();
             string userName = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserName).FirstOrDefault();
+            string userPhone = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserPhno).FirstOrDefault();
+
             var obj = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).ToList();
             List<string> list = new List<string>();
             foreach (var item in obj)
@@ -345,6 +351,7 @@ namespace Online_SHopping_Cart.Controllers
                 ohvmlist.Add(obj1);
                 list.Add(userName);
                 list.Add(deliveryadd);
+                list.Add(userPhone);
 
             }
             ViewBag.list = list.Distinct();

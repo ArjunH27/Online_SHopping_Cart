@@ -112,8 +112,19 @@
 
         <div>
             <p>Already a User <a href="login">Sign IN Here</a></p>
+            <p>Please Read the<a class="modal-trigger" href="#modal1">*Terms and Conditions</a></p>
         </div>
 
+    </div>
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Terms and Conditions</h4>
+            <p>Your Credentials will be active after getting conformation from Admin</p>
+            <p>*Condition does not apply for Buyers</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
     </div>
 
     
@@ -121,6 +132,7 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/scripts/materialize.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -151,7 +163,16 @@
             });
 
         });
-
+        $('.modal').modal({
+            dismissible: true, // Modal can be dismissed by clicking outside of the modal
+            opacity: .5, // Opacity of modal background
+            inDuration: 300, // Transition in duration
+            outDuration: 200, // Transition out duration
+            startingTop: '4%', // Starting top style attribute
+            endingTop: '10%', // Ending top style attribute
+            
+        }
+      );
 
     });
 

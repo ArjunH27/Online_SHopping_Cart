@@ -16,6 +16,13 @@
     }
 
 </style>
+@if (ViewBag.cmsg != null)
+{
+    <script type="text/javascript">
+    window.onload = function () {
+        alert("@ViewBag.cmsg");
+    };</script>
+}
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="~/Content/materialize.css" rel="stylesheet" />
 <script src="~/scripts/jquery-1.10.2.js"></script>

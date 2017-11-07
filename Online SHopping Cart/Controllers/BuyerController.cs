@@ -34,8 +34,12 @@ namespace Online_SHopping_Cart.Controllers
                 obj.ProductPrice = item.ProductPrice;
                 obj.ProductDesc = item.ProductDesc;
                 Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId).FirstOrDefault();
-                obj.BinaryImage = img.BinaryImage;
-                plist.Add(obj);
+                if (img != null)
+                {
+                    obj.BinaryImage = img.BinaryImage;
+                    plist.Add(obj);
+                }
+                
             }
             ViewBag.newpro = plist;
 
@@ -118,8 +122,12 @@ namespace Online_SHopping_Cart.Controllers
                     not_avail_product.Add(item.ProductId);
                 }
                 Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted==false).FirstOrDefault();
-                obj.BinaryImage =  img.BinaryImage;
-                plist.Add(obj);
+                if(img!=null)
+                {
+                    obj.BinaryImage = img.BinaryImage;
+                    plist.Add(obj);
+                }
+               
             }
             ViewBag.no_stock = not_avail_product;
             Session["filter1"] = 0;
@@ -237,7 +245,7 @@ namespace Online_SHopping_Cart.Controllers
                 db.SaveChanges();
             }
             Session["location"] = null;
-            return RedirectToAction("OrderHistoryList");
+            return RedirectToAction("notification");
         }
 
         [HttpGet]
@@ -307,7 +315,7 @@ namespace Online_SHopping_Cart.Controllers
             }
             count_cart();
             Session["location"] = null;
-            return RedirectToAction("OrderHistoryList");
+            return RedirectToAction("notification");
         }
 
         public ActionResult service_name(string id)
@@ -438,8 +446,12 @@ namespace Online_SHopping_Cart.Controllers
                     not_avail_product.Add(pobj.ProductId);
                 }
                 Image_Table img = db.Image_Table.Where(x => x.Productid == item1 && x.ImageIsDeleted==false).FirstOrDefault();
-                bobj.BinaryImage = img.BinaryImage;
-                plist.Add(bobj);
+                if (img != null)
+                {
+                    bobj.BinaryImage = img.BinaryImage;
+                    plist.Add(bobj);
+                }
+            
             }
             TempData["count"] = c;
             TempData["tcart_amt"] = total;      

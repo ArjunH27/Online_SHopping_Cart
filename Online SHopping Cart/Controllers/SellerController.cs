@@ -11,19 +11,22 @@ using System.Web.Mvc;
 
 namespace Online_SHopping_Cart.Controllers
     {
-        public class SellerController : Controller
+   
+    public class SellerController : Controller
         {
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         SellerViewModel svm = new SellerViewModel();
         // GET: Seller
+        public static int flag = 0;
 
         [HttpGet]
         public ActionResult Index()
         {
+           
             Notification_Count();
             Out_Of_Stock();
             Total();
-            Most_Sold_Pro();
+           // Most_Sold_Pro();
             return View();
         }
         public static class MyChartTheme
@@ -126,7 +129,7 @@ namespace Online_SHopping_Cart.Controllers
 
         public void Chart(DateTime date)
         {
-
+           
             int count;
             List<SellerViewModel> sellerlist = new List<SellerViewModel>();
             //DateTime datetime = DateTime.Now;
@@ -138,7 +141,7 @@ namespace Online_SHopping_Cart.Controllers
 
             string prevname = null;
             var productlist = (from a in db.Product_Table where a.SellerId == userid && a.ProductIsDeleted == false select a).ToList();
-            var orderlist = (from o in db.Order_Table where o.OrderCreatedDate == Date && o.OrderIsDeleted == false select o).ToList();
+            var orderlist = (from o in db.Order_Table where o.OrderCreatedDate == Date && o.OrderIsDeleted == false && o.OrderStatus==1 select o).ToList();
             foreach (var product in productlist)
 
             {
@@ -180,14 +183,18 @@ namespace Online_SHopping_Cart.Controllers
                 }
 
             }
-            TempData["data"] = sellerlist;
+           //ViewBag.data = sellerlist;
             //List<SellerViewModel> sellerlist = TempData["data"] as List<SellerViewModel>;
-            var chart = new Chart(width: 300, height: 300, theme: MyChartTheme.MyCustom)
+            if (sellerlist.Count != 0)
+            {
+                var chart = new Chart(width: 300, height: 300, theme: MyChartTheme.MyCustom)
 
-                .AddSeries("Default", chartType: "doughnut",
-                xValue: sellerlist, xField: "ProductName",
-                yValues: sellerlist, yFields: "Quantity")
-                .Write("png");
+                    .AddSeries("Default", chartType: "doughnut",
+                    xValue: sellerlist, xField: "ProductName",
+                    yValues: sellerlist, yFields: "Quantity")
+                    .Write("png");
+            }
+            
             //return Json(new { sellerlist }, JsonRequestBehavior.AllowGet);
         }
 
@@ -282,7 +289,7 @@ namespace Online_SHopping_Cart.Controllers
         public void DisableNotification()
         {
             Order_Table obj = new Order_Table();
-            var order = (from a in db.Order_Table select a).ToList();
+            var order = (from a in db.Order_Table where a.OrderIsDeleted==false select a).ToList();
             foreach (var item in order)
             {
                 if (item.OrderNotification == "00")
@@ -301,9 +308,12 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+
+            ViewBag.null_image = TempData["null_image"];
+            ViewBag.not_image = TempData["not_image"];
             Notification_Count();
             List<BaseCategory_Table> category = new List<BaseCategory_Table>();
-            category = db.BaseCategory_Table.ToList();
+            category = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted == false).ToList();
             var productlist = new List<SelectListItem>();
             foreach (var item in category)
             {
@@ -327,7 +337,7 @@ namespace Online_SHopping_Cart.Controllers
             if (!string.IsNullOrEmpty(id))
             {
                 BaseCatId = Convert.ToInt32(id);
-                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == BaseCatId & x.ProductCatIsDeleted == false).ToList();
+                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == BaseCatId && x.ProductCatIsDeleted == false).ToList();
                 foreach (var item in productCategory)
                 {
                     ProductcategoryList.Add(new SelectListItem
@@ -373,21 +383,33 @@ namespace Online_SHopping_Cart.Controllers
                     file = Request.Files[j];
 
                     ContentRepository service = new ContentRepository();
-                    image = service.UploadImageInDataBase(file, model);
+                    if (file.FileName != "")
+                    {
+                        image = service.UploadImageInDataBase(file, model);
 
-                    Image_Table imageObj = new Image_Table();
+                        Image_Table imageObj = new Image_Table();
 
 
-                    imageObj.BinaryImage = image.BinaryImage;
-                    imageObj.Productid = product.ProductId;
-                    imageObj.ImageCreatedBy = Session["user"].ToString();
-                    imageObj.ImageCreatedDate = DateTime.Now;
-                    imageObj.ImageUpdatedBy = Session["user"].ToString();
-                    imageObj.ImageUpdatedDate = DateTime.Now;
-                    imageObj.ImageIsDeleted = false;
-                    db.Image_Table.Add(imageObj);
-                    db.SaveChanges();
-
+                        imageObj.BinaryImage = image.BinaryImage;
+                        imageObj.Productid = product.ProductId;
+                        imageObj.ImageCreatedBy = Session["user"].ToString();
+                        imageObj.ImageCreatedDate = DateTime.Now;
+                        imageObj.ImageUpdatedBy = Session["user"].ToString();
+                        imageObj.ImageUpdatedDate = DateTime.Now;
+                        imageObj.ImageIsDeleted = false;
+                        db.Image_Table.Add(imageObj);
+                        db.SaveChanges();
+                    }
+                    else if(file.FileName== "")
+                    {
+                        TempData["null_image"] = "Cannot Upload Null Image";
+                        return RedirectToAction("Create");
+                    }
+                    else
+                    {
+                        TempData["not_image"] = "this is not an image file";
+                        return RedirectToAction("Create");
+                    }
                 }
             }
             return RedirectToAction("display");
@@ -434,6 +456,9 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult display()
         {
+            ViewBag.null_imagedisp = TempData["null_imagedisp"];
+            ViewBag.not_imagedisp = TempData["not_imagedisp"];
+            ViewBag.not_product = TempData["not_product"];
             Notification_Count();
             string uname = Session["user"].ToString();
             int uid = (from a in db.User_Table where a.UserName == uname select a.UserId).FirstOrDefault();
@@ -477,6 +502,7 @@ namespace Online_SHopping_Cart.Controllers
         {
             List<SellerViewModel> prolist = new List<SellerViewModel>();
             Notification_Count();
+           
             string uname = Session["user"].ToString();
             int uid = (from a in db.User_Table where a.UserName == uname select a.UserId).FirstOrDefault();
             List<SellerViewModel> obj2 = new List<SellerViewModel>();
@@ -486,13 +512,10 @@ namespace Online_SHopping_Cart.Controllers
             foreach (var b in search)
 
             {
+              
                 if (b.ProductIsDeleted == false && b.SellerId == uid)
                 {
-
-
-
-
-
+                   
                     SellerViewModel obj = new SellerViewModel();
 
                     obj.ProductId = b.ProductId;
@@ -509,19 +532,22 @@ namespace Online_SHopping_Cart.Controllers
 
                     obj.BinaryImage = image;
                     obj2.Add(obj);
+                   
                 }
+                
             }
             if (obj2.Count > 0)
             {
-                //ViewBag.pro = obj1;
+               
                 return View(obj2);
-                // return Json(new { obj2 }, JsonRequestBehavior.AllowGet);
+       
             }
             else
             {
-                return View();
+                TempData["not_product"] = "not a product name";
+                return RedirectToAction("display");
             }
-
+           
         }
 
 
@@ -551,8 +577,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult upload(Image_Table model)
         {
-            if (model.BinaryImage != null)
-            {
+          
                 Image_Table image = new Image_Table();
                 int j;
                 object[] imgarray = new object[5];
@@ -563,23 +588,47 @@ namespace Online_SHopping_Cart.Controllers
                     file = Request.Files[j];
 
                     ContentRepository service = new ContentRepository();
-                    image = service.UploadImageInDataBase(file, model);
 
-                    Image_Table imageObj = new Image_Table();
-
-
-                    imageObj.BinaryImage = image.BinaryImage;
-                    imageObj.Productid = Convert.ToInt32(TempData["ID"]);
-                    imageObj.ImageCreatedBy = Session["user"].ToString();
-                    imageObj.ImageCreatedDate = DateTime.Now;
-                    imageObj.ImageUpdatedBy = Session["user"].ToString();
-                    imageObj.ImageUpdatedDate = DateTime.Now;
-                    imageObj.ImageIsDeleted = false;
-                    db.Image_Table.Add(imageObj);
-                    db.SaveChanges();
-
+                if (file.ContentType.ToLower() != "image/jpg" &&
+                    file.ContentType.ToLower() != "image/jpeg" &&
+                    file.ContentType.ToLower() != "image/pjpeg" &&
+                    file.ContentType.ToLower() != "image/gif" &&
+                    file.ContentType.ToLower() != "image/x-png" &&
+                    file.ContentType.ToLower() != "image/png")
+                {
+                    TempData["not_imagedisp"] = "this is not an image file";
+                    return RedirectToAction("display");
                 }
-            }
+
+
+
+
+
+                    else if (file.FileName != "")
+                    {
+                        image = service.UploadImageInDataBase(file, model);
+
+                        Image_Table imageObj = new Image_Table();
+
+                       
+                        imageObj.BinaryImage = image.BinaryImage;
+                        imageObj.Productid = Convert.ToInt32(TempData["ID"]);
+                        imageObj.ImageCreatedBy = Session["user"].ToString();
+                        imageObj.ImageCreatedDate = DateTime.Now;
+                        imageObj.ImageUpdatedBy = Session["user"].ToString();
+                        imageObj.ImageUpdatedDate = DateTime.Now;
+                        imageObj.ImageIsDeleted = false;
+                        db.Image_Table.Add(imageObj);
+                        db.SaveChanges();
+                    }
+                    else if (file.FileName == "")
+                    {
+                        TempData["null_imagedisp"] = "Cannot Upload Null Image";
+                        return RedirectToAction("display");
+                    }
+                  
+                }
+            
             return RedirectToAction("display");
         }
 
@@ -599,7 +648,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     if (item1 != null)
                     {
-                        var userid = (from e in db.Order_Table where e.OrderId == item1.Orderid select e.Userid).FirstOrDefault();
+                        var userid = (from e in db.Order_Table where e.OrderId == item1.Orderid && e.OrderStatus== 1 select e.Userid).FirstOrDefault();
                         var servicepid = (from c in db.Service_Table where c.ServiceId == item1.Serviceid && c.ServiceIsDeleted != true select c.ServiceProviderid).FirstOrDefault();
                         var servicename = (from d in db.User_Table where d.UserId == servicepid select d.UserName).FirstOrDefault();
                         var username = (from f in db.User_Table where f.UserId == userid select f.UserName).FirstOrDefault();

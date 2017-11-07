@@ -63,6 +63,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult login()
         {
+            ViewBag.cmsg = TempData["cmsg"];
             ViewBag.message1 = TempData["message1"];
             ViewBag.message2 = TempData["message2"];
             ViewBag.message3 = TempData["message3"];
@@ -153,6 +154,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 obj.Password = "user123";
                 db.SaveChanges();
+                TempData["cmsg"] = "New Psssword is send to your Mail";
                 return RedirectToAction("SendMail", new { email = email });
             }
             else
