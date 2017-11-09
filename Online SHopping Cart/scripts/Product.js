@@ -1,40 +1,23 @@
 ﻿$(document).ready(function () {
     $('.edit').hide();
+
     $(document).on("click", ".edit-case", function () {
         var tr = $(this).parents('tr:first');
-        // var ProductCatId = tr.find('#CatId').text();
         var ProductCatName = tr.find('#CatName').text();
         var ProductCatDescription = tr.find('#CatDescription').text();
         var BaseCat = tr.find("#BaseName").text();
-        //tr.find('#ProductCatId').val(ProductCatId);
         tr.find('#ProductCatName').val(ProductCatName);
         tr.find('#ProductCatDescription').val(ProductCatDescription);
         tr.find('.edit, .read').toggle();
-       tr.find('#BaseCategoryName option:selected').text(BaseCat);
-    
-        //tr.find('#BaseCategoryName option:selected').val(id);
-        //var BaseCatid = tr.find('#BaseCategoryName').val();
-//tr.find('#BaseCategoryName option:contains(' + BaseCat + ')').prop('selected', true);
-   
-
-       
-      
+       tr.find('#BaseCategoryName option:selected').text(BaseCat);  
     });
+
     $(document).on('click',".update-case",function (e) {
         e.preventDefault();
         var tr = $(this).parents('tr:first');
         var ProductCatId = $(this).prop('id');
         var ProductCatName = tr.find('#ProductCatName').val();
         var ProductCatDescription = tr.find('#ProductCatDescription').val();
-        //if (tr.find('#BaseCategoryName').change()) {
-        //    var BaseCat = tr.find('#BaseCategoryName option:selected').text();
-        //    var BaseCatid = tr.find('#BaseCategoryName option:selected').val();
-        //    return false
-        //}
-        //else {
-        //    var BaseCat = tr.find("#BaseName").text();
-        //    var BaseCatid = tr.find("#baseid").val();
-        //}
         var BaseCat = tr.find("#BaseName").text();
         
         if (ProductCatName == "") {
@@ -72,8 +55,7 @@
                         tr.find('#CatDescription').text(data.ProductCatDesc);
                         tr.find('#BaseName').text(BaseCat);
                         tr.find('#label1').html("");
-                        tr.find('#label2').html("");
-                        // window.location.href = data.Url;
+                        tr.find('#label2').html("")
                     },
                     error: function (err) {
                         alert("error");
@@ -125,8 +107,6 @@
             }
             else {
                 $('.update-case').prop('disabled', false);
-
-                //$('.edit').hide();
             }
 
 

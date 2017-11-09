@@ -1,25 +1,7 @@
-﻿@model IEnumerable < Online_SHopping_Cart.ViewModel.OrderHistory_ViewModel>
+﻿@model IEnumerable<Online_SHopping_Cart.ViewModel.OrderHistory_ViewModel>
 
+<link href="~/Content/ServiceStyleSheet.css" rel="stylesheet" />
 
-<style>
-    #main-wrap {
-        /* overflow to handle inner floating block */
-        overflow: hidden;
-        border-style: inset;
-        height: auto;
-    }
-
-    #sidebar {
-        text-align: center;
-        float: left;
-        width: 30%;
-    }
-
-    #content-wrap {
-        float: right;
-        width: 70%;
-    }
-</style>
 @Html.Label("Customer Details")
 @foreach (var item in ViewBag.list)
 {
@@ -28,6 +10,7 @@
     </div>
 }
 <br />
+
 @Html.Label("Purchase Details")<br />
 @foreach (var item in Model)
 {
@@ -49,5 +32,3 @@
     <br /><br /><br />
 
 }
-
-

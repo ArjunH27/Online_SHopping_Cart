@@ -134,10 +134,18 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\materialize-social.css" />
     <Content Include="Content\materialize.css" />
+    <Content Include="Content\serviceLayoutStyle.css" />
+    <Content Include="Content\ServiceStyleSheet.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\StyleSheet1.css" />
+    <Content Include="css\Adminstyle\Gridstyle.css" />
     <Content Include="css\bootstrap.css" />
-    <Content Include="css\style1.css" />
+    <Content Include="css\SellerStyle\CreateStyle.css" />
+    <Content Include="css\SellerStyle\DisplayStyle.css" />
+    <Content Include="css\SellerStyle\IndexStyle.css" />
+    <Content Include="css\SellerStyle\LayoutStyle.css" />
+    <Content Include="css\SellerStyle\NotificationStyle.css" />
+    <Content Include="css\Adminstyle\homestyle.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\admin.png" />
@@ -182,6 +190,8 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="scripts\addService.js" />
+    <Content Include="scripts\AdminHome.js" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -199,8 +209,13 @@
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\Confirm.js" />
-    <Content Include="scripts\CreateJS.js" />
-    <Content Include="scripts\JavaScript.js" />
+    <Content Include="scripts\Location.js" />
+    <Content Include="scripts\Managerole.js" />
+    <Content Include="scripts\Product.js" />
+    <Content Include="scripts\SellerScript\CreateJS.js" />
+    <Content Include="scripts\SellerScript\ImageDisplayJS.js" />
+    <Content Include="scripts\SellerScript\IndexJs.js" />
+    <Content Include="scripts\SellerScript\DisplayJS.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
@@ -209,12 +224,13 @@
     <Content Include="scripts\jquery.validate.min.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="scripts\Location.js" />
-    <Content Include="scripts\Managerole.js" />
+    <Content Include="scripts\manageService.js" />
     <Content Include="scripts\materialize.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
-    <Content Include="scripts\Product.js" />
     <Content Include="scripts\productsPartialView.js" />
+    <Content Include="scripts\serviceHome.js" />
+    <Content Include="scripts\serviceLayout.js" />
+    <Content Include="scripts\viewService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -326,7 +342,6 @@
     <Content Include="Views\Shared\_ServiceLayout.cshtml" />
     <Content Include="Views\Service\Service_Home.cshtml" />
     <Content Include="Views\Service\Add_Service.cshtml" />
-    <Content Include="Views\Service\Products_PartialView.cshtml" />
     <Content Include="Views\Service\Manage_Service.cshtml" />
     <Content Include="Views\Service\View_Service.cshtml" />
     <Content Include="Views\Service\profile.cshtml" />
@@ -334,14 +349,18 @@
     <Content Include="Views\User\loader.cshtml" />
     <Content Include="Views\Buyer\purchase_all.cshtml" />
     <Content Include="Views\Buyer\try1.cshtml" />
-    <Content Include="Views\Service\View.cshtml" />
     <Content Include="Views\Buyer\ChangePassword.cshtml" />
     <Content Include="Views\Seller\ChangePassword.cshtml" />
     <Content Include="Views\Service\ChangePassword.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
-    <Content Include="Views\Service\OrderDetails.cshtml" />
     <Content Include="Views\Buyer\Brand_page.cshtml" />
-    <Content Include="Views\Service\imagedisplay.cshtml" />
+    <Content Include="Views\User\Error.cshtml" />
+    <Content Include="Views\Service\_imageDisplay.cshtml" />
+    <Content Include="Views\Service\_orderDetails.cshtml" />
+    <Content Include="Views\Service\_productsPartialView.cshtml" />
+    <Content Include="Views\Seller\Error.cshtml" />
+    <Content Include="Views\Admin\Error.cshtml" />
+    <Content Include="Views\Buyer\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

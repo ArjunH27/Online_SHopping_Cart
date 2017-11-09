@@ -4,72 +4,15 @@
     Layout = "~/Views/Shared/_SellerLayout.cshtml";
 }
 <link href="~/Content/StyleSheet1.css" rel="stylesheet" />
-
-
-<style>
-    .btn-bs-file {
-        position: relative;
-    }
-
-        .btn-bs-file input[type="file"] {
-            position: absolute;
-            top: -9999999;
-            filter: alpha(opacity=0);
-            opacity: 0;
-            width: 0;
-            height: 0;
-            outline: none;
-            cursor: inherit;
-        }
-
-    .thumb {
-        width: 50px;
-        height: 50px;
-        margin: 0.2em -0.7em 0 0;
-    }
-
-    .remove_img_preview {
-        position: relative;
-        top: -25px;
-        right: 5px;
-        background: black;
-        color: white;
-        border-radius: 50px;
-        font-size: 0.9em;
-        padding: 0 0.3em 0;
-        text-align: center;
-        cursor: pointer;
-    }
-
-        .remove_img_preview:before {
-            content: "×";
-        }
-
-    .pip {
-        display: inline-block;
-        margin: 10px 10px 0 0;
-    }
-
-    #preview {
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-clip: padding-box;
-        border: 1px solid silver;
-        -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
-        display: inline-block;
-    }
-</style>
-
+<link href="~/css/SellerStyle/CreateStyle.css" rel="stylesheet" />
+<script src="~/scripts/SellerScript/CreateJS.js"></script>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
-<script src="~/scripts/CreateJS.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
 @if (ViewBag.null_image != null)
 {
     <script type="text/javascript">
@@ -91,33 +34,23 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
 
             <div class="form-group">
                 @Html.Label("Base Category", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-
                     @Html.DropDownList("BaseProducts", (IEnumerable<SelectListItem>)ViewBag.basecategory, "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlbcat" })
                     @Html.ValidationMessage("BaseProducts", "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <div class="form-group">
                 @Html.Label("Product Category", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-
                     @Html.DropDownListFor(model => model.ProductCatId, new List<SelectListItem>(), "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlpcat" })
                     @Html.ValidationMessageFor(model => model.ProductCatId, "", new { @class = "text-danger" })
                 </div>
             </div>
-
-
-
-
-
             <div class="form-group">
                 @Html.Label("Product Name", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -125,9 +58,6 @@
                     @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
                 </div>
             </div>
-
-
-
             <div class="form-group">
                 @Html.Label("Product Rate", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -135,8 +65,6 @@
                     @Html.ValidationMessageFor(model => model.ProductPrice, "", new { @class = "text-danger" })
                 </div>
             </div>
-
-
 
             <div class="form-group">
                 @Html.Label("Product Stock", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -146,36 +74,16 @@
                 </div>
             </div>
             <div class="form-group" id="button">
-
                 @Html.Label("Product Images", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-
 
                     <label class="btn-bs-file btn btn-primary">
                         <span class="glyphicon glyphicon-picture"></span>Browse
                         <input type="file" name="ImageData" id="ImageData" multiple />
-
                     </label>
-
-                    @*<input type="file" name="ImageData" id="ImageData" onchange="fileCheck(this);" multiple>*@
                     <div id="preview"></div>
-
                 </div>
-
             </div>
-
-
-
-
-            @*<div class="form-group">
-                   @Html.Label("Preview")
-                    <div class="col-md-10">
-                        <div class="gallery" />
-                    </div>
-                </div>*@
-
-
-
             <br />
             <div class="form-group">
                 @Html.Label("Features", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -190,14 +98,9 @@
                     @Html.ActionLink("View Details", "display")
                 </div>
             </div>
-
         </div>
 
     }
-
 </div>
-
-
-
 
 

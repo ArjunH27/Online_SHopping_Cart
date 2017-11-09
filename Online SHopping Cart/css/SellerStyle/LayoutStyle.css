@@ -1,0 +1,94 @@
+﻿  .navbar {
+            background: #000080;
+            border: black;
+            height: 55px;
+        }
+
+            .navbar #navcol {
+                color: white;
+                font-size: 20px;
+            }
+
+                .navbar #navcol:hover {
+                    /*//color: black;*/
+                    font-size: 23px;
+                }
+
+            .navbar #logo {
+                color: white;
+            }
+
+                .navbar #logo:hover {
+                    /*color: black;*/
+                    /*font-size:5px;*/
+                }
+
+        .body {
+            transition: background-color .5s;
+            font-family: "Lato", sans-serif;
+        }
+
+        .dropdown-menu {
+            background: transparent;
+        }
+
+            .dropdown-menu li:hover {
+                font-size: large;
+            }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+            .sidenav a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 22px;
+                color: black;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidenav a:hover {
+                    font-size: 25px;
+                }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        #mains {
+            background-color: #D7DBDD;
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        @@media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+                .sidenav a {
+                    font-size: 18px;
+                }
+        }
+
+        .badge-notify {
+            background: red;
+            position: relative;
+            top: -10px;
+            left: -3px;
+        }

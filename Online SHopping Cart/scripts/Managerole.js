@@ -2,10 +2,8 @@
     $('.edit').hide();
     $(document).on("click",".edit-case", function () {
         var tr = $(this).parents('tr:first');
-        //var RoleId = tr.find('#Id').text();
         var RoleName = tr.find('#Name').text();
         var RoleDescription = tr.find('#Description').text();
-        //tr.find('#RoleId').val(RoleId);
         tr.find('#RoleName').val(RoleName);
         tr.find('#RoleDescription').val(RoleDescription);
         tr.find('.edit, .read').toggle();
@@ -14,7 +12,6 @@
         e.preventDefault();
         var tr = $(this).parents('tr:first');
         var  RoleId = $(this).prop('id');
-        //var RoleId = tr.find('#RoleId').val();
         var RoleName = tr.find('#RoleName').val();
         var RoleDescription = tr.find('#RoleDescription').val();
         if (RoleName == "") 
@@ -44,7 +41,6 @@
                     tr.find('#Description').text(data.RoleDesc);
                     tr.find('#label1').html("");
                     tr.find('#label2').html("");
-                    //window.location = data.Url;
                 },
                 error: function (err) {
                     alert("error");
@@ -89,8 +85,6 @@
             if ($(this).val() == $current.val() && $(this).attr('class') != $current.attr('class')) {
                 alert('duplicate found!');
                 $current.removeClass("thiss");
-                //$current.addClass("edit");
-                //$current.addClass("cat");
                 $('.update-case').prop('disabled', true);
                 location.reload(true);
                 return false;
@@ -99,19 +93,11 @@
                 $('.update-case').prop('disabled', false);
                 $current.addClass("edit");
                 $current.addClass("cat");
-                //$('.edit').hide();
 
             }
         });
         $current.removeClass("thiss");
     });
 
-    //$(document).on('click', ".btn", function (e) {
-    //    $('.message').show();
-
-    //});
-    //$(document).on('change', '.text', function () {
-    //    $('.message').show();
-
-    //});
+   
 });

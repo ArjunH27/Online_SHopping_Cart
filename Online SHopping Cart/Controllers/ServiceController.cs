@@ -12,186 +12,225 @@ namespace Online_SHopping_Cart.Controllers
     public class ServiceController : Controller
     {
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
-        // GET: Service
-       
-       
+
+        #region Homepage
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>a home page</returns>
         public ActionResult Service_Home()
         {
-            Notofication_Count();
-            order_count();
-            return View();
-        }
+            Notification_Count();   //For getting notification count in navigation bar
 
-        public void order_count()
-        {
-            string name = Session["user"].ToString();
+            string userName = Session["Service"].ToString();
             int orderCount = 0;
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
-            List<Order_Table> orderList = new List<Order_Table>();
-            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
-            foreach (var item in orders)
-            {
-                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
-                foreach (var item1 in serviceids)
-                {
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
 
-                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
-                    if (serid == serviceProviderId)
+            var orders = (from a in db.Order_Table where a.OrderStatus == 1 && a.OrderIsDeleted == false select a).ToList();
+            foreach (var items in orders)
+            {
+                var serviceIdList = (from b in db.OrderDetail_Table where items.OrderId == b.Orderid select b.Serviceid).ToList();
+                foreach (var item in serviceIdList)
+                {
+                    var serviceId = (from c in db.Service_Table where c.ServiceId == item select c.ServiceProviderid).FirstOrDefault();
+                    if (serviceId == serviceProviderId)
                     {
-                        if (item.OrderDeliveryDate > System.DateTime.Now)
+                        if (items.OrderDeliveryDate > System.DateTime.Now)
                         {
                             orderCount++;
                         }
-
-                        orderList.Add(item);
                     }
-                    Session["ordercount"] = orderCount;
+
                 }
+                Session["OrderCount"] = orderCount;//For printing number of currently running orders in home page
             }
+            return View();
         }
-        public void Notofication_Count()
+        /// <summary>
+        /// For getting notification number in navigation bar 
+        /// </summary>
+        public void Notification_Count()
         {
-            string name = Session["user"].ToString();
+            string userName = Session["Service"].ToString();
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
+            List<Order_Table> orderList = new List<Order_Table>();
 
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
-            List<Order_Table> orderlist = new List<Order_Table>();
-            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false && o.OrderNotification == "00" || o.OrderNotification == "10" select o);
-            foreach (var item in orders)
+            var orders = (from a in db.Order_Table where a.OrderStatus == 1 && a.OrderIsDeleted == false && a.OrderNotification == "00" || a.OrderNotification == "10" select a);
+
+            foreach (var items in orders)
             {
-                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
-                foreach (var item1 in serviceids)
+                var serviceIdList = (from b in db.OrderDetail_Table where items.OrderId == b.Orderid select b.Serviceid).ToList();
+                foreach (var item in serviceIdList)
                 {
-
-                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
-                    if (serid == serviceProviderId)
+                    var serviceId = (from a in db.Service_Table where a.ServiceId == item select a.ServiceProviderid).FirstOrDefault();
+                    if (serviceId == serviceProviderId)
                     {
-                        orderlist.Add(item);
+                        orderList.Add(items);
                     }
                 }
             }
-            var l = orderlist.DistinctBy(x => x.OrderId).ToList();
-            // ViewBag.ordering = orderlist;
-            ViewBag.ordering = l;
-            //Session["notif-count"] = orderlist.Count();
 
-            Session["notif-count"] = l.Count();
+            ViewBag.Order = orderList.DistinctBy(x => x.OrderId).ToList();
+
+            Session["NotificationCount"] = orderList.DistinctBy(x => x.OrderId).Count();
         }
+
+        /// <summary>
+        /// For disabling notification number in navigation bar after seen by the user
+        /// </summary>
         public void DisableNotification()
         {
             Order_Table obj = new Order_Table();
             var order = (from a in db.Order_Table select a).ToList();
             foreach (var item in order)
             {
-                if (item.OrderNotification == "00")
+                if (item.OrderNotification == "00")         //notification satus=00,when new order is placed
                 {
-                    item.OrderNotification = "01";
+                    item.OrderNotification = "01";          //changing status to 01, indicating service provider has seen the notification
                 }
-                else if (item.OrderNotification == "10")
+                else if (item.OrderNotification == "10")    //notification satus = 10, when new order is seen by seller but not service provider
                 {
-                    item.OrderNotification = "11";
+                    item.OrderNotification = "11";          //changing status to 11, indicating both seller and service provider has seen the notification
                 }
 
             }
-            db.SaveChanges();
-            Notofication_Count();
-        }
 
+            db.SaveChanges();
+
+            Notification_Count();
+        }
+        #endregion
+
+        #region Add Service
+        /// <summary>
+        /// Get method for adding service by the courier service provider
+        /// </summary>
+        /// <returns>a page for adding service</returns>
         [HttpGet]
         public ActionResult Add_Service()
         {
-            Notofication_Count();
-            ViewBag.message = TempData["message"];
-            Service_ViewModel svm = new Service_ViewModel();
-            List<BaseCategory_Table> category = new List<BaseCategory_Table>();
-            category = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted==false).ToList();
-            var productlist = new List<SelectListItem>();
-            foreach (var item in category)
+            Notification_Count();
+
+            Service_ViewModel svm_obj = new Service_ViewModel();
+            List<BaseCategory_Table> baseCategoryList = new List<BaseCategory_Table>();
+            var productListItem = new List<SelectListItem>();
+
+            baseCategoryList = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted == false).ToList();
+
+            foreach (var item in baseCategoryList)
             {
-                productlist.Add(new SelectListItem
+                productListItem.Add(new SelectListItem
                 {
                     Text = item.BaseCatName.ToString(),
                     Value = item.BaseCatId.ToString(),
 
                 });
 
-                ViewBag.baseCategory = productlist;
+                ViewBag.BaseCategory = productListItem;
             }
-            TempData["categoryName"] = ViewBag.baseCategory;
-            svm.locationList = db.Location_Table.Where(x=>x.LocationIsDeleted==false).ToList();
-            svm.selectedLocation = 0;
-            return View(svm);
+
+            svm_obj.locationList = db.Location_Table.Where(x => x.LocationIsDeleted == false).ToList();
+            svm_obj.selectedLocation = 0;
+
+            ViewBag.message = TempData["Message"];
+            return View(svm_obj);
 
         }
-        public ActionResult GetProductCategory(string id)
+        /// <summary>
+        /// For displaying product category based on base category
+        /// </summary>
+        /// <param name="baseCategoryId"></param>
+        /// <returns>dropdownlist of product categories</returns>
+        public ActionResult GetProductCategory(string baseCategoryId)
         {
             int baseCatId;
-            List<SelectListItem> productcategoryList = new List<SelectListItem>();
-            if (!string.IsNullOrEmpty(id))
+            List<SelectListItem> productCategoryList = new List<SelectListItem>();
+
+            if (!string.IsNullOrEmpty(baseCategoryId))
             {
-                baseCatId = Convert.ToInt32(id);
-                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId && x.ProductCatIsDeleted==false).ToList();
+                baseCatId = Convert.ToInt32(baseCategoryId);
+                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId && x.ProductCatIsDeleted == false).ToList();
                 foreach (var item in productCategory)
                 {
-                    productcategoryList.Add(new SelectListItem
+                    productCategoryList.Add(new SelectListItem
                     {
                         Text = item.ProductCatName.ToString(),
-
                         Value = item.ProductCatId.ToString(),
 
                     });
                 }
             }
-            return Json(productcategoryList, JsonRequestBehavior.AllowGet);
+
+            return Json(productCategoryList, JsonRequestBehavior.AllowGet);
 
         }
+        /// <summary>
+        /// For displaying partial view of products based on the type of product choosen
+        /// </summary>
+        /// <param name="productCatId"></param>
+        /// <returns>partial view of products</returns>
         [HttpGet]
-        public ActionResult Image_PartialView(int productCatId)
+        public ActionResult Products_PartialView(int productCatId)
         {
-            List<Buyer_Product> imageList = new List<Buyer_Product>();
+            List<Buyer_Product> productList = new List<Buyer_Product>();
+
             var products = (from p in db.Product_Table
                             where p.ProductCatid == productCatId && p.ProductIsDeleted == false
                             select p).ToList();
             foreach (var item in products)
             {
-
-                Buyer_Product obj = new Buyer_Product();
-                obj.ProductName = item.ProductName;
-                obj.ProductId = item.ProductId;
-                obj.ProductPrice = item.ProductPrice;
-                obj.ProductDesc = item.ProductDesc;
-                Image_Table img = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted==false).FirstOrDefault();
-                if(img!=null)
+                Buyer_Product product = new Buyer_Product();
+                product.ProductName = item.ProductName;
+                product.ProductId = item.ProductId;
+                product.ProductPrice = item.ProductPrice;
+                product.ProductDesc = item.ProductDesc;
+                Image_Table image = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted == false).FirstOrDefault();
+                if (image != null)
                 {
-                    obj.BinaryImage = img.BinaryImage;
-                    imageList.Add(obj);
+                    product.BinaryImage = image.BinaryImage;
+                    productList.Add(product);
                 }
-                
-
             }
-            ViewBag.imglist = imageList.DistinctBy(x => x.ProductId).ToList();
-            return PartialView("Products_PartialView");
-        }
-        [HttpPost]
-        public ActionResult imagedisplay(int id)
-        {
-            Product_Table product = db.Product_Table.Find(id);
 
-            var image = (from a in db.Image_Table where a.Productid == product.ProductId && a.ImageIsDeleted == false select a).ToList();
-            ViewBag.imlist = image.ToList();
-            return PartialView("imagedisplay");
+            ViewBag.ProductList = productList.DistinctBy(x => x.ProductId).ToList();
+            return PartialView("_productsPartialView");
         }
+        /// <summary>
+        /// For displaying different images of same product when clicked
+        /// </summary>
+        /// <param name="imageId"></param>
+        /// <returns>list of images</returns>
         [HttpPost]
-        public ActionResult Add_Service(Service_ViewModel model, string[] ids)
+        public ActionResult ImageDisplay(int imageId)
+        {
+            Product_Table product = db.Product_Table.Find(imageId);
+
+            var imageList = (from a in db.Image_Table
+                             where a.Productid == product.ProductId && a.ImageIsDeleted == false
+                             select a).ToList();
+            ViewBag.ImageList = imageList.ToList();
+            return PartialView("_imageDisplay");
+        }
+        /// <summary>
+        /// post method for adding service.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="productIds"></param>
+        /// <returns>Add service page</returns>
+        [HttpPost]
+        public ActionResult Add_Service(Service_ViewModel model, string[] productIds)
         {
             try
             {
-                Notofication_Count();
-                string name = Session["user"].ToString();
+                Notification_Count();
+
+                string name = Session["Service"].ToString();
                 int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
                 List<Order_Table> orderList = new List<Order_Table>();
-                for (int j = 0; j < ids.Count(); j++)
+
+                for (int i = 0; i < productIds.Count(); i++)
                 {
-                    int currentProduct = Convert.ToInt32(ids[j]);
+                    int currentProduct = Convert.ToInt32(productIds[i]);
                     var product = (from s in db.Service_Table where s.Productid == currentProduct && s.Locationid == model.selectedLocation && s.ServiceProviderid == serviceProviderId && s.ServiceIsDeleted == false select s).FirstOrDefault();
 
                     if (product == null)
@@ -200,13 +239,13 @@ namespace Online_SHopping_Cart.Controllers
                         service.Locationid = model.selectedLocation;
                         service.DeliveryCharge = model.deliveryCharge;
                         service.ServiceDesc = model.serviceDescription;
-                        service.Productid = Convert.ToInt32(ids[j]);
+                        service.Productid = Convert.ToInt32(productIds[i]);
                         service.ServiceName = model.serviceName;
                         service.ServiceProviderid = serviceProviderId;
                         service.ServiceCreatedDate = System.DateTime.Now;
                         service.ServiceUpdatedDate = System.DateTime.Now;
-                        service.ServiceCreatedBy = Session["user"].ToString();
-                        service.ServiceUpdatedBy = Session["user"].ToString();
+                        service.ServiceCreatedBy = Session["Service"].ToString();
+                        service.ServiceUpdatedBy = Session["Service"].ToString();
                         service.ServiceIsDeleted = false;
                         db.Service_Table.Add(service);
                         db.SaveChanges();
@@ -217,25 +256,32 @@ namespace Online_SHopping_Cart.Controllers
                     {
                         var productName = (from p in db.Product_Table where p.ProductId == currentProduct select p.ProductName).FirstOrDefault();
                         string message = String.Format("Same location already added for the product " + productName);
-                        TempData["message"] = message;
+                        TempData["Message"] = message;
                         return RedirectToAction("Add_Service");
                     }
                 }
-                TempData["message"] = "Service Added";
+                TempData["Message"] = "Service Added";
                 return RedirectToAction("Add_Service");
             }
             catch (Exception e)
             {
-                TempData["message"] = "fill all fileds";
+                TempData["Message"] = "fill all fileds";
                 return RedirectToAction("Add_Service");
             }
 
         }
+        #endregion
+
+        #region Manage service
+        /// <summary>
+        /// For editing the existing services
+        /// </summary>
+        /// <returns>grid view of added services</returns>
         public ActionResult Manage_Service()
         {
-            Notofication_Count();
-            string name = Session["user"].ToString();
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            Notification_Count();
+            string userName = Session["Service"].ToString();
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
 
             var serviceDetails = (from s in db.Service_Table
                                   join p in db.Product_Table on s.Productid equals p.ProductId
@@ -257,6 +303,16 @@ namespace Online_SHopping_Cart.Controllers
 
             return View();
         }
+        /// <summary>
+        /// For editing the details
+        /// </summary>
+        /// <param name="ServiceId"></param>
+        /// <param name="ServiceName"></param>
+        /// <param name="DeliveryCharge"></param>
+        /// <param name="ServiceDesc"></param>
+        /// <param name="LocationName"></param>
+        /// <param name="ProductName"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult ServiceEdit(int ServiceId, string ServiceName, decimal DeliveryCharge, string ServiceDesc, string LocationName, string ProductName)
         {
@@ -268,10 +324,10 @@ namespace Online_SHopping_Cart.Controllers
             service.DeliveryCharge = DeliveryCharge;
             service.ServiceDesc = ServiceDesc;
             int locationId = (from l in db.Location_Table where l.LocationName == LocationName select l.LocationId).FirstOrDefault();
-
             service.Locationid = locationId;
             int productId = (from p in db.Product_Table where p.ProductName == ProductName select p.ProductId).FirstOrDefault();
             service.Productid = productId;
+            service.ServiceUpdatedBy = Session["Service"].ToString();
             service.ServiceUpdatedDate = System.DateTime.Now;
             db.SaveChanges();
             var redirectUrl = new UrlHelper(Request.RequestContext).Action("Manage_Service", "Service");
@@ -280,38 +336,50 @@ namespace Online_SHopping_Cart.Controllers
 
 
         }
-
+        /// <summary>
+        /// For deleting the service.
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult ServiceDelete(int ServiceId)
+        public ActionResult ServiceDelete(int serviceId)
         {
-            Service_Table service = db.Service_Table.Find(ServiceId);
+            Service_Table service = db.Service_Table.Find(serviceId);
             service.ServiceIsDeleted = true;
+            service.ServiceUpdatedBy = Session["Service"].ToString();
+            service.ServiceUpdatedDate = System.DateTime.Now;
             db.SaveChanges();
             bool result = true;
             var redirectUrl = new UrlHelper(Request.RequestContext).Action("Manage_Service", "Service");
             return Json(new { Url = redirectUrl, result });
         }
+        #endregion
+
+        #region View service
+        /// <summary>
+        /// For displaying the details of customers who have opted his service.grid view will show a link to diplay details of a purticular order. 
+        /// </summary>
+        /// <returns>grid view of order details</returns>
         public ActionResult View_Service()
         {
             DisableNotification();
-            Notofication_Count();
+            Notification_Count();
 
-            string name = Session["user"].ToString();
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+            string name = Session["Service"].ToString();
             List<Order_Table> orderList = new List<Order_Table>();
+            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+
             var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
-            foreach (var item in orders)
+            foreach (var items in orders)
             {
-                var serviceids = (from or in db.OrderDetail_Table where item.OrderId == or.Orderid select or.Serviceid).ToList();
-                foreach (var item1 in serviceids)
+                var serviceIdList = (from or in db.OrderDetail_Table where items.OrderId == or.Orderid select or.Serviceid).ToList();
+                foreach (var item in serviceIdList)
                 {
 
-                    var serid = (from a in db.Service_Table where a.ServiceId == item1 select a.ServiceProviderid).FirstOrDefault();
-                    if (serid == serviceProviderId)
+                    var serviceId = (from s in db.Service_Table where s.ServiceId == item select s.ServiceProviderid).FirstOrDefault();
+                    if (serviceId == serviceProviderId)
                     {
-
-
-                        orderList.Add(item);
+                        orderList.Add(items);
                     }
 
                 }
@@ -322,7 +390,14 @@ namespace Online_SHopping_Cart.Controllers
             return View();
 
         }
+        /// <summary>
+        /// For displaying the order details inside an order using order id and user id.
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <param name="UserId"></param>
+        /// <returns>partial view popup of order details</returns>
         [HttpPost]
+
         public ActionResult OrderDetails(int OrderId, int UserId)
         {
 
@@ -330,9 +405,9 @@ namespace Online_SHopping_Cart.Controllers
             string userName = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserName).FirstOrDefault();
             string userPhone = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserPhno).FirstOrDefault();
 
-            var obj = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).ToList();
+            var orderList = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).ToList();
             List<string> list = new List<string>();
-            foreach (var item in obj)
+            foreach (var item in orderList)
             {
                 var service = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).Select(x => x.Serviceid).FirstOrDefault();
                 var product_desc = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductDesc).FirstOrDefault();
@@ -340,32 +415,40 @@ namespace Online_SHopping_Cart.Controllers
                 var deliveryadd = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryAddress).FirstOrDefault();
                 var deliverydate = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryDate).FirstOrDefault();
                 var image = db.Image_Table.Where(x => x.Productid == item.Productid).Select(x => x.BinaryImage).FirstOrDefault();
-                OrderHistory_ViewModel obj1 = new OrderHistory_ViewModel();
-                obj1.ProductName = product;
-                obj1.ProductDesc = product_desc;
-                obj1.OrderDelivryAddress = deliveryadd;
-                obj1.Amount = (decimal)item.Amount;
-                obj1.OrderDeliveryDate = (DateTime)deliverydate;
-                obj1.CustomerName = userName;
-                obj1.BinaryImage = image;
-                ohvmlist.Add(obj1);
+                OrderHistory_ViewModel vm_obj = new OrderHistory_ViewModel();
+                vm_obj.ProductName = product;
+                vm_obj.ProductDesc = product_desc;
+                vm_obj.OrderDelivryAddress = deliveryadd;
+                vm_obj.Amount = (decimal)item.Amount;
+                vm_obj.OrderDeliveryDate = (DateTime)deliverydate;
+                vm_obj.CustomerName = userName;
+                vm_obj.BinaryImage = image;
+                ohvmlist.Add(vm_obj);
                 list.Add(userName);
                 list.Add(deliveryadd);
                 list.Add(userPhone);
 
             }
             ViewBag.list = list.Distinct();
-            return PartialView("OrderDetails", ohvmlist);
+            return PartialView("_orderDetails", ohvmlist);
         }
 
+        #endregion
+
+        #region User Profile
+
+        /// <summary>
+        /// Users is able to View and update User Profile
+        /// </summary>
+        /// <returns>form for editing user details</returns>
 
         [HttpGet]
         public ActionResult profile()
         {
-            Notofication_Count();
+            Notification_Count();
             ViewBag.fill_msg = TempData["fill_msg"];
-            Notofication_Count();
-            string name = Session["user"].ToString();
+
+            string name = Session["Service"].ToString();
             User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
             return View(obj);
         }
@@ -373,10 +456,10 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult profile(User_Table obj)
         {
-            Notofication_Count();
+            Notification_Count();
             if (obj.FirstName != null && obj.LastName != null && obj.UserEmail != null && obj.UserAddress != null && obj.UserPhno != null)
             {
-                string name = Session["user"].ToString();
+                string name = Session["Service"].ToString();
                 User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
                 user.FirstName = obj.FirstName;
                 user.LastName = obj.LastName;
@@ -394,10 +477,17 @@ namespace Online_SHopping_Cart.Controllers
             }
             return View();
         }
+        #endregion
 
+        #region Change Password
+
+        /// <summary>
+        /// Allows user to Cahnge Password
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ChangePassword()
         {
-            Notofication_Count();
+            Notification_Count();
             ViewBag.message = TempData["message"];
             return View();
         }
@@ -406,14 +496,14 @@ namespace Online_SHopping_Cart.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            Notofication_Count();
+            Notification_Count();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
             User_Table obj = new User_Table();
-            string name = Session["user"].ToString();
+            string name = Session["Service"].ToString();
             User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
             if (details.Password == model.OldPassword)
             {
@@ -438,13 +528,32 @@ namespace Online_SHopping_Cart.Controllers
             }
             return RedirectToAction("ChangePassword");
         }
+        #endregion
 
+        #region Logout
+
+        /// <summary>
+        /// Logout's back to Login page
+        /// </summary>
         public void logout()
         {
-            Session["user"] = null;
+            Session["Service"] = null;
             Session["count"] = null;
             Session.Abandon();
             Response.Redirect("/User/login");
         }
+        #endregion
+        #region Error
+
+        /// <summary>
+        /// Custom Error Page
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Error()
+        {
+            return View();
+        }
+        #endregion
     }
 }

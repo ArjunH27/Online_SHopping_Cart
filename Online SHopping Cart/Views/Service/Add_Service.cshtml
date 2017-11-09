@@ -3,36 +3,36 @@
     ViewBag.Title = "Add_Service";
     Layout = "~/Views/Shared/_ServiceLayout.cshtml";
 }
-
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/scripts/jquery.validate.min.js"></script>
 <script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
-<style>
-
-</style>
+<script src="~/scripts/addService.js"></script>
+<link href="~/Content/ServiceStyleSheet.css" rel="stylesheet" />
 @if (ViewBag.message != null)
 {
     <script type="text/javascript">
-    window.onload = function () {
-        alert("@ViewBag.message");
-    };</script>
+        window.onload = function () {
+            alert("@ViewBag.message");
+        };
+    </script>
 }
 <br /><br />
+
 <div class="container">
     <h2>Add Service</h2>
+
     @using (Html.BeginForm("Add_Service", "Service", FormMethod.Post, new { id = "TheForm" }))
     {
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <hr />
+
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.Display("Search Products")
-
             <div class="form-group">
                 @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("baseProductList", (IEnumerable<SelectListItem>)ViewBag.baseCategory, "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlbcat" })
+                    @Html.DropDownList("baseProductList", (IEnumerable<SelectListItem>)ViewBag.BaseCategory, "--Select--", htmlAttributes: new { @class = "form-control", id = "ddlbcat" })
                     @Html.ValidationMessage("Message", "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     @Html.ValidationMessageFor(model => model.productCatId, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group" style="background-color:#E5E7E9">
+            <div class="form-group" id="partialView">
                 <div id="partialPlaceHolder">
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 @Html.Label("Choose Location", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @foreach (var item in Model.locationList)
-                {
+                    {
                         <div>
                             @Html.RadioButtonFor(m => m.selectedLocation, item.LocationId)
                             @Html.Label(item.LocationName)
@@ -86,44 +86,7 @@
                     <input type="submit" value="Add Service" class="btn btn-default" />
                 </div>
             </div>
-
         </div>
     }
 </div>
-<script type="text/javascript">
-   $(document).ready(function () {
-        $('#ddlbcat').change(function () {
-            $.ajax({
-                type: "post",
-                url: "/Service/GetProductCategory",
-                data: { id: $('#ddlbcat').val() },
-                datatype: "json",
 
-                success: function (data) {
-                    var category = "<select id='ddlpcat'>";
-                    category = category + '<option value="">--Select--</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        category = category + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
-                    }
-                    category = category + '</select>';
-                    $('#ddlpcat').html(category);
-                }
-            });
-        });
-    });
-    function GetProductId() {
-        var productCatId = $("#ddlpcat").val();
-        $.ajax({
-            url: '/Service/Image_PartialView',
-            type: 'Get',
-            data: { productCatId: productCatId },
-            success: function (result) {
-                $("#partialPlaceHolder").html(result);
-            },
-            error: function () {
-                alert("failed");
-            }
-        });
-    }
-
-</script>

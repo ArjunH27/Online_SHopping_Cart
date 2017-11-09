@@ -39,9 +39,9 @@
                         Response.Redirect("User/login");
                     }
 
-                    @if (Session["user"] != null)
+                    @if (Session["Buyer"] != null)
                     {
-                        <li data-activates="slide-out" class="button-collapse" style="cursor:pointer" >Welcome : @Session["user"].ToString() </li>
+                        <li data-activates="slide-out" class="button-collapse" style="cursor:pointer" >Welcome : @Session["Buyer"].ToString() </li>
                         
                         @*<li >Profile</li>*@
                     }
@@ -63,7 +63,7 @@
                 </div>
             </li>
             <li><a class="waves-effect" href="#!">NAME : @Session["name"].ToString()</a> </li>
-            <li><a class="waves-effect" href="#!">UserName : @Session["user"].ToString()</a> </li>
+            <li><a class="waves-effect" href="#!">UserName : @Session["Buyer"].ToString()</a> </li>
 
             <li><div class="divider"></div></li>
             <li>
@@ -80,7 +80,7 @@
             </li>
             <li>
                 <div class="chip">
-                    @Html.ActionLink("LOGOUT", "logout")
+                    @Html.ActionLink("LOGOUT", "Logout")
                     <i class="material-icons"> backspace</i>
                 </div>
             </li>

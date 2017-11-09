@@ -2,11 +2,9 @@
     $('.edit').hide();
     $(document).on("click",".edit-case", function () {
         var tr = $(this).parents('tr:first');
-        //var LocationId = tr.find('#LId').text();
         var LocationName = tr.find('#LName').text();
         var LocationPIN = tr.find('#PIN').text();
         var LocationDescription = tr.find('#LDescription').text();
-       // tr.find('#LocationId').val(LocationId);
         tr.find('#LocationName').val(LocationName);
         tr.find('#LocationPIN').val(LocationPIN);
         tr.find('#LocationDescription').val(LocationDescription);
@@ -16,7 +14,6 @@
         e.preventDefault();
         var tr = $(this).parents('tr:first');
         var LocationId = $(this).prop('id');
-        //var RoleId = tr.find('#RoleId').val();
         var LocationName = tr.find('#LocationName').val();
         var LocationPIN = tr.find('#LocationPIN').val();
         var LocationDescription = tr.find('#LocationDescription').val();
@@ -48,7 +45,6 @@
                     tr.find('#label1').html("");
                     tr.find('#label2').html("");
                     tr.find('#label3').html("");
-                    //window.location = data.Url;
                 },
                 error: function (err) {
                     alert("error");
@@ -100,9 +96,6 @@
             }
             else {
                 $('.update-case').prop('disabled', false);
-               
-                //$('.edit').hide();
-
             }
  });
         $current.removeClass("thiss");

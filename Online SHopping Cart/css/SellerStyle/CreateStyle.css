@@ -1,0 +1,51 @@
+﻿ .btn-bs-file {
+        position: relative;
+    }
+
+        .btn-bs-file input[type="file"] {
+            position: absolute;
+            top: -9999999;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            width: 0;
+            height: 0;
+            outline: none;
+            cursor: inherit;
+        }
+
+    .thumb {
+        width: 50px;
+        height: 50px;
+        margin: 0.2em -0.7em 0 0;
+    }
+
+    .remove_img_preview {
+        position: relative;
+        top: -25px;
+        right: 5px;
+        background: black;
+        color: white;
+        border-radius: 50px;
+        font-size: 0.9em;
+        padding: 0 0.3em 0;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .remove_img_preview:before {
+            content: "×";
+        }
+
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+
+    #preview {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-clip: padding-box;
+        border: 1px solid silver;
+        -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+        display: inline-block;
+    }

@@ -5,130 +5,30 @@
 
 }
 <!DOCTYPE html>
-
 <html>
 <head>
-    <style>
-        .webGrid {
-            border: 1px solid;
-            margin-top: 30px;
-            width: 800px;
-        }
 
-
-            .webGrid tr {
-                border-spacing: 50px;
-            }
-
-            .webGrid tr {
-                border: 1px solid #C0C0C0;
-                height: 50px;
-            }
-
-                .webGrid tr:hover {
-                    background-color: #F5F5F5;
-                }
-
-            .webGrid th, .webGrid td {
-                padding-left: 20px;
-                width: 50px;
-            }
-
-
-
-        .header {
-            background-color: #E5E7E9;
-            height: 40px;
-            margin-left: 10px;
-        }
-
-            .header th {
-                border: 0.5px solid #C0C0C0;
-                padding-left: 20px;
-            }
-
-        .altColor {
-            background-color: #ECF0F1;
-        }
-
-        .btn {
-            padding: 10px 24px;
-            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 1px 0 rgba(0,0,0,0.19);
-        }
-
-
-        .clickable {
-            cursor: pointer;
-            background: #ffff99;
-        }
-
-        .inner-addon {
-            position: relative;
-        }
-
-            /* style icon */
-            .inner-addon .glyphicon {
-                position: absolute;
-                padding: 10px;
-                pointer-events: none;
-            }
-
-        /* align icon */
-        .left-addon .glyphicon {
-            left: 0px;
-        }
-
-        .right-addon .glyphicon {
-            right: 0px;
-        }
-
-        /* add padding  */
-        .left-addon input {
-            padding-left: 30px;
-        }
-
-        .right-addon input {
-            padding-right: 30px;
-        }
-        
-    </style>
-
+    <link href="~/css/SellerStyle/IndexStyle.css" rel="stylesheet" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
     <link href="~/Content/StyleSheet1.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/scripts/JavaScript.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
     <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css"
           rel="stylesheet" type="text/css" />
-
-
-
-
+    <script src="~/scripts/SellerScript/IndexJs.js"></script>
+    <script src="~/scripts/SellerScript/JavaScript.js"></script>
 
 </head>
-
 <body onload="myFunction()">
     <div class="col-md-12">
         <img src="http://www.omsaicars.com/images/sales_team.png" style="height:500px;width:1000px;" />
     </div>
-    @*<div class="col-md-6">
-            <h3>Most Sold Product</h3>
-            <img id="imagebtn"
-                 src="data:image/jpg;base64,@(Convert.ToBase64String(ViewBag.image))"
-                 width="70px"
-                 height="70px" />
 
-            @ViewBag.name
-        </div>*@
     <div class="col-md-6">
         <table>
             <tr>
@@ -137,29 +37,14 @@
                 </td>
                 <td>
                     <div id="pie" style="margin-top:20px;" class="col-md-6">
-                      
-
-
-                       
                         <img src="" id="pieimg" />
-
-                        
                     </div>
                 </td>
             </tr>
         </table>
     </div>
-
-
-
-
-
-
-
-
     <div style="margin-left: 10px; margin-right: 50px; margin-top: 50px; display:inline-block;">
         <h3>Out Of Stock</h3>
-
         @{
 
             var grid = new WebGrid(source: ViewBag.outofstock, canPage: true, rowsPerPage: 5, selectionFieldName: "selectedRow");
@@ -171,10 +56,6 @@
 
                         columns: grid.Columns
                         (
-
-
-
-
                        grid.Column("ProductName", "Product", format:
                     @<text>
                         <span id="name" class="read ">@item.ProductName</span>
@@ -204,18 +85,10 @@
                             @Html.TextBox("ProductStock", (int)item.ProductStock, new { @class = "edit form-control" })
                             <label id="label4" class="text-danger"></label>
                         </text>, style: "name"),
-
-
-
-
-
-
-
-                            grid.Column("", style: "button",
+                        grid.Column("", style: "button",
                                          format:
                                         @<text>
                                             <button class="edit-case read btn btn-default btn-sm" id="@item.ProductId"><span class="glyphicon glyphicon-pencil"></span>   EDIT</button>
-
                                             <button class="delete-case read btn btn-default btn-sm" id="@item.ProductId">
                                                 <span class="glyphicon glyphicon-trash"></span>  DELETE
                                             </button>
@@ -224,52 +97,6 @@
                                         </text>))
 
                      )
-
-
-
-
-
-
     </div>
-
 </body>
 </html>
-<script>
-
-
-
-        $(function () {
-            $("#datepicker").datepicker({ maxDate:new Date()});
-        //    $("#datepicker").text($('#calpicker').val());
-        });
-
-        function myFunction() {
-            var today = new Date();
-            var dd = today.getDate();
-          var mm = today.getMonth()+1; //January is 0!
-          var yyyy = today.getFullYear();
-
-         if(dd<10) {
-               dd = '0'+dd
-               }
-
-              if(mm<10) {
-                        mm = '0'+mm
-                   }
-
-today = mm + '/' + dd + '/' + yyyy;
-
-$('#pieimg').attr('src', '/Seller/Chart?date=' + today)
-        }
-
-        function TestOnTextChange(item) {
-
-
-
-            var text = $('#datepicker').val();
-
-            $('#pieimg').attr('src', '/Seller/Chart?date=' + text)
-
-
-        }
-</script>

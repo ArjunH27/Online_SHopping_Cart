@@ -10,10 +10,21 @@ namespace Online_SHopping_Cart.Controllers
 {
     public class UserController : Controller
     {
+        //Model object
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         // GET: User
+
+        #region  Register
+
+        /// <summary>
+            /// Create Method is used for Registration
+            /// </summary>
+            /// <returns></returns>
+
+
         public ActionResult create()
         {
+            try { 
             List<Role_Table> role = new List<Role_Table>();
             role = db.Role_Table.Where(x => x.RoleIsDeleted == false).ToList();
             var rolelist = new List<SelectListItem>();
@@ -26,11 +37,17 @@ namespace Online_SHopping_Cart.Controllers
                 });
             }
             ViewBag.rolename = rolelist;
+            }
+            catch
+            {
+                Response.Redirect("Error");
+            }
             return View();
         }
         [HttpPost]
         public ActionResult create(User_Table obj)
         {
+            try { 
             if (ModelState.IsValid)
             {
                 obj.UserCreatedDate = System.DateTime.Now;
@@ -53,26 +70,44 @@ namespace Online_SHopping_Cart.Controllers
                     db.SaveChanges();
                     return RedirectToAction("login");
                 }
+            }          
             }
-            else
+            catch
             {
-                return RedirectToAction("errror");
+                Response.Redirect("Error");
             }
+            return View();
         }
+
+        #endregion
+
+        #region Login
+
+        /// <summary>
+        /// login is used for Login to application
+        /// </summary>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult login()
         {
+            try { 
             ViewBag.cmsg = TempData["cmsg"];
             ViewBag.message1 = TempData["message1"];
             ViewBag.message2 = TempData["message2"];
             ViewBag.message3 = TempData["message3"];
+            }
+            catch
+            {
+                Response.Redirect("Error");
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult login(string user, string password)
         {
+            try { 
             User_Table obj = db.User_Table.Where(x => x.UserName == user).FirstOrDefault();
           
             if (obj != null)
@@ -85,23 +120,23 @@ namespace Online_SHopping_Cart.Controllers
 
                         if (robj.RoleName == "Super_Admin")
                         {
-                            Session["user"] = obj.UserName;
+                            Session["Admin"] = obj.UserName;
                             return RedirectToAction("Homepage", "Admin");
                         }
                         else if (robj.RoleName == "Seller")
                         {
-                            Session["user"] = obj.UserName;
+                            Session["Seller"] = obj.UserName;
                             return RedirectToAction("Index", "Seller");
                         }
                         else if (robj.RoleName == "Courier_Service")
                         {
-                            Session["user"] = obj.UserName;
+                            Session["Service"] = obj.UserName;
                             Session["name"] = obj.FirstName;
                             return RedirectToAction("Service_Home", "Service");
                         }
                         else if (robj.RoleName == "Buyer")
                         {
-                            Session["user"] = obj.UserName;
+                            Session["Buyer"] = obj.UserName;
                             Session["name"] = obj.FirstName;
                            
                             string name = obj.UserName;
@@ -113,7 +148,7 @@ namespace Online_SHopping_Cart.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("errror");
+                            return RedirectToAction("Error");
                         }
                     }
                     else
@@ -136,8 +171,21 @@ namespace Online_SHopping_Cart.Controllers
                 TempData["message1"] = "User Does Not Exist";
                 return RedirectToAction("login", "User");
             }
+            }
+            catch
+            {
+                Response.Redirect("Error");
+            }
             return View();
         }
+        #endregion
+
+        #region Forget Password
+
+        /// <summary>
+        /// forget_pass is used for retrevial of password
+        /// </summary>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult forget_pass()
@@ -149,6 +197,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult forget_pass(string user,string email)
         {
+            try { 
             User_Table obj = db.User_Table.Where(x => x.UserName == user & x.UserEmail == email).FirstOrDefault();
             if(obj!=null)
             {
@@ -162,12 +211,22 @@ namespace Online_SHopping_Cart.Controllers
                 TempData["for_valid"] = "Enter the Correct Credentials";
                 return RedirectToAction("forget_pass", "User");
             }
+            }
+            catch
+            {
+                Response.Redirect("Error");
+            }
             return View();
         }
 
+        /// <summary>
+        /// Mail is send to user with reset Password
+        /// </summary>
+        /// <returns></returns>
+
         public ActionResult SendMail(string email)
         {
-                   
+            try {    
                 MailMessage mail = new MailMessage();
 
                 var fromAddress = "factoryforshop@gmail.com";
@@ -189,21 +248,51 @@ namespace Online_SHopping_Cart.Controllers
 
 
             return RedirectToAction("login");
-
+            }
+            catch
+            {
+                Response.Redirect("Error");
+            }
+            return View();
 
         }
 
+
+        #endregion
+
+        #region Error
+
+        /// <summary>
+        /// Custom Error Page
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public ActionResult errror()
+        public ActionResult Error()
         {
             return View();
         }
+        #endregion
 
+        #region Loader
+
+        /// <summary>
+        /// Loader page for the Buyer(user) 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult loader()
         {
             return View();
         }
 
+        #endregion
+
+        #region validations
+
+        /// <summary>
+        /// Checks password and confirm Password is matching during registration
+        /// </summary>
+        /// <returns></returns>
+        
         public JsonResult confirm_pass(string pass, string cp)
         {
             int res = 0;
@@ -215,6 +304,11 @@ namespace Online_SHopping_Cart.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Checks if username Already Exist
+        /// </summary>
+        /// <returns></returns>
+        
         public JsonResult IsNameExist(string UserName)
         {
             var validateName = db.User_Table.Where(x => x.UserName == UserName && x.UserIsDeleted == false).FirstOrDefault();   //Details of base category that has same name of Entered rolename and which are active is taken
@@ -229,6 +323,11 @@ namespace Online_SHopping_Cart.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks if User Mailid Already Exist
+        /// </summary>
+        /// <returns></returns>
+
         public JsonResult IsmailExist(string UserEmail)
         {
             var validateName = db.User_Table.Where(x => x.UserEmail == UserEmail && x.UserIsDeleted == false).FirstOrDefault();   //Details of base category that has same name of Entered rolename and which are active is taken
@@ -242,9 +341,10 @@ namespace Online_SHopping_Cart.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
     }
 
-  }
+}
 
         
 

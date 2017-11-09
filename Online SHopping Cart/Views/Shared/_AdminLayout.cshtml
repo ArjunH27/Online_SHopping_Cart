@@ -147,10 +147,10 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                @if (Session["user"] != null)
+                @if (Session["Admin"] != null)
                 {
                     @*<li>@Html.ActionLink(@Session["user"].ToString(), "profile")</li>*@
-                    <span style="font-size:30px;cursor:pointer;color:#aaa" ; onclick="openNav()">&#9776; @Session["user"].ToString()</span>
+                    <span style="font-size:30px;cursor:pointer;color:#aaa" ; onclick="openNav()">&#9776; @Session["Admin"].ToString()</span>
 
                 }
                 else
@@ -163,10 +163,10 @@
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <img src="~/Images/user.png" style="height:150px;width:150px;" />
-                <a href="#">Profile</a>
+                
                 @Html.ActionLink("Edit Profile", "profile")
                @Html.ActionLink("Change Password", "ChangePassword")
-                @Html.ActionLink("LOGOUT", "logout")
+                @Html.ActionLink("LOGOUT", "Logout")
 
             </div>
         </div>

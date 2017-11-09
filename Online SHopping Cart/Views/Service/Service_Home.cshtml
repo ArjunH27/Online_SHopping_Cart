@@ -1,46 +1,20 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Service_Home";
     Layout = "~/Views/Shared/_ServiceLayout.cshtml";
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>Shop Factory</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <style>
-        #boxes {
-            border: inset;
-            text-align: center;
-        }
-
-        .my_text {
-            font-family: 'Times New Roman';
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: inset;
-        }
-
-        .heading {
-            text-align: center;
-            font-size: 200px;
-            font-family: 'Comic Sans MS';
-            font-weight: bold;
-        }
-
-        .active {
-            background-color: blue;
-        }
-    </style>
+    <script src="~/scripts/serviceHome.js"></script>
 </head>
 <body>
     <div class="container">
-
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
@@ -77,18 +51,7 @@
         <div class="heading">
             <h1>WE’RE GLAD YOU’RE HERE </h1>
         </div>
-        @*<div class="col-md-4" id="boxes">
 
-                <p class="my_text">
-                    shopFactory courier services is a shipping marketplace that helps you generate new and recurring business by placing competing bids or accepting offers on customers’ shipments. With a new shipment posted every 30 seconds on shopFactory, there’s no shortage of opportunity whether you ship vehicles, furniture, freight, equipment, motorcycles, and more.
-                </p>
-            </div>
-            <div class="col-md-8">
-                <marquee behavior="scroll" direction="left">
-                    <p>Sample text under a <a href="/html/codes/scrolling_images.cfm">scrolling image</a>.</p>
-                </marquee>
-
-            </div>*@
         <div class="col-md-4">
             <ul class="list-group">
                 <li class="list-group-item" id="l1">About Us</li>
@@ -104,7 +67,7 @@
             </div>
             <div class="jumbotron" id="c2">
                 <img src="https://www.shareicon.net/download/2016/07/22/800285_delivery_512x512.png" style="width:150px; height:150px;" />
-                <h4>You have @Session["ordercount"] orders running</h4>
+                <h4>You have @Session["OrderCount"] orders running</h4>
             </div>
             <div class="jumbotron" id="c3">
                 <span class="glyphicon glyphicon-phone-alt"></span>
@@ -114,50 +77,6 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-	$(document).ready(function(){
-	    $('.jumbotron').hide();
-	    $('#c1').show();
 
-		$('.list-group .list-group-item').click(function() {
-
-			if($(this).index()==0)
-			{
-
-				$('#c1').slideToggle(1000);
-					if(! $(this).hasClass('active')) {
-
-
-				}
-				$(".jumbotron:nth-child(1)").show();
-
-				$('#c2,#c3').slideUp(1000);
-			}
-			else if ($(this).index()==1)
-			{
-			$('#c2').slideToggle(1000);
-
-				$(".jumbotron:nth-child(2)").show();
-				$('#c1,#c3').slideUp(1000);
-			}
-			else if ($(this).index()==2)
-			{
-
-				$(".jumbotron:nth-child(3)").show();
-				$('#c1,#c2').slideUp(1000);
-			}
-
-			$('.list-group .list-group-item.active').removeClass('active');
-			$(this).addClass('active');
-
-
-		});
-
-
-	});
-
-
-    </script>
 </body>
 </html>
-

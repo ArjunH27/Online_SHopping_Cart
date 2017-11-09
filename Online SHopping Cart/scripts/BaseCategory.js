@@ -3,10 +3,8 @@
      
     $(document).on("click",".edit-case", function () {
         var tr = $(this).parents('tr:first');
-        //var BaseCatId = tr.find('#BaseId').text();
         var BaseCatName = tr.find('#BaseName').text();
         var BaseCatDescription = tr.find('#BaseDescription').text();
-      //  tr.find('#BaseCatId').val(BaseCatId);
         tr.find('#BaseCatName').val(BaseCatName);
         tr.find('#BaseCatDescription').val(BaseCatDescription);
         tr.find('.edit, .read').toggle();
@@ -41,7 +39,6 @@
                     tr.find('#BaseDescription').text(data.BaseCatDesc);
                     tr.find('#label1').html("");
                     tr.find('#label2').html("");
-                    //window.location = data.Url;
                 },
                 error: function (err) {
                     alert("error");
@@ -94,8 +91,6 @@
                 }
                 else {
                     $('.update-case').prop('disabled', false);
-                  
-                    //$('.edit').hide();
 
                 }
 
