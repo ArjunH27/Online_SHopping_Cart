@@ -341,12 +341,12 @@ namespace Online_SHopping_Cart.Controllers
                         }
                         else if (file.FileName == "")
                         {
-                            TempData["null_image"] = "Cannot Upload Null Image";
+                            TempData["Null_Image"]= ConstantFile.null_image;
                             return RedirectToAction("Create");
                         }
                         else
                         {
-                            TempData["not_image"] = "This is not an image file";
+                            TempData["not_image"] = ConstantFile.not_image;
                             return RedirectToAction("Create");
                         }
                     }
@@ -470,7 +470,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                return View("Error");
             }
-            return View();
+            
         }
         #endregion
 
@@ -532,7 +532,7 @@ namespace Online_SHopping_Cart.Controllers
                 }
                 else
                 {
-                    TempData["not_product"] = "not a product name";
+                    TempData["not_product"] = ConstantFile.not_product;
                     return RedirectToAction("display");
                 }
             }
@@ -540,7 +540,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+           
         }
         #endregion
 
@@ -568,7 +568,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+           
         }
         #endregion
 
@@ -613,7 +613,7 @@ namespace Online_SHopping_Cart.Controllers
                         file.ContentType.ToLower() != "image/x-png" &&
                         file.ContentType.ToLower() != "image/png")
                     {
-                        TempData["not_imagedisp"] = "this is not an image file";
+                        TempData["not_imagedisp"] = ConstantFile.not_imagedisp;
                         return RedirectToAction("display");
                     }
                     else if (file.FileName != "")
@@ -632,7 +632,7 @@ namespace Online_SHopping_Cart.Controllers
                     }
                     else if (file.FileName == "")
                     {
-                        TempData["null_imagedisp"] = "Cannot Upload Null Image";
+                        TempData["null_image"] = ConstantFile.null_image;
                         return RedirectToAction("display");
                     }
                 }
@@ -642,7 +642,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+            
         }
         #endregion
 
@@ -736,22 +736,22 @@ namespace Online_SHopping_Cart.Controllers
             {
                 if (details.Password == model.NewPassword)
                 {
-                    TempData["message"] = "your old password and new password are same!!!";
+                    TempData["ChangePassword"] = ConstantFile.PasswordConflict;
                 }
                 else if (model.NewPassword == model.ConfirmPassword)
                 {
                     details.Password = model.NewPassword;
                     db.SaveChanges();
-                    TempData["message"] = "password changes successfully!!";
+                    TempData["ChangePassword"] = ConstantFile.PasswordChangeSuccess;
                 }
                 else
                 {
-                    TempData["message"] = "confirm password an new password does not match";
+                    TempData["ChangePassword"] = ConstantFile.ConfirmPasswordConflict;
                 }
             }
             else
             {
-                TempData["message"] = "your old password is incorrect ";
+                TempData["ChangePassword"] = ConstantFile.OldPassworWrong;
             }
             return RedirectToAction("ChangePassword");
         }

@@ -15,37 +15,48 @@ namespace Online_SHopping_Cart.Controllers
 
         #region Homepage
         /// <summary>
-        /// 
+        /// Service Homepage
         /// </summary>
         /// <returns>a home page</returns>
         public ActionResult Service_Home()
         {
-            Notification_Count();   //For getting notification count in navigation bar
-
-            string userName = Session["Service"].ToString();
-            int orderCount = 0;
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
-
-            var orders = (from a in db.Order_Table where a.OrderStatus == 1 && a.OrderIsDeleted == false select a).ToList();
-            foreach (var items in orders)
+            try
             {
-                var serviceIdList = (from b in db.OrderDetail_Table where items.OrderId == b.Orderid select b.Serviceid).ToList();
-                foreach (var item in serviceIdList)
-                {
-                    var serviceId = (from c in db.Service_Table where c.ServiceId == item select c.ServiceProviderid).FirstOrDefault();
-                    if (serviceId == serviceProviderId)
-                    {
-                        if (items.OrderDeliveryDate > System.DateTime.Now)
-                        {
-                            orderCount++;
-                        }
-                    }
+                Notification_Count();   //For getting notification count in navigation bar
 
+                string userName = Session["Service"].ToString();
+                int orderCount = 0;
+                int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
+
+                //For printing number of currently running orders in home page
+                var orders = (from a in db.Order_Table where a.OrderStatus == 1 && a.OrderIsDeleted == false select a).ToList();
+                foreach (var items in orders)
+                {
+                    var serviceIdList = (from b in db.OrderDetail_Table where items.OrderId == b.Orderid select b.Serviceid).ToList();
+                    foreach (var item in serviceIdList)
+                    {
+                        var serviceId = (from c in db.Service_Table where c.ServiceId == item select c.ServiceProviderid).FirstOrDefault();
+                        if (serviceId == serviceProviderId)
+                        {
+                            if (items.OrderDeliveryDate > System.DateTime.Now)
+                            {
+                                orderCount++;
+                            }
+                        }
+
+                    }
+                    Session["OrderCount"] = orderCount;
                 }
-                Session["OrderCount"] = orderCount;//For printing number of currently running orders in home page
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
             return View();
         }
+        #endregion
+
+        #region Notification
         /// <summary>
         /// For getting notification number in navigation bar 
         /// </summary>
@@ -74,6 +85,9 @@ namespace Online_SHopping_Cart.Controllers
 
             Session["NotificationCount"] = orderList.DistinctBy(x => x.OrderId).Count();
         }
+        #endregion
+
+        #region Disable Notification
 
         /// <summary>
         /// For disabling notification number in navigation bar after seen by the user
@@ -109,31 +123,40 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult Add_Service()
         {
-            Notification_Count();
-
-            Service_ViewModel svm_obj = new Service_ViewModel();
-            List<BaseCategory_Table> baseCategoryList = new List<BaseCategory_Table>();
-            var productListItem = new List<SelectListItem>();
-
-            baseCategoryList = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted == false).ToList();
-
-            foreach (var item in baseCategoryList)
+            try
             {
-                productListItem.Add(new SelectListItem
+                Notification_Count();
+
+                Service_ViewModel svm_obj = new Service_ViewModel();
+                List<BaseCategory_Table> baseCategoryList = new List<BaseCategory_Table>();
+                var productListItem = new List<SelectListItem>();
+
+                baseCategoryList = db.BaseCategory_Table.Where(x => x.BaseCatIsDeleted == false).ToList();
+
+                foreach (var item in baseCategoryList)
                 {
-                    Text = item.BaseCatName.ToString(),
-                    Value = item.BaseCatId.ToString(),
+                    productListItem.Add(new SelectListItem
+                    {
+                        Text = item.BaseCatName.ToString(),
+                        Value = item.BaseCatId.ToString(),
 
-                });
+                    });
 
-                ViewBag.BaseCategory = productListItem;
+                    ViewBag.BaseCategory = productListItem;
+                }
+
+                svm_obj.locationList = db.Location_Table.Where(x => x.LocationIsDeleted == false).ToList();
+                svm_obj.selectedLocation = 0;
+
+                ViewBag.message = TempData["validationMessage"];
+                return View(svm_obj);
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
 
-            svm_obj.locationList = db.Location_Table.Where(x => x.LocationIsDeleted == false).ToList();
-            svm_obj.selectedLocation = 0;
 
-            ViewBag.message = TempData["Message"];
-            return View(svm_obj);
 
         }
         /// <summary>
@@ -143,25 +166,32 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns>dropdownlist of product categories</returns>
         public ActionResult GetProductCategory(string baseCategoryId)
         {
-            int baseCatId;
-            List<SelectListItem> productCategoryList = new List<SelectListItem>();
-
-            if (!string.IsNullOrEmpty(baseCategoryId))
+            try
             {
-                baseCatId = Convert.ToInt32(baseCategoryId);
-                List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId && x.ProductCatIsDeleted == false).ToList();
-                foreach (var item in productCategory)
+                int baseCatId;
+                List<SelectListItem> productCategoryList = new List<SelectListItem>();
+
+                if (!string.IsNullOrEmpty(baseCategoryId))
                 {
-                    productCategoryList.Add(new SelectListItem
+                    baseCatId = Convert.ToInt32(baseCategoryId);
+                    List<ProductCategory_Table> productCategory = db.ProductCategory_Table.Where(x => x.BaseCatid == baseCatId && x.ProductCatIsDeleted == false).ToList();
+                    foreach (var item in productCategory)
                     {
-                        Text = item.ProductCatName.ToString(),
-                        Value = item.ProductCatId.ToString(),
+                        productCategoryList.Add(new SelectListItem
+                        {
+                            Text = item.ProductCatName.ToString(),
+                            Value = item.ProductCatId.ToString(),
 
-                    });
+                        });
+                    }
                 }
-            }
+                return Json(productCategoryList, JsonRequestBehavior.AllowGet);
 
-            return Json(productCategoryList, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return View("Error");
+            }
 
         }
         /// <summary>
@@ -172,27 +202,34 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult Products_PartialView(int productCatId)
         {
-            List<Buyer_Product> productList = new List<Buyer_Product>();
-
-            var products = (from p in db.Product_Table
-                            where p.ProductCatid == productCatId && p.ProductIsDeleted == false
-                            select p).ToList();
-            foreach (var item in products)
+            try
             {
-                Buyer_Product product = new Buyer_Product();
-                product.ProductName = item.ProductName;
-                product.ProductId = item.ProductId;
-                product.ProductPrice = item.ProductPrice;
-                product.ProductDesc = item.ProductDesc;
-                Image_Table image = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted == false).FirstOrDefault();
-                if (image != null)
-                {
-                    product.BinaryImage = image.BinaryImage;
-                    productList.Add(product);
-                }
-            }
+                List<Buyer_Product> productList = new List<Buyer_Product>();
 
-            ViewBag.ProductList = productList.DistinctBy(x => x.ProductId).ToList();
+                var products = (from p in db.Product_Table
+                                where p.ProductCatid == productCatId && p.ProductIsDeleted == false
+                                select p).ToList();
+                foreach (var item in products)
+                {
+                    Buyer_Product product = new Buyer_Product();
+                    product.ProductName = item.ProductName;
+                    product.ProductId = item.ProductId;
+                    product.ProductPrice = item.ProductPrice;
+                    product.ProductDesc = item.ProductDesc;
+                    Image_Table image = db.Image_Table.Where(x => x.Productid == item.ProductId && x.ImageIsDeleted == false).FirstOrDefault();
+                    if (image != null)
+                    {
+                        product.BinaryImage = image.BinaryImage;
+                        productList.Add(product);
+                    }
+                }
+
+                ViewBag.ProductList = productList.DistinctBy(x => x.ProductId).ToList();
+            }
+            catch (Exception)
+            {
+                return View("Error");
+            }
             return PartialView("_productsPartialView");
         }
         /// <summary>
@@ -203,12 +240,19 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult ImageDisplay(int imageId)
         {
-            Product_Table product = db.Product_Table.Find(imageId);
+            try
+            {
+                Product_Table product = db.Product_Table.Find(imageId);
 
-            var imageList = (from a in db.Image_Table
-                             where a.Productid == product.ProductId && a.ImageIsDeleted == false
-                             select a).ToList();
-            ViewBag.ImageList = imageList.ToList();
+                var imageList = (from a in db.Image_Table
+                                 where a.Productid == product.ProductId && a.ImageIsDeleted == false
+                                 select a).ToList();
+                ViewBag.ImageList = imageList.ToList();
+            }
+            catch (Exception)
+            {
+                return View("Error");
+            }
             return PartialView("_imageDisplay");
         }
         /// <summary>
@@ -256,16 +300,16 @@ namespace Online_SHopping_Cart.Controllers
                     {
                         var productName = (from p in db.Product_Table where p.ProductId == currentProduct select p.ProductName).FirstOrDefault();
                         string message = String.Format("Same location already added for the product " + productName);
-                        TempData["Message"] = message;
+                        TempData["validationMessage"] = message;
                         return RedirectToAction("Add_Service");
                     }
                 }
-                TempData["Message"] = "Service Added";
+              
                 return RedirectToAction("Add_Service");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                TempData["Message"] = "fill all fileds";
+                TempData["validationMessage"] = ConstantFile.validationMessage;
                 return RedirectToAction("Add_Service");
             }
 
@@ -279,27 +323,33 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns>grid view of added services</returns>
         public ActionResult Manage_Service()
         {
-            Notification_Count();
-            string userName = Session["Service"].ToString();
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
+            try
+            {
+                Notification_Count();
+                string userName = Session["Service"].ToString();
+                int serviceProviderId = db.User_Table.Where(x => x.UserName == userName).Select(x => x.UserId).FirstOrDefault();
 
-            var serviceDetails = (from s in db.Service_Table
-                                  join p in db.Product_Table on s.Productid equals p.ProductId
-                                  join l in db.Location_Table on s.Locationid equals l.LocationId
-                                  where s.ServiceIsDeleted != true && s.ServiceProviderid == serviceProviderId
-                                  select new
-                                  {
-                                      s.ServiceId,
-                                      s.ServiceName,
-                                      s.DeliveryCharge,
-                                      s.ServiceDesc,
-                                      l.LocationName,
-                                      p.ProductName
-                                  });
+                var serviceDetails = (from s in db.Service_Table
+                                      join p in db.Product_Table on s.Productid equals p.ProductId
+                                      join l in db.Location_Table on s.Locationid equals l.LocationId
+                                      where s.ServiceIsDeleted != true && s.ServiceProviderid == serviceProviderId
+                                      select new
+                                      {
+                                          s.ServiceId,
+                                          s.ServiceName,
+                                          s.DeliveryCharge,
+                                          s.ServiceDesc,
+                                          l.LocationName,
+                                          p.ProductName
+                                      });
 
-            ViewBag.Services = serviceDetails.ToList();
+                ViewBag.Services = serviceDetails.ToList();
 
-
+            }
+            catch (Exception)
+            {
+                return View("Error");
+            }
 
             return View();
         }
@@ -342,7 +392,7 @@ namespace Online_SHopping_Cart.Controllers
         /// <param name="serviceId"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult ServiceDelete(int serviceId)
+        public JsonResult ServiceDelete(int serviceId)
         {
             Service_Table service = db.Service_Table.Find(serviceId);
             service.ServiceIsDeleted = true;
@@ -362,31 +412,37 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns>grid view of order details</returns>
         public ActionResult View_Service()
         {
-            DisableNotification();
-            Notification_Count();
-
-            string name = Session["Service"].ToString();
-            List<Order_Table> orderList = new List<Order_Table>();
-            int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
-
-            var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
-            foreach (var items in orders)
+            try
             {
-                var serviceIdList = (from or in db.OrderDetail_Table where items.OrderId == or.Orderid select or.Serviceid).ToList();
-                foreach (var item in serviceIdList)
+                DisableNotification();
+                Notification_Count();
+
+                string name = Session["Service"].ToString();
+                List<Order_Table> orderList = new List<Order_Table>();
+                int serviceProviderId = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
+
+                var orders = (from o in db.Order_Table where o.OrderStatus == 1 && o.OrderIsDeleted == false select o);
+                foreach (var items in orders)
                 {
-
-                    var serviceId = (from s in db.Service_Table where s.ServiceId == item select s.ServiceProviderid).FirstOrDefault();
-                    if (serviceId == serviceProviderId)
+                    var serviceIdList = (from or in db.OrderDetail_Table where items.OrderId == or.Orderid select or.Serviceid).ToList();
+                    foreach (var item in serviceIdList)
                     {
-                        orderList.Add(items);
+
+                        var serviceId = (from s in db.Service_Table where s.ServiceId == item select s.ServiceProviderid).FirstOrDefault();
+                        if (serviceId == serviceProviderId)
+                        {
+                            orderList.Add(items);
+                        }
+
                     }
-
                 }
+
+                ViewBag.OrderList = orderList.DistinctBy(x => x.OrderId).ToList();
             }
-
-            ViewBag.OrderList = orderList.DistinctBy(x => x.OrderId).ToList();
-
+            catch (Exception)
+            {
+                return View("Error");
+            }
             return View();
 
         }
@@ -400,37 +456,44 @@ namespace Online_SHopping_Cart.Controllers
 
         public ActionResult OrderDetails(int OrderId, int UserId)
         {
-
-            List<OrderHistory_ViewModel> ohvmlist = new List<OrderHistory_ViewModel>();
-            string userName = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserName).FirstOrDefault();
-            string userPhone = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserPhno).FirstOrDefault();
-
-            var orderList = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).ToList();
-            List<string> list = new List<string>();
-            foreach (var item in orderList)
+            try
             {
-                var service = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).Select(x => x.Serviceid).FirstOrDefault();
-                var product_desc = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductDesc).FirstOrDefault();
-                var product = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductName).FirstOrDefault();
-                var deliveryadd = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryAddress).FirstOrDefault();
-                var deliverydate = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryDate).FirstOrDefault();
-                var image = db.Image_Table.Where(x => x.Productid == item.Productid).Select(x => x.BinaryImage).FirstOrDefault();
-                OrderHistory_ViewModel vm_obj = new OrderHistory_ViewModel();
-                vm_obj.ProductName = product;
-                vm_obj.ProductDesc = product_desc;
-                vm_obj.OrderDelivryAddress = deliveryadd;
-                vm_obj.Amount = (decimal)item.Amount;
-                vm_obj.OrderDeliveryDate = (DateTime)deliverydate;
-                vm_obj.CustomerName = userName;
-                vm_obj.BinaryImage = image;
-                ohvmlist.Add(vm_obj);
-                list.Add(userName);
-                list.Add(deliveryadd);
-                list.Add(userPhone);
+                List<OrderHistory_ViewModel> ohvmlist = new List<OrderHistory_ViewModel>();
+                string userName = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserName).FirstOrDefault();
+                string userPhone = db.User_Table.Where(x => x.UserId == UserId).Select(x => x.UserPhno).FirstOrDefault();
 
+                var orderList = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).ToList();
+                List<string> list = new List<string>();
+                foreach (var item in orderList)
+                {
+                    var service = db.OrderDetail_Table.Where(x => x.Orderid == OrderId).Select(x => x.Serviceid).FirstOrDefault();
+                    var product_desc = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductDesc).FirstOrDefault();
+                    var product = db.Product_Table.Where(x => x.ProductId == item.Productid).Select(x => x.ProductName).FirstOrDefault();
+                    var deliveryadd = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryAddress).FirstOrDefault();
+                    var deliverydate = db.Order_Table.Where(x => x.OrderId == OrderId).Select(x => x.OrderDeliveryDate).FirstOrDefault();
+                    var image = db.Image_Table.Where(x => x.Productid == item.Productid).Select(x => x.BinaryImage).FirstOrDefault();
+                    OrderHistory_ViewModel vm_obj = new OrderHistory_ViewModel();
+                    vm_obj.ProductName = product;
+                    vm_obj.ProductDesc = product_desc;
+                    vm_obj.OrderDelivryAddress = deliveryadd;
+                    vm_obj.Amount = (decimal)item.Amount;
+                    vm_obj.OrderDeliveryDate = (DateTime)deliverydate;
+                    vm_obj.CustomerName = userName;
+                    vm_obj.BinaryImage = image;
+                    ohvmlist.Add(vm_obj);
+                    list.Add(userName);
+                    list.Add(deliveryadd);
+                    list.Add(userPhone);
+
+                }
+                ViewBag.list = list.Distinct();
+                return PartialView("_orderDetails", ohvmlist);
             }
-            ViewBag.list = list.Distinct();
-            return PartialView("_orderDetails", ohvmlist);
+            catch (Exception)
+            {
+                return View("Error");
+            }
+
         }
 
         #endregion
@@ -440,55 +503,67 @@ namespace Online_SHopping_Cart.Controllers
         /// <summary>
         /// Users is able to View and update User Profile
         /// </summary>
-        /// <returns>form for editing user details</returns>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult profile()
         {
-            Notification_Count();
-            ViewBag.fill_msg = TempData["fill_msg"];
+            try
+            {
+                ViewBag.EnterDetails = TempData["EnterDetails"];
+                string name = Session["Service"].ToString();
+                User_Table User = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
+                return View(User);
+            }
+            catch
+            {
+                return View("Error");
+            }
 
-            string name = Session["Service"].ToString();
-            User_Table obj = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
-            return View(obj);
         }
 
         [HttpPost]
-        public ActionResult profile(User_Table obj)
+        public ActionResult profile(User_Table UserDetail)
         {
-            Notification_Count();
-            if (obj.FirstName != null && obj.LastName != null && obj.UserEmail != null && obj.UserAddress != null && obj.UserPhno != null)
+            try
             {
-                string name = Session["Service"].ToString();
-                User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
-                user.FirstName = obj.FirstName;
-                user.LastName = obj.LastName;
-                user.UserEmail = obj.UserEmail;
-                user.UserAddress = obj.UserAddress;
-                user.UserPhno = obj.UserPhno;
-                user.UserUpdateBy = name;
-                user.UserUpdatedDate = System.DateTime.Now;
-                db.SaveChanges();
+                if (UserDetail.FirstName != null && UserDetail.LastName != null && UserDetail.UserEmail != null && UserDetail.UserAddress != null && UserDetail.UserPhno != null)
+                {
+                    string name = Session["Service"].ToString();
+                    User_Table user = db.User_Table.Where(x => x.UserName == name).FirstOrDefault();
+                    user.FirstName = UserDetail.FirstName;
+                    user.LastName = UserDetail.LastName;
+                    user.UserEmail = UserDetail.UserEmail;
+                    user.UserAddress = UserDetail.UserAddress;
+                    user.UserPhno = UserDetail.UserPhno;
+                    user.UserUpdatedDate = System.DateTime.Now;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    TempData["EnterDetails"] = ConstantFile.EnterDetails;
+                    return RedirectToAction("profile");
+                }
             }
-            else
+            catch
             {
-                TempData["fill_msg"] = "Please Enter The Details";
-                return RedirectToAction("profile");
+                return View("Error");
             }
             return View();
         }
+
         #endregion
 
         #region Change Password
 
         /// <summary>
-        /// Allows user to Cahnge Password
+        /// Allows user to Change Password
         /// </summary>
         /// <returns></returns>
+
         public ActionResult ChangePassword()
         {
-            Notification_Count();
-            ViewBag.message = TempData["message"];
+            ViewBag.ChangePassword = TempData["ChangePassword"];
             return View();
         }
 
@@ -496,38 +571,45 @@ namespace Online_SHopping_Cart.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            Notification_Count();
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
-            }
-
-            User_Table obj = new User_Table();
-            string name = Session["Service"].ToString();
-            User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
-            if (details.Password == model.OldPassword)
-            {
-                if (details.Password == model.NewPassword)
+                if (!ModelState.IsValid)
                 {
-                    TempData["message"] = "your old password and new password are same!!!";
+                    return View(model);
                 }
-                else if (model.NewPassword == model.ConfirmPassword)
+
+                string name = Session["Service"].ToString();
+                User_Table details = (from a in db.User_Table where a.UserName == name select a).FirstOrDefault();
+                if (details.Password == model.OldPassword)
                 {
-                    details.Password = model.NewPassword;
-                    db.SaveChanges();
-                    TempData["message"] = "password changes successfully!!";
+                    if (details.Password == model.NewPassword)
+                    {
+                        TempData["ChangePassword"] = ConstantFile.PasswordConflict;
+                    }
+                    else if (model.NewPassword == model.ConfirmPassword)
+                    {
+                        details.Password = model.NewPassword;
+                        db.SaveChanges();
+                        TempData["ChangePassword"] = ConstantFile.PasswordChangeSuccess;
+                    }
+                    else
+                    {
+                        TempData["ChangePassword"] = ConstantFile.ConfirmPasswordConflict;
+                    }
                 }
                 else
                 {
-                    TempData["message"] = "confirm password an new password does not match";
+                    TempData["ChangePassword"] = ConstantFile.OldPassworWrong;
                 }
+                return RedirectToAction("ChangePassword");
             }
-            else
+            catch
             {
-                TempData["message"] = "your old password is incorrect ";
+                return View("Error");
             }
-            return RedirectToAction("ChangePassword");
+
         }
+
         #endregion
 
         #region Logout
@@ -543,6 +625,7 @@ namespace Online_SHopping_Cart.Controllers
             Response.Redirect("/User/login");
         }
         #endregion
+
         #region Error
 
         /// <summary>

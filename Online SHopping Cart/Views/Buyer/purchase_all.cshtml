@@ -33,11 +33,9 @@
     </div>
 </div>
     <script src="~/scripts/jquery-1.10.2.min.js"></script>
-<script src="~/scripts/materialize.js"></script>
-    
-    
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1V0ctVqyVwcbQXzT6xXDk6rUKpocVFGg&callback=myMap"></script>
-    <script>
+    <script src="~/scripts/materialize.js"></script>
+       
+  <script>
         $(document).ready(function () {
             $("#no_msg").hide();
             $("#bookbtn").hide();
@@ -72,27 +70,5 @@
 
         });
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (p) {
-                var LatLng = new google.maps.LatLng(p.coords.latitude, p.coords.longitude);
-                var mapOptions = {
-                    center: LatLng,
-                    zoom: 16,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
-                var marker = new google.maps.Marker({
-                    position: LatLng,
-                    map: map,
-                    title: "<div style = 'height:60px;width:200px'><b>Your location:</b><br />Latitude: " + p.coords.latitude + "<br />Longitude: " + p.coords.longitude
-                });
-                google.maps.event.addListener(marker, "click", function (e) {
-                    var infoWindow = new google.maps.InfoWindow();
-                    infoWindow.setContent(marker.title);
-                    infoWindow.open(map, marker);
-                });
-            });
-        } else {
-            alert('Geo Location feature is not supported in this browser.');
-        }
+        
     </script>

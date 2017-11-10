@@ -1,6 +1,7 @@
 ﻿using Online_SHopping_Cart.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
@@ -14,29 +15,31 @@ namespace Online_SHopping_Cart.Controllers
         ShoppingCartDbEntities db = new ShoppingCartDbEntities();
         // GET: User
 
+
         #region  Register
 
         /// <summary>
-            /// Create Method is used for Registration
-            /// </summary>
-            /// <returns></returns>
+        /// Create Method is used for Registration
+        /// </summary>
+        /// <returns></returns>
 
 
         public ActionResult create()
         {
-            try { 
-            List<Role_Table> role = new List<Role_Table>();
-            role = db.Role_Table.Where(x => x.RoleIsDeleted == false).ToList();
-            var rolelist = new List<SelectListItem>();
-            foreach (var item in role)
+            try
             {
-                rolelist.Add(new SelectListItem
+                List<Role_Table> role = new List<Role_Table>();
+                role = db.Role_Table.Where(x => x.RoleIsDeleted == false).ToList();
+                var rolelist = new List<SelectListItem>();
+                foreach (var item in role)
                 {
-                    Text = item.RoleName.ToString(),
-                    Value = item.RoleId.ToString()
-                });
-            }
-            ViewBag.rolename = rolelist;
+                    rolelist.Add(new SelectListItem
+                    {
+                        Text = item.RoleName.ToString(),
+                        Value = item.RoleId.ToString()
+                    });
+                }
+                ViewBag.rolename = rolelist;
             }
             catch
             {
@@ -45,32 +48,31 @@ namespace Online_SHopping_Cart.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult create(User_Table obj)
+        public ActionResult create(User_Table User)
         {
-            try { 
-            if (ModelState.IsValid)
+            try
             {
-                obj.UserCreatedDate = System.DateTime.Now;
-                obj.UserUpdatedDate = System.DateTime.Now;
-                if (obj.Roleid == 1 || obj.Roleid == 2 || obj.Roleid == 3)
+                if (ModelState.IsValid)
                 {
-                    obj.UserCreatedBy = obj.UserName;
-                    obj.UserUpdateBy = obj.UserName;
-                    obj.UserIsDeleted = true;
-                    db.User_Table.Add(obj);
-                    db.SaveChanges();
-                    return RedirectToAction("login");
+                    User.UserCreatedDate = System.DateTime.Now;
+                    User.UserUpdatedDate = System.DateTime.Now;
+                    User.UserCreatedBy = User.UserName;
+                    User.UserUpdateBy = User.UserName;
+                    if (User.Roleid == 1 || User.Roleid == 2 || User.Roleid == 3)
+                    {
+                        User.UserIsDeleted = true;
+                        db.User_Table.Add(User);
+                        db.SaveChanges();
+                        return RedirectToAction("login");
+                    }
+                    else
+                    {
+                        User.UserIsDeleted = false;
+                        db.User_Table.Add(User);
+                        db.SaveChanges();
+                        return RedirectToAction("login");
+                    }
                 }
-                else
-                {
-                    obj.UserCreatedBy = obj.UserName;
-                    obj.UserUpdateBy = obj.UserName;
-                    obj.UserIsDeleted = false;
-                    db.User_Table.Add(obj);
-                    db.SaveChanges();
-                    return RedirectToAction("login");
-                }
-            }          
             }
             catch
             {
@@ -91,11 +93,12 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult login()
         {
-            try { 
-            ViewBag.cmsg = TempData["cmsg"];
-            ViewBag.message1 = TempData["message1"];
-            ViewBag.message2 = TempData["message2"];
-            ViewBag.message3 = TempData["message3"];
+            try
+            {
+                ViewBag.NewPassword = TempData["NewPassword"];
+                ViewBag.InValidUser = TempData["InValidUser"];
+                ViewBag.InValidPassword = TempData["InValidPassword"];
+                ViewBag.Autharization = TempData["Autharization"];
             }
             catch
             {
@@ -107,70 +110,71 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public ActionResult login(string user, string password)
         {
-            try { 
-            User_Table obj = db.User_Table.Where(x => x.UserName == user).FirstOrDefault();
-          
-            if (obj != null)
+            try
             {
-                Role_Table robj = db.Role_Table.Where(x => x.RoleId == obj.Roleid).FirstOrDefault();
-                if (obj.Password == password)
-                {
-                    if (obj.UserIsDeleted == false)
-                    {
+                User_Table User = db.User_Table.Where(x => x.UserName == user).FirstOrDefault();
 
-                        if (robj.RoleName == "Super_Admin")
+                if (User != null)
+                {
+                    Role_Table Role = db.Role_Table.Where(x => x.RoleId == User.Roleid).FirstOrDefault();
+                    if (User.Password == password)
+                    {
+                        if (User.UserIsDeleted == false)
                         {
-                            Session["Admin"] = obj.UserName;
-                            return RedirectToAction("Homepage", "Admin");
-                        }
-                        else if (robj.RoleName == "Seller")
-                        {
-                            Session["Seller"] = obj.UserName;
-                            return RedirectToAction("Index", "Seller");
-                        }
-                        else if (robj.RoleName == "Courier_Service")
-                        {
-                            Session["Service"] = obj.UserName;
-                            Session["name"] = obj.FirstName;
-                            return RedirectToAction("Service_Home", "Service");
-                        }
-                        else if (robj.RoleName == "Buyer")
-                        {
-                            Session["Buyer"] = obj.UserName;
-                            Session["name"] = obj.FirstName;
-                           
-                            string name = obj.UserName;
-                            int id = db.User_Table.Where(x => x.UserName == name).Select(x => x.UserId).FirstOrDefault();
-                            var oder_id = db.Order_Table.Where(x => x.Userid == id & x.OrderStatus == 0 & x.OrderIsDeleted == false).Select(x => x.OrderId).FirstOrDefault();
-                            int count = db.OrderDetail_Table.Where(x => x.Orderid == oder_id).Count();
-                            Session["count"] = count;
-                            return RedirectToAction("loader", "User");
+
+                            if (Role.RoleName == "Super_Admin")
+                            {
+                                Session["Admin"] = User.UserName;
+                                return RedirectToAction("Homepage", "Admin");
+                            }
+                            else if (Role.RoleName == "Seller")
+                            {
+                                Session["Seller"] = User.UserName;
+                                return RedirectToAction("Index", "Seller");
+                            }
+                            else if (Role.RoleName == "Courier_Service")
+                            {
+                                Session["Service"] = User.UserName;
+                                Session["name"] = User.FirstName;
+                                return RedirectToAction("Service_Home", "Service");
+                            }
+                            else if (Role.RoleName == "Buyer")
+                            {
+                                Session["Buyer"] = User.UserName;
+                                Session["name"] = User.FirstName;
+
+                                string name = User.UserName;
+                                int id = User.UserId;
+                                var oder_id = db.Order_Table.Where(x => x.Userid == id & x.OrderStatus == 0 & x.OrderIsDeleted == false).Select(x => x.OrderId).FirstOrDefault();
+                                int count = db.OrderDetail_Table.Where(x => x.Orderid == oder_id).Count();
+                                Session["count"] = count;
+                                return RedirectToAction("loader", "User");
+                            }
+                            else
+                            {
+                                return RedirectToAction("Error");
+                            }
                         }
                         else
                         {
-                            return RedirectToAction("Error");
+                            TempData["Autharization"] = ConstantFile.Autharization;
+                            return RedirectToAction("login", "User");
                         }
+
                     }
                     else
                     {
-                        TempData["message3"] = "Not an Autharized User";
+                        TempData["InValidPassword"] = ConstantFile.InValidPassword;
                         return RedirectToAction("login", "User");
-                    }
 
+
+                    }
                 }
                 else
                 {
-                    TempData["message2"] = "Password Dont Match";
+                    TempData["InValidUser"] = ConstantFile.InValidUser;
                     return RedirectToAction("login", "User");
-
-
                 }
-            }
-            else
-            {
-                TempData["message1"] = "User Does Not Exist";
-                return RedirectToAction("login", "User");
-            }
             }
             catch
             {
@@ -190,27 +194,28 @@ namespace Online_SHopping_Cart.Controllers
         [HttpGet]
         public ActionResult forget_pass()
         {
-            ViewBag.for_valid = TempData["for_valid"];
+            ViewBag.CorrectCredentials = TempData["CorrectCredentials"];
             return View();
         }
 
         [HttpPost]
-        public ActionResult forget_pass(string user,string email)
+        public ActionResult forget_pass(string user, string email)
         {
-            try { 
-            User_Table obj = db.User_Table.Where(x => x.UserName == user & x.UserEmail == email).FirstOrDefault();
-            if(obj!=null)
+            try
             {
-                obj.Password = "user123";
-                db.SaveChanges();
-                TempData["cmsg"] = "New Psssword is send to your Mail";
-                return RedirectToAction("SendMail", new { email = email });
-            }
-            else
-            {
-                TempData["for_valid"] = "Enter the Correct Credentials";
-                return RedirectToAction("forget_pass", "User");
-            }
+                User_Table User = db.User_Table.Where(x => x.UserName == user & x.UserEmail == email).FirstOrDefault();
+                if (User != null)
+                {
+                    User.Password = "user123";
+                    db.SaveChanges();
+                    TempData["NewPassword"] = ConstantFile.NewPassword;
+                    return RedirectToAction("SendMail", new { email = email });
+                }
+                else
+                {
+                    TempData["CorrectCredentials"] = ConstantFile.CorrectCredentials;
+                    return RedirectToAction("forget_pass", "User");
+                }
             }
             catch
             {
@@ -226,14 +231,17 @@ namespace Online_SHopping_Cart.Controllers
 
         public ActionResult SendMail(string email)
         {
-            try {    
+            try
+            {
                 MailMessage mail = new MailMessage();
 
-                var fromAddress = "factoryforshop@gmail.com";
+                var sender = ConfigurationManager.AppSettings["SenderEmail"];
+                var senderPassword = ConfigurationManager.AppSettings["SenderEmailPassword"];
+              
 
                 var toAddress = email;
 
-                const string fromPassword = "shopfactory123";
+               
 
                 string mailSubject = " New Password ";
                 string mailBody = "New Password : user123";
@@ -242,12 +250,12 @@ namespace Online_SHopping_Cart.Controllers
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new System.Net.NetworkCredential(fromAddress, fromPassword); // admin name and password   
+                smtp.Credentials = new System.Net.NetworkCredential(sender, senderPassword); // admin name and password   
                 smtp.EnableSsl = true;
-                smtp.Send(fromAddress, toAddress, mailSubject, mailBody);
+                smtp.Send(sender, toAddress, mailSubject, mailBody);
 
 
-            return RedirectToAction("login");
+                return RedirectToAction("login");
             }
             catch
             {
@@ -292,11 +300,11 @@ namespace Online_SHopping_Cart.Controllers
         /// Checks password and confirm Password is matching during registration
         /// </summary>
         /// <returns></returns>
-        
+
         public JsonResult confirm_pass(string pass, string cp)
         {
             int res = 0;
-            if(pass==cp)
+            if (pass == cp)
             {
                 res = 1;
                 return Json(res, JsonRequestBehavior.AllowGet);
@@ -308,7 +316,7 @@ namespace Online_SHopping_Cart.Controllers
         /// Checks if username Already Exist
         /// </summary>
         /// <returns></returns>
-        
+
         public JsonResult IsNameExist(string UserName)
         {
             var validateName = db.User_Table.Where(x => x.UserName == UserName && x.UserIsDeleted == false).FirstOrDefault();   //Details of base category that has same name of Entered rolename and which are active is taken

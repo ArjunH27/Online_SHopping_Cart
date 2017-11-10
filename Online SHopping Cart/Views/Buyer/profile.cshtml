@@ -26,11 +26,11 @@
     {
         @Html.AntiForgeryToken()
 
-        if (ViewBag.fill_msg != null)
+        if (ViewBag.EnterDetails != null)
         {
             <script type="text/javascript">
     window.onload = function () {
-        alert("@ViewBag.fill_msg");
+        alert("@ViewBag.EnterDetails");
     };</script>
         }
         <div id="msg"></div>

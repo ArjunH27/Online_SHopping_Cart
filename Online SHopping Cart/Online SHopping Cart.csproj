@@ -235,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ConstantFile.cs" />
     <Compile Include="ContentRepository.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BuyerController.cs" />
@@ -317,7 +318,6 @@
     <Content Include="Views\Buyer\Index.cshtml" />
     <Content Include="Views\Buyer\profile.cshtml" />
     <Content Include="Views\Buyer\Product_cat.cshtml" />
-    <Content Include="Views\Buyer\UploadImages.cshtml" />
     <Content Include="Views\Buyer\Product_page.cshtml" />
     <Content Include="Views\Buyer\order.cshtml" />
     <Content Include="Views\Buyer\cart.cshtml" />
@@ -348,7 +348,6 @@
     <Content Include="Views\Buyer\notification.cshtml" />
     <Content Include="Views\User\loader.cshtml" />
     <Content Include="Views\Buyer\purchase_all.cshtml" />
-    <Content Include="Views\Buyer\try1.cshtml" />
     <Content Include="Views\Buyer\ChangePassword.cshtml" />
     <Content Include="Views\Seller\ChangePassword.cshtml" />
     <Content Include="Views\Service\ChangePassword.cshtml" />
@@ -361,6 +360,7 @@
     <Content Include="Views\Seller\Error.cshtml" />
     <Content Include="Views\Admin\Error.cshtml" />
     <Content Include="Views\Buyer\Error.cshtml" />
+    <Content Include="Views\Service\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

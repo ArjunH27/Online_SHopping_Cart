@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>shopFactory</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
     <link href="~/css/bootstrap.css" rel="stylesheet" />
@@ -149,14 +149,11 @@
             <ul class="nav navbar-nav navbar-right">
                 @if (Session["Admin"] != null)
                 {
-                    @*<li>@Html.ActionLink(@Session["user"].ToString(), "profile")</li>*@
+                    
                     <span style="font-size:30px;cursor:pointer;color:#aaa" ; onclick="openNav()">&#9776; @Session["Admin"].ToString()</span>
 
                 }
-                else
-                {
-                    Response.Redirect("User/login");
-                }
+                
 
             </ul>
 

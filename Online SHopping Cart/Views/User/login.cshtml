@@ -16,12 +16,12 @@
     }
 
 </style>
-@if (ViewBag.cmsg != null)
+@if (ViewBag.NewPassword != null)
 {
     <script type="text/javascript">
-    window.onload = function () {
-        alert("@ViewBag.cmsg");
-    };</script>
+        window.onload = function () {
+            alert("@ViewBag.NewPassword");
+        };</script>
 }
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="~/Content/materialize.css" rel="stylesheet" />
@@ -31,17 +31,17 @@
     <div class="wrapper">
         <h3 style="color:#80cbc4" >LOGIN</h3>
         <form class="col s12" method="post" action="">
-            @if (ViewBag.message3 != null)
+            @if (ViewBag.Autharization != null)
             {
-                <p style="color:red;">@ViewBag.message3</p>
+                <p style="color:red;">@ViewBag.Autharization</p>
             }
             <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
                 <input type="text" name="user" class="validate">
                 <label>User Name</label>
-                @if (ViewBag.message1 != null)
+                @if (ViewBag.InValidUser != null)
             {
-                    <p style="color:red;">@ViewBag.message1</p>
+                    <p style="color:red;">@ViewBag.InValidUser</p>
                 }
                
             </div>
@@ -50,9 +50,9 @@
                 <i class="material-icons prefix">lock_outline</i>
                 <input type="password" name="password" class="validate">
                 <label>Password</label>
-                @if (ViewBag.message2 != null)
+                @if (ViewBag.InValidPassword != null)
             {
-                    <p style="color:red;">@ViewBag.message2</p>
+                    <p style="color:red;">@ViewBag.InValidPassword</p>
                 }
             </div>
           

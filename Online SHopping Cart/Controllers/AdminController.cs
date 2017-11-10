@@ -2,9 +2,9 @@
 using Online_SHopping_Cart.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Online_SHopping_Cart.Controllers
@@ -104,7 +104,6 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
         }
         #region Manage Role
         /// <summary>
@@ -127,7 +126,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+
         }
 
         /// <summary>
@@ -158,7 +157,7 @@ namespace Online_SHopping_Cart.Controllers
                 return View("Error");
 
             }
-            return RedirectToAction("ManageRole");
+            
         }
         /// <summary>
         /// This is to edit role details in a grid.Inline editing is done by ajax method.
@@ -196,8 +195,8 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public JsonResult RoleDelete(int RoleId)
         {
-            try
-            {
+           
+            
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 //Details of patricular role to be deleted is obtained using it's id
                 Role_Table role = db.Role_Table.Find(RoleId);
@@ -207,12 +206,7 @@ namespace Online_SHopping_Cart.Controllers
                 //passing url to which control to be navigated is stored in a variable
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageRole", "Admin");
                 return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+
         }
         /// <summary>
         /// IsRoleNameExist is used to avoid duplicate rolename in Role_Table .
@@ -224,8 +218,7 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns></returns>
         public JsonResult IsRoleNameExist(string RoleName)
         {
-            try
-            {
+            
                 //Details of roles that has same name of Entered rolename obtained
                 var validateName = db.Role_Table.FirstOrDefault(x => x.RoleName == RoleName && x.RoleIsDeleted == false);
                 //If such details exist false is returned       
@@ -238,12 +231,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
         #endregion
         #region Manage Base Categories
@@ -264,7 +252,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+            
         }
         /// <summary>
         /// To create new base categories in Online Shopping site.New base category is added to the BaseCategory_Table
@@ -292,7 +280,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("ManageBaseCategories");
+          
 
         }
         /// <summary>
@@ -306,8 +294,6 @@ namespace Online_SHopping_Cart.Controllers
         //updated values are passed as parameters of post function through ajax method
         public JsonResult BaseCategoryEdit(int BaseCatId, string BaseCatName, string BaseCatDescription)
         {
-            try
-            {
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 //Details of patricular base category to be edited is obtained using it's id
                 BaseCategory_Table category = db.BaseCategory_Table.Find(BaseCatId);
@@ -321,12 +307,7 @@ namespace Online_SHopping_Cart.Controllers
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageBaseCategories", "Admin");
                 //Values updated and url is returned back to ajax success function
                 return Json(new { BaseCatId = BaseCatId, BaseCatName = BaseCatName, BaseCatDesc = BaseCatDescription, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+            
         }
         /// <summary>
         ///  This is to delete details of a a particular base category 
@@ -337,27 +318,20 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public JsonResult BaseCategoryDelete(int BaseCatId)
         {
-            try
-            {
-                ShoppingCartDbEntities db = new ShoppingCartDbEntities();
-                // Details of patricular role to be deleted is obtained using it's id
-                BaseCategory_Table basecategory = db.BaseCategory_Table.Find(BaseCatId);
-                //Record obtained is soft  deleted                          
-                basecategory.BaseCatIsDeleted = true;
-                db.SaveChanges();
-                bool result = true;
-                //passing url to which control to be navigated is stored in a variable
-                var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageBaseCategories", "Admin");
-                //Values updated and url is returned back to ajax success function  
-                return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
 
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+            ShoppingCartDbEntities db = new ShoppingCartDbEntities();
+            // Details of patricular role to be deleted is obtained using it's id
+            BaseCategory_Table basecategory = db.BaseCategory_Table.Find(BaseCatId);
+            //Record obtained is soft  deleted                          
+            basecategory.BaseCatIsDeleted = true;
+            db.SaveChanges();
+            bool result = true;
+            //passing url to which control to be navigated is stored in a variable
+            var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageBaseCategories", "Admin");
+            //Values updated and url is returned back to ajax success function  
+            return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
         }
+            
         /// <summary>
         /// To avoid duplicate entry of existing base category
         /// This function called on validation of base category name.
@@ -366,8 +340,7 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns></returns>
         public JsonResult IsBaseCategoryNameExist(string BaseCatName)
         {
-            try
-            {
+           
                 //Details of base category that has same name of Entered rolename 
                 var validateName = db.BaseCategory_Table.Where(x => x.BaseCatName == BaseCatName && x.BaseCatIsDeleted == false).FirstOrDefault();
                 //If  such details exist false is returned 
@@ -380,12 +353,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
         #endregion
         #region Manage Product Categories
@@ -424,7 +392,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+            
         }
         /// <summary>
         /// To create new product categories under a base category in Online Shopping site.New product  category is added to the ProductCategory_Table which has foreign key reference to BaseCategory_Table
@@ -453,7 +421,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("ManageProductCategories");
+            
 
         }
         /// <summary>
@@ -469,8 +437,7 @@ namespace Online_SHopping_Cart.Controllers
 
         public JsonResult ProductCategoryEdit(int ProductCatId, string ProductCatName, string ProductCatDescription, int BaseCatid)
         {
-            try
-            {
+           
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 //Details of patricular product category to be edited is obtained using it's id
                 ProductCategory_Table category = db.ProductCategory_Table.Find(ProductCatId);
@@ -484,12 +451,7 @@ namespace Online_SHopping_Cart.Controllers
                 //passing url to which control to be navigated is stored in a variable
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageProductCategories", "Admin");
                 return Json(new { ProductCatId = ProductCatId, ProductCatName = ProductCatName, ProductCatDesc = ProductCatDescription, BaseCatid = BaseCatid, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+            
         }
         /// <summary>
         /// This is to delete details of a a particular product category 
@@ -500,9 +462,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public JsonResult ProductCategoryDelete(int ProductCatId)
         {
-
-            try
-            {
+            
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 // Details of patricular role to be deleted is obtained using it's id
                 ProductCategory_Table procategory = db.ProductCategory_Table.Find(ProductCatId);
@@ -513,12 +473,7 @@ namespace Online_SHopping_Cart.Controllers
                 //passing url to which control to be navigated is stored in a variable
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageProductCategories", "Admin");
                 return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
         /// <summary>
         /// To avoid duplicate entry of existing product category  
@@ -528,8 +483,7 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns></returns>
         public JsonResult IsProductCategoryNameExist(string ProductCatName)
         {
-            try
-            {
+            
                 var validateName = db.ProductCategory_Table.FirstOrDefault
                                     (x => x.ProductCatName == ProductCatName && x.ProductCatIsDeleted == false);
                 if (validateName != null)
@@ -540,12 +494,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
         #endregion
         #region Manage Location
@@ -567,7 +516,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+           
         }
         [HttpPost]
         //updated values are passed as parameters of post function through ajax method
@@ -590,14 +539,13 @@ namespace Online_SHopping_Cart.Controllers
                 return View("Error");
             }
 
-            return RedirectToAction("ManageLocation");
+       
         }
         [HttpPost]
         //updated values are passed as parameters
         public JsonResult LocationEdit(int LocationId, string LocationName, int LocationPIN, string LocationDescription)
         {
-            try
-            {
+            
                 //Details of patricular product category to be edited is obtained using it's id
                 Location_Table locations = db.Location_Table.Find(LocationId);
                 locations.LocationName = LocationName;
@@ -610,12 +558,7 @@ namespace Online_SHopping_Cart.Controllers
                 //passing url to which control to be navigated is stored in a variable
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageLocation", "Admin");
                 return Json(new { LocationId = LocationId, LocationName = LocationName, LocationPIN = LocationPIN, LocationDesc = LocationDescription, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
 
         }
         /// <summary>
@@ -626,8 +569,7 @@ namespace Online_SHopping_Cart.Controllers
         [HttpPost]
         public JsonResult LocationDelete(int LocationId)
         {
-            try
-            {
+            
                 // Details of patricular role to be deleted is obtained using it's id
                 Location_Table locations = db.Location_Table.Find(LocationId);
                 locations.LocationIsDeleted = true;
@@ -635,12 +577,7 @@ namespace Online_SHopping_Cart.Controllers
                 bool result = true;
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("ManageLocation", "Admin");
                 return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+         
         }
         /// <summary>
         ///To avoid duplicate entry of already existing location
@@ -649,8 +586,7 @@ namespace Online_SHopping_Cart.Controllers
         /// <returns></returns>
         public JsonResult IsLocationNameExist(string LocationName)
         {
-            try
-            {
+            
                 var validateName = db.Location_Table.FirstOrDefault
                                     (x => x.LocationName == LocationName && x.LocationIsDeleted == false);
                 if (validateName != null)
@@ -661,12 +597,7 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
         #endregion
         #region Manage User
@@ -706,7 +637,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+         
         }
 
         /// <summary>
@@ -720,8 +651,7 @@ namespace Online_SHopping_Cart.Controllers
         public JsonResult AcceptUser(int UserId)
 
         {
-            try
-            {
+            
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 //To accept a user its details is taken 
                 var confirmuser = (from u in db.User_Table where u.UserId == UserId select u).FirstOrDefault();
@@ -755,13 +685,7 @@ namespace Online_SHopping_Cart.Controllers
                 bool result = true;
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");                          //passing url to which control to be navigated is stored in a variable
                 return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+           
         }
 
 
@@ -777,8 +701,7 @@ namespace Online_SHopping_Cart.Controllers
         public JsonResult DeclineUser(int UserId)
 
         {
-            try
-            {
+           
                 ShoppingCartDbEntities db = new ShoppingCartDbEntities();
                 //To decline user its details is taken
                 var confirmuser = (from u in db.User_Table where u.UserId == UserId select u).FirstOrDefault();
@@ -811,12 +734,7 @@ namespace Online_SHopping_Cart.Controllers
                 bool result = true;
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("SendMail", "Admin");                           //passing url to which control to be navigated is stored in a variable
                 return Json(new { result, Url = redirectUrl }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                Response.Redirect("~/User/Error");
-            }
-            return Json(JsonRequestBehavior.AllowGet);
+            
         }
         /// <summary>
         /// To send the mail on accept or decline of a user
@@ -826,17 +744,18 @@ namespace Online_SHopping_Cart.Controllers
         {
             try
             {
+                var sender = ConfigurationManager.AppSettings["SenderEmail"];
+                var senderPassword = ConfigurationManager.AppSettings["SenderEmailPassword"];
                 string username = TempData["user"].ToString();
                 var user = (from u in db.User_Table where u.UserName == username select u).FirstOrDefault();
                 if (ModelState.IsValid)
                 {
                     MailMessage mail = new MailMessage();
 
-                    var fromAddress = "factoryforshop@gmail.com";//change using project mail
+
 
                     var toAddress = user.UserEmail;
 
-                    const string fromPassword = "shopfactory123";
                     if (user.UserIsDeleted == true)
                     {
                         mail.Subject = "ShopFactory Acknowledgement";
@@ -852,9 +771,9 @@ namespace Online_SHopping_Cart.Controllers
                     smtp.Host = "smtp.gmail.com";
                     smtp.Port = 587;
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new System.Net.NetworkCredential(fromAddress, fromPassword); // admin name and password   
+                    smtp.Credentials = new System.Net.NetworkCredential(sender, senderPassword); // admin name and password   
                     smtp.EnableSsl = true;
-                    smtp.Send(fromAddress, toAddress, mail.Subject, mail.Body);
+                    smtp.Send(sender, toAddress, mail.Subject, mail.Body);
                     TempData["message"] = "Mail Sent to the user";
                     return RedirectToAction("ManageUser", "Admin");
                 }
@@ -867,7 +786,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("ManageUser", "Admin");
+
 
         }
         #endregion
@@ -893,7 +812,7 @@ namespace Online_SHopping_Cart.Controllers
                 return View("Error");
 
             }
-            return View();
+         
         }
 
         [HttpPost]
@@ -924,7 +843,7 @@ namespace Online_SHopping_Cart.Controllers
             {
                 return View("Error");
             }
-            return View();
+            
         }
 
         /// <summary>
@@ -936,14 +855,14 @@ namespace Online_SHopping_Cart.Controllers
             try
             {
 
-                ViewBag.message = TempData["message"];
+                ViewBag.ChangePassword = TempData["ChangePassword"];
                 return View();
             }
             catch
             {
                 return View("Error");
             }
-            return View();
+           
         }
 
         [HttpPost]
@@ -964,22 +883,22 @@ namespace Online_SHopping_Cart.Controllers
                 {
                     if (details.Password == model.NewPassword)
                     {
-                        TempData["message"] = "your old password and new password are same!!!";
+                        TempData["ChangePassword"] = ConstantFile.PasswordConflict;
                     }
                     else if (model.NewPassword == model.ConfirmPassword)
                     {
                         details.Password = model.NewPassword;
                         db.SaveChanges();
-                        TempData["message"] = "password changes successfully!!";
+                        TempData["ChangePassword"] = ConstantFile.PasswordChangeSuccess;
                     }
                     else
                     {
-                        TempData["message"] = "confirm password an new password does not match";
+                        TempData["ChangePassword"] = ConstantFile.ConfirmPasswordConflict;
                     }
                 }
                 else
                 {
-                    TempData["message"] = "your old password is incorrect ";
+                    TempData["ChangePassword"] = ConstantFile.OldPassworWrong;
                 }
                 return RedirectToAction("ChangePassword");
             }
@@ -988,7 +907,7 @@ namespace Online_SHopping_Cart.Controllers
                 return View("Error");
 
             }
-            return RedirectToAction("ChangePassword");
+        
 
         }
 
